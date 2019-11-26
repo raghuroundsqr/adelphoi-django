@@ -1,12 +1,10 @@
-from django.shortcuts import render, render_to_response
-
 # Create your views here.
 import json
 from django.template import RequestContext
 from django.http import HttpResponse,JsonResponse,HttpResponseRedirect
 from django.urls import reverse_lazy
 
-from .models import TestModels,ModelTests#,ModelTestSub
+from .models import TestModels,ModelTests,FirstmatchAdelphoiMapping2 #,ModelTestSub
 from django.views.decorators.csrf import csrf_exempt
 from .forms import TestForms,TestForms2,ModelTestForms
 # from django.views import View
@@ -115,6 +113,7 @@ class ModelView(CreateView):
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
         if form.is_valid():
+            
             #- Insert data to AI model
             client_code = form.cleaned_data.get('client_code')
             gender = form.cleaned_data.get('gender')
@@ -166,14 +165,9 @@ class ModelView(CreateView):
             schizophrenia = form.cleaned_data.get('schizophrenia')
             number_of_foster_care_placements = form.cleaned_data.get('number_of_foster_care_placements')
 
-            # hist_of_prior_program_SAO = form.cleaned_data.get('hist_of_prior_program_SAO')
-
             # if ModelTests.objects.filter(client_code=client_code):
             #     print("already exists")
             #     return  super(AboutView).save()
-            # else:
-            #     print("new client code")
-
             print(client_code)
 
 
@@ -225,11 +219,11 @@ class ModelView(CreateView):
             print(data.shape)
 
             ###
-            # X_test = data.fillna(0)  # remove in front end
+            data = data.fillna(2)  # remove in front end
 
             print(data)
 
-            loaded_model = pickle.load(open("C:/Users/Raghu/Downloads/final_dt_48p_263r.sav", "rb"))
+            loaded_model = pickle.load(open("C:/Users/Raghu/Downloads/final_dt_48p_263r_2clases_smote.sav", "rb"))
 
             results = loaded_model.predict_proba(data)
             print("results::", results)
@@ -238,12 +232,16 @@ class ModelView(CreateView):
             Confidence = results[0][Program_suggested - 1]
             print(f'Model is suggesting Program - {str(Program_suggested)} with confidence of {str(round(Confidence * 100, 2))}')
             result = (f'Model is suggesting Program - {str(Program_suggested)} with confidence of {str(round(Confidence * 100, 2))}')
+
+
             # program = Program_suggested
+            # q = Adelphoi_Mapping2.objects.all()
+            # print(q)
 
             # ModelTests(program=Program_suggested).save()
             # form.save(commit=False)
             # form.program = Program_suggested
-            p = ModelTests(client_code = client_code,gender = gender,primaryRaceCode= primaryRaceCode,ls_type = ls_type,
+                p = ModelTests(client_code = client_code,gender = gender,primaryRaceCode= primaryRaceCode,ls_type = ls_type,
                            ageAtEpisodeStart = ageAtEpisodeStart,episode_number = episode_number,CYF_code = CYF_code,ageAtEnrollStart = ageAtEnrollStart,
                            RefSourceCode = RefSourceCode,termination_directly_to_AV = termination_directly_to_AV,client_self_harm = client_self_harm,yls_PriorCurrentOffenses_Score = yls_PriorCurrentOffenses_Score,
                            yls_FamCircumstances_Score = yls_FamCircumstances_Score,yls_Edu_Employ_Score = yls_Edu_Employ_Score,yls_Peer_Score = yls_Peer_Score,
@@ -260,8 +258,10 @@ class ModelView(CreateView):
 
                            program = Program_suggested,confidence = Confidence)
             p.save()
+            # print(p)
             # form.save()
             return HttpResponse(result)
+
 
             #############
             #- Get predicted values

@@ -1,5 +1,7 @@
 from django.db import models
 from datetime import datetime
+from django.urls import reverse
+from django.contrib.postgres.fields import ArrayField
 
 # Create your models here.
 class TestModels(models.Model):
@@ -66,27 +68,8 @@ class TestModels(models.Model):
     #     managed = True
     #     db_table = 'TestModels_info'
 
-#     Gender
-# PrimaryRaceCode
-# AgeAtEpisodeStart
-# EpisodeNumber
-# CYF code
-# LS_Type
-# AgeAtEnrollStart
-# RefSourceCode
-# Incarcerated caregivers
-# Incarcerated siblings
-# Number of prior AWOLS's
-# Animal cruelty
-# sexually acting out in past program
-# prior hospitalizations
-# Termination directly to AV
-# Autism Diagnosis
-# Borderline Personality
-# Compliant with meds
 
 
-from django.urls import reverse
 
 
 class TestMod(models.Model):
@@ -154,6 +137,16 @@ class ModelTest(models.Model):
     CANS_Trauma_Exp = models.IntegerField(db_column='CANS_Trauma_Exp')
 
 
+# class FirstmatchTestmodels(models.Model):
+#     gender = models.CharField(db_column='Gender',max_length=20)  # Field name made lowercase.
+#     ls_type = models.CharField(db_column='LS_Type',max_length=20)  # Field name made lowercase.
+#     primaryracecode = models.CharField(db_column='PrimaryRacecode',max_length=20)  # Field name made lowercase.
+#     # id = models.IntegerField(primary_key=True)  # AutoField?
+#
+#     class Meta:
+#         managed = False
+#         db_table = 'FirstMatch_testmodels'
+
 class ModelTests(models.Model):
     GENDER_CHOICES = (
         (1, 'Female'),
@@ -206,7 +199,7 @@ class ModelTests(models.Model):
     Severe_MH_symptoms = ((0, 'no ER/hospitalizations'), (1, 'last 3 months'), (2, '6 months ago'), (3, '9 months ago'),
                           (4, '1 year or more ago'))
 
-    client_code = models.IntegerField(db_column='Client_code')
+    client_code = models.IntegerField(db_column='Client_code',primary_key=True)
     gender = models.IntegerField(db_column='Gender', choices=GENDER_CHOICES)
     primaryRaceCode = models.IntegerField(db_column='PrimaryRacecode', choices=RACE_CHOICES)
     ls_type = models.IntegerField(db_column='LS_Type', choices=LS_CHOICES)
@@ -217,14 +210,14 @@ class ModelTests(models.Model):
     RefSourceCode = models.IntegerField(db_column='RefSourceCode', choices=REF_CHOICES)
     termination_directly_to_AV = models.IntegerField(db_column='Termination_directly_to_AV', choices=Termination_av)
     client_self_harm = models.IntegerField(db_column='Client_self_harm')
-    yls_PriorCurrentOffenses_Score = models.IntegerField(db_column='YLS_PriorCurrentOffenses_Score')
-    yls_FamCircumstances_Score = models.IntegerField(db_column='YLS_FamCircumstances_Score')
-    yls_Edu_Employ_Score = models.IntegerField(db_column='YLS_Edu_Employ_Score')
-    yls_Peer_Score = models.IntegerField(db_column='YLS_Peer_Score')
-    yls_Subab_Score = models.IntegerField(db_column='YLS_Subab_Score')
-    yls_Leisure_Score = models.IntegerField(db_column='YLS_Leisure_Score')
-    yls_Personality_Score = models.IntegerField(db_column='YLS_Personality_Score')
-    yls_Attitude_Score = models.IntegerField(db_column='YLS_Attitude_Score')
+    yls_PriorCurrentOffenses_Score = models.IntegerField(db_column='YLS_PriorCurrentOffenses_Score',blank=True)
+    yls_FamCircumstances_Score = models.IntegerField(db_column='YLS_FamCircumstances_Score',blank=True)
+    yls_Edu_Employ_Score = models.IntegerField(db_column='YLS_Edu_Employ_Score',blank=True)
+    yls_Peer_Score = models.IntegerField(db_column='YLS_Peer_Score',blank=True)
+    yls_Subab_Score = models.IntegerField(db_column='YLS_Subab_Score',blank=True)
+    yls_Leisure_Score = models.IntegerField(db_column='YLS_Leisure_Score',blank=True)
+    yls_Personality_Score = models.IntegerField(db_column='YLS_Personality_Score',blank=True)
+    yls_Attitude_Score = models.IntegerField(db_column='YLS_Attitude_Score',blank=True)
     cans_LifeFunctioning = models.IntegerField(db_column='CANS_LifeFunctioning')
     cans_YouthStrengths = models.IntegerField(db_column='CANS_YouthStrengths')
     cans_CareGiverStrengths = models.IntegerField(db_column='CANS_CareGiverStrengths')
@@ -268,3 +261,14 @@ class ModelTests(models.Model):
 # class ModelTestSub(ModelTests):
 #     program = models.IntegerField(db_column='Program', default=999)
     # confidence = models.IntegerField(db_column='Confidence', default=999)
+
+class FirstmatchAdelphoiMapping2(models.Model):
+    gender = models.IntegerField()
+    id = models.IntegerField(primary_key=True)  # AutoField?
+    level = models.TextField()  # This field type is a guess.
+    location = models.TextField()  # This field type is a guess.
+    program = models.IntegerField()
+
+    class Meta:
+        managed = False
+        db_table = 'FirstMatch_adelphoi_mapping2'

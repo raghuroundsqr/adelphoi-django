@@ -41,6 +41,7 @@ class ModelTestForms(forms.ModelForm):
     class Meta:
         model = ModelTests
         # fields = "__all__"
+
         exclude = ['modified_date','program','confidence'] #,'hist_of_prior_program_SAO'
     # def save(self,program=None):
     #     first_info = super(ModelTestForms,self).save(commit=False)
