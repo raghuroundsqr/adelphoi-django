@@ -207,6 +207,10 @@ class ModelView(CreateView):
                   'YLS_Leisure_Score': yls_Leisure_Score, 'YLS_Personality_Score': yls_Personality_Score,
                   'YLS_Attitude_Score': yls_Attitude_Score, 'Client self-harm': client_self_harm,
 
+                  'CANS_LifeFunctioning': cans_LifeFunctioning ,
+                 'CANS_YouthStrengths':cans_YouthStrengths, 'CANS_CareGiverStrengths':cans_CareGiverStrengths, 'CANS_Culture':cans_Culture,
+                 'CANS_YouthBehavior':cans_YouthBehavior, 'CANS_YouthRisk':cans_YouthRisk, 'CANS_Trauma_Exp': cans_Trauma_Exp
+
             }
 
             # 'CANS_LifeFunctioning': cans_LifeFunctioning,
@@ -225,7 +229,7 @@ class ModelView(CreateView):
 
             print(data)
 
-            loaded_model = pickle.load(open("C:/Users/Raghu/Downloads/final_dt_48p_213r.sav", "rb"))
+            loaded_model = pickle.load(open("C:/Users/Raghu/Downloads/final_dt_48p_263r.sav", "rb"))
 
             results = loaded_model.predict_proba(data)
             print("results::", results)
@@ -253,6 +257,7 @@ class ModelView(CreateView):
                            death_Silblings = death_Silblings,death_Caregiver = death_Caregiver,alcohol_Use = alcohol_Use,drug_Use = drug_Use,borderline_IQ = borderline_IQ,
                            significant_mental_health_symptoms = significant_mental_health_symptoms,number_of_prior_placements = number_of_prior_placements,psychosis = psychosis,
                            reactive_Attachment_Disorder = reactive_Attachment_Disorder,schizophrenia = schizophrenia,number_of_foster_care_placements = number_of_foster_care_placements,
+
                            program = Program_suggested,confidence = Confidence)
             p.save()
             # form.save()
