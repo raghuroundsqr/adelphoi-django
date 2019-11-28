@@ -96,4 +96,12 @@
       </map>
     </option>
   </component>
+  <component name="XDebuggerManager">
+    <watches-manager>
+      <configuration name="PythonConfigurationType">
+        <watch expression="mcs" language="Python" />
+        <watch expression="mcs[0].gender" language="Python" />
+      </configuration>
+    </watches-manager>
+  </component>
 </project>

@@ -3,11 +3,13 @@ from django.contrib import admin
 
 from django.urls import path
 from . import views
+from rest_framework.urlpatterns import format_suffix_patterns
 
 urlpatterns = [
     path('insert_data',views.adelphoi_insert,name = 'insert_d'),
     path('CBV',views.CBView.as_view(success_url="/CBV")),
     path('AboutView',views.AboutView.as_view()),
-    path('model_test',views.ModelView.as_view(success_url="/model_test"))
+    path('model_test/',views.ModelView.as_view(success_url="/model_test")),
+    path('list_view/',views.AdelphoiList.as_view())
 
 ]

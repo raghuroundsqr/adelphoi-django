@@ -1,7 +1,7 @@
-from django.db import models
+from djongo import models
 from datetime import datetime
 from django.urls import reverse
-from django.contrib.postgres.fields import ArrayField
+# from django.contrib.postgres.fields import ArrayField
 
 # Create your models here.
 class TestModels(models.Model):
@@ -262,13 +262,9 @@ class ModelTests(models.Model):
 #     program = models.IntegerField(db_column='Program', default=999)
     # confidence = models.IntegerField(db_column='Confidence', default=999)
 
-class FirstmatchAdelphoiMapping2(models.Model):
-    gender = models.IntegerField()
-    id = models.IntegerField(primary_key=True)  # AutoField?
-    level = models.TextField()  # This field type is a guess.
-    location = models.TextField()  # This field type is a guess.
-    program = models.IntegerField()
 
-    class Meta:
-        managed = False
-        db_table = 'FirstMatch_adelphoi_mapping2'
+
+#
+#     class Meta:
+#         managed = True
+#         db_table = 'Mapping_Collection'

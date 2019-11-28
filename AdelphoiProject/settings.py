@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     'FirstMatch'
 ]
 
@@ -85,6 +86,7 @@ DATABASES = {
         'NAME': 'Adelphoi_DB',
         'HOST': 'localhost',
         'PORT': 27017,
+        'ENFORCE_SCHEMA': False,
     }
 }
 
