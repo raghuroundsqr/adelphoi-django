@@ -63,6 +63,11 @@ class TestModels(models.Model):
     Autism_Diagnosis = models.IntegerField(db_column='Autism_Diagnosis',choices = Autism,  blank=True, null=True)
     Borderline_Personality = models.IntegerField(db_column='Borderline_Personality', choices = border, blank=True, null=True)
     Compliant_with_meds = models.IntegerField(db_column='Compliant_with_meds', choices = complaint,blank=True, null=True)
+
+
+
+
+
      # = models.IntegerField(db_column = 'Age')
     # class Meta:
     #     managed = True
@@ -177,28 +182,20 @@ class ModelTests(models.Model):
         (53, 'Schukill'),
         (54, 'Somerset'), (55, 'Union'), (56, 'Venango'))
     CYF_CHOICES = ((1, 'CYF'), (2, 'Juvenile Justice'), (3, 'MH'))
-    caregivers_choice = ((0, 'no'), (1, 'yes'))
-    cruelty_choice = ((0, 'no'), (1, 'yes'))
+    no_or_yes = ((0, 'no'), (1, 'yes'))
     Termination_av = ((0, 'no'), (1, 'unknown'), (2, 'one'), (3, 'two or more'))
-    Autism = ((0, 'no'), (1, 'yes'))
     complaint = ((0, 'no'), (1, 'yes'), (9, 'N / A'))
-    inc_siblings_choice = ((0, 'no'), (1, 'yes'))
-    border_per = ((0, 'no'), (1, 'yes'))
     prior_awols_choice = ((0, 'none'), (1, 'one'), (2, 'two'), (3, 'many'))
-    SAO_past_program = ((0, 'no'), (1, 'yes'))
     Borderline_IQ = ((0, '70+, or not listed assumed 70+'), (1, '<70'))
     foster_care_placements = ((0, 'no'), (1, 'one'), (2, 'two'), (3, 'three or more'))
     prior_placements = ((0, 'no'), (1, 'one'), (2, 'two'), (3, 'three or more'))
-    Death_Caregiver = ((0, 'no'), (1, 'yes'))
-    Death_Silblings = ((0, 'no'), (1, 'yes'))
-    Alcohol_Use = ((0, 'no'), (1, 'yes'))
-    Drug_Use = ((0, 'no'), (1, 'yes'))
-    Psychosis = ((0, 'no'), (1, 'yes'))
-    Reactive_Attachment_Disorder = ((0, 'no'), (1, 'yes'))
-    Schizophrenia = ((0, 'no'), (1, 'yes'))
     Severe_MH_symptoms = ((0, 'no ER/hospitalizations'), (1, 'last 3 months'), (2, '6 months ago'), (3, '9 months ago'),
                           (4, '1 year or more ago'))
+    primary_lang_choices = ((1,'English'),(2,'not English'))
+    second_lang = ((0,'not at all'),(1,'very little'),(2,'average'),(3,'very well'))
 
+    name = models.CharField(db_column='name', max_length=100)
+    dob = models.DateField(db_column='dob')
     client_code = models.IntegerField(db_column='Client_code',primary_key=True)
     gender = models.IntegerField(db_column='Gender', choices=GENDER_CHOICES)
     primaryRaceCode = models.IntegerField(db_column='PrimaryRacecode', choices=RACE_CHOICES)
@@ -225,38 +222,54 @@ class ModelTests(models.Model):
     cans_YouthBehavior = models.IntegerField(db_column='CANS_YouthBehavior')
     cans_YouthRisk = models.IntegerField(db_column='CANS_YouthRisk')
     cans_Trauma_Exp = models.IntegerField(db_column='CANS_Trauma_Exp')
-    incarcerated_caregivers = models.IntegerField(db_column='Incarcerated_caregivers', choices=caregivers_choice)
-    incarcerated_siblings = models.IntegerField(db_column='Incarcerated_siblings', choices=inc_siblings_choice)
+    incarcerated_caregivers = models.IntegerField(db_column='Incarcerated_caregivers', choices=no_or_yes)
+    incarcerated_siblings = models.IntegerField(db_column='Incarcerated_siblings', choices=no_or_yes)
     number_of_prior_AWOLS = models.IntegerField(db_column='Number_of_prior_AWOLS', choices=prior_awols_choice)
-    animal_cruelty = models.IntegerField(db_column='Animal_cruelty', choices=cruelty_choice)
+    animal_cruelty = models.IntegerField(db_column='Animal_cruelty', choices=no_or_yes)
     # sexually_acting_out_in_past_program = models.IntegerField(db_column='sexually_acting_out_in_past_program',
     #                                                           choices=SAO_past_program)
     prior_hospitalizations = models.IntegerField(db_column='prior_hospitalizations')
-    autism_Diagnosis = models.IntegerField(db_column='Autism_Diagnosis', choices=Autism)
-    borderline_Personality = models.IntegerField(db_column='Borderline_Personality', choices=border_per)
+    autism_Diagnosis = models.IntegerField(db_column='Autism_Diagnosis', choices=no_or_yes)
+    borderline_Personality = models.IntegerField(db_column='Borderline_Personality', choices=no_or_yes)
     compliant_with_meds = models.IntegerField(db_column='Compliant_with_meds', choices=complaint)
     severe_mental_health_symptoms = models.IntegerField(db_column='Severe_mental_health_symptoms',choices=Severe_MH_symptoms)
     number_of_prior_treatment_terminations = models.IntegerField(db_column='Number_of_prior_treatment_terminations')
     length_of_time_since_living_at_home = models.IntegerField(db_column='Length_of_time_since_living_at_home')
-    death_Silblings = models.IntegerField(db_column='Death Silblings', choices=Death_Silblings)
-    death_Caregiver = models.IntegerField(db_column='Death_Caregiver', choices=Death_Caregiver)
-    alcohol_Use = models.IntegerField(db_column='Alcohol_Use', choices=Alcohol_Use)
-    drug_Use = models.IntegerField(db_column='Drug_Use', choices=Drug_Use)
+    death_Silblings = models.IntegerField(db_column='Death Silblings', choices=no_or_yes)
+    death_Caregiver = models.IntegerField(db_column='Death_Caregiver', choices=no_or_yes)
+    alcohol_Use = models.IntegerField(db_column='Alcohol_Use', choices=no_or_yes)
+    drug_Use = models.IntegerField(db_column='Drug_Use', choices=no_or_yes)
     borderline_IQ = models.IntegerField(db_column='Borderline_IQ', choices=Borderline_IQ)
     significant_mental_health_symptoms = models.IntegerField(db_column='Significant_mental_health_symptoms')
     number_of_prior_placements = models.IntegerField(db_column='Number_of_prior_placements', choices=prior_placements)
-    psychosis = models.IntegerField(db_column='Psychosis', choices=Psychosis)
+    psychosis = models.IntegerField(db_column='Psychosis', choices=no_or_yes)
     reactive_Attachment_Disorder = models.IntegerField(db_column='Reactive_Attachment_Disorder',
-                                                       choices=Reactive_Attachment_Disorder)
-    schizophrenia = models.IntegerField(db_column='Schizophrenia', choices=Schizophrenia)
+                                                       choices=no_or_yes)
+    schizophrenia = models.IntegerField(db_column='Schizophrenia', choices=no_or_yes)
     number_of_foster_care_placements = models.IntegerField(db_column='Number_of_foster_care_placements',
                                                            choices=foster_care_placements)
     modified_date  = models.DateTimeField(db_column='Modified_Date',auto_now=True)
 
 
-    hist_of_prior_program_SAO = models.IntegerField(db_column='Hist_of_prior_program_SAO',choices=SAO_past_program)
+    hist_of_prior_program_SAO = models.IntegerField(db_column='Hist_of_prior_program_SAO',choices=no_or_yes)
     program = models.IntegerField(db_column='Program')
     confidence = models.IntegerField(db_column='Confidence')
+
+
+    episode_start = models.DateField(db_column='episode_start')
+    primary_language = models.IntegerField(db_column='primary_language',choices=primary_lang_choices)
+    enrollStart_date = models.DateField(db_column='enrollStart_date')
+    english_second_lang = models.IntegerField(db_column='english_second_lang',choices=second_lang)
+    level_of_care = models.IntegerField(db_column='level_of_care')
+    type_of_drugs = models.TextField(db_column='type_of_drugs')
+    family_support = models.IntegerField(db_column='family_support')
+    level_of_aggression = models.IntegerField(db_column='level_of_aggression')
+    fire_setting = models.IntegerField(db_column='fire_setting')
+    abuse_neglect = models.IntegerField(db_column='abuse_neglect',choices=no_or_yes)
+    FAST_FamilyTogetherScore = models.IntegerField(db_column='FAST_FamilyTogetherScore')
+    FAST_CaregiverAdvocacyScore = models.IntegerField(db_column='FAST_CaregiverAdvocacyScore')
+    Screening_tool_Trauma = models.IntegerField(db_column ='Screening_tool_Trauma')
+
 
 # class ModelTestSub(ModelTests):
 #     program = models.IntegerField(db_column='Program', default=999)

@@ -9,9 +9,3 @@ class ModelTestsSerializers(serializers.ModelSerializer):
         # fields ='__all__'
         exclude = ['modified_date', 'program', 'confidence']
 
-class ModelTestsSerializers2(serializers.ModelSerializer):
-
-    class Meta:
-        model = ModelTests
-        fields ='__all__'
-        # exclude = ['modified_date', 'program', 'confidence']
