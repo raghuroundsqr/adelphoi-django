@@ -5,7 +5,12 @@ from django.urls import path
 from . import views
 from rest_framework.urlpatterns import format_suffix_patterns
 
+from rest_framework_swagger.views import get_swagger_view
+
+
+schema_view = get_swagger_view(title='Adelphoi API documnetation')
 urlpatterns = [
+    path('documentation/', schema_view), #swagger_documentation
     path('insert_data',views.adelphoi_insert,name = 'insert_d'),
     path('CBV',views.CBView.as_view(success_url="/CBV")),
     path('AboutView',views.AboutView.as_view()),

@@ -300,7 +300,9 @@ class AdelphoiList(ListCreateAPIView):
     serializer_class = ModelTestsSerializers
     queryset = ModelTests.objects.all()
 
+
     def perform_create(self, serializer: ModelTestsSerializers):
+        # try:
         dt = {'Gender': serializer.validated_data.get('gender'), 'PrimaryRacecode': serializer.validated_data.get('primaryRaceCode'), 'CYF code': serializer.validated_data.get('CYF_code'), 'LS_Type': serializer.validated_data.get('ls_type'),
               'EpisodeNumber': serializer.validated_data.get('episode_number'),
               'RefSourceName': serializer.validated_data.get('RefSourceCode'), 'Number of foster care placements': serializer.validated_data.get('number_of_foster_care_placements'),
@@ -340,7 +342,7 @@ class AdelphoiList(ListCreateAPIView):
         data = pd.DataFrame(dt, index=[0])
         print(data.columns)
         print(data.shape)
-        #
+        data = data.fillna(0)
         loaded_model = pickle.load(open("C:/Users/Raghu/Downloads/final_dt_48p_263r_2clases_smote.sav", "rb"))
         #
         results = loaded_model.predict_proba(data)
@@ -350,3 +352,6 @@ class AdelphoiList(ListCreateAPIView):
         Confidence = results[0][Program_suggested - 1]
         serializer.save(program=Program_suggested,confidence=Confidence)
         # serializer.save()
+        # return Response(serializer.data, status=status.HTTP_201_CREATED)
+        # except Exception as e:
+        #     return Response({"error":"NOT FOUND"},status=404)

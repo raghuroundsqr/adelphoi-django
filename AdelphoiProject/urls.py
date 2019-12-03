@@ -18,6 +18,7 @@ from django.urls import include,path
 
 # from FirstMatch import views
 urlpatterns = [
+
     path('admin/', admin.site.urls),
     # path('insert_data',views.adelphoi_insert,name = 'insert_d'),
     # path('CBV',views.CBView.as_view(success_url="/CBV")),
