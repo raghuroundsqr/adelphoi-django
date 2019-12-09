@@ -2,8 +2,11 @@ from djongo import models
 from datetime import datetime
 from django.urls import reverse
 # from django.contrib.postgres.fields import ArrayField
-
+from django.contrib.postgres.fields import ArrayField
 # Create your models here.
+
+from jsonfield import JSONField
+
 class TestModels(models.Model):
 
     GENDER_CHOICES = (
@@ -74,22 +77,6 @@ class TestModels(models.Model):
     #     db_table = 'TestModels_info'
 
 
-
-
-
-class TestMod(models.Model):
-    Client_code = models.IntegerField(db_column='Client_code', blank=True, null=True)
-    prior_hospitalizations = models.IntegerField(db_column='prior_hospitalizations', blank=True, null=True)
-    class Meta:
-        db_table = "TestMod"
-
-class Student(models.Model):
-    first_name = models.CharField(max_length=20)
-    last_name  = models.CharField(max_length=30)
-    class Meta:
-        db_table = "student"
-
-
 class ModelTest(models.Model):
     Client_code = models.IntegerField(db_column = 'Client_code')
     Gender  = models.IntegerField(db_column = 'Gender')
@@ -141,16 +128,6 @@ class ModelTest(models.Model):
     CANS_YouthRisk = models.IntegerField(db_column='CANS_YouthRisk')
     CANS_Trauma_Exp = models.IntegerField(db_column='CANS_Trauma_Exp')
 
-
-# class FirstmatchTestmodels(models.Model):
-#     gender = models.CharField(db_column='Gender',max_length=20)  # Field name made lowercase.
-#     ls_type = models.CharField(db_column='LS_Type',max_length=20)  # Field name made lowercase.
-#     primaryracecode = models.CharField(db_column='PrimaryRacecode',max_length=20)  # Field name made lowercase.
-#     # id = models.IntegerField(primary_key=True)  # AutoField?
-#
-#     class Meta:
-#         managed = False
-#         db_table = 'FirstMatch_testmodels'
 
 class ModelTests(models.Model):
     GENDER_CHOICES = (
@@ -271,13 +248,30 @@ class ModelTests(models.Model):
     Screening_tool_Trauma = models.IntegerField(db_column ='Screening_tool_Trauma')
 
 
-# class ModelTestSub(ModelTests):
-#     program = models.IntegerField(db_column='Program', default=999)
-    # confidence = models.IntegerField(db_column='Confidence', default=999)
 
 
+class Ade_Mapping(models.Model):
+    program = models.IntegerField(db_column='program')
+    gender = models.IntegerField(db_column='gender')
+    level_of_care = models.IntegerField(db_column='level_of_care')
+    location = ArrayField(models.IntegerField(db_column='location'))
+    location_name = ArrayField(models.CharField(db_column='location_name',max_length=100))
+    program_name = models.CharField(db_column='program_name',max_length=100)
+    level_name = models.CharField(db_column='level_name',max_length=100)
 
-#
-#     class Meta:
-#         managed = True
-#         db_table = 'Mapping_Collection'
+
+class Adelphoi_Mapping(models.Model):
+    program = models.IntegerField(db_column='program')
+    program_name = models.CharField(db_column='program_name', max_length=100)
+
+    gender = models.IntegerField(db_column='gender')
+    gender_name = models.CharField(db_column='gender_name',max_length=20)
+
+    level_of_care = models.IntegerField(db_column='level_of_care')
+    level_names = models.CharField(db_column='level_names', max_length=100)
+
+    location = ArrayField(models.IntegerField(db_column='location'))
+    location_names = ArrayField(models.CharField(db_column='location_names',max_length=100))
+
+    facility_type = models.IntegerField(db_column='facility_type')
+    facility_names = models.CharField(db_column='facility_names',max_length=100)

@@ -1,5 +1,5 @@
 from django.forms import ModelForm
-from .models import TestModels,Student,TestMod,ModelTest,ModelTests
+from .models import TestModels,ModelTest,ModelTests
 from django import forms
 from django.http import HttpResponse
 from django.core import validators
@@ -33,16 +33,12 @@ class TestForms2(forms.ModelForm):
         else:
             raise forms.ValidationError("Validation is not done")
 
-class EmpForm(forms.ModelForm):
-    class Meta:
-        model = Student
-        fields = "__all__"
 class ModelTestForms(forms.ModelForm):
     class Meta:
         model = ModelTests
         # fields = "__all__"
 
-        exclude = ['modified_date','program','confidence'] #,'hist_of_prior_program_SAO'
+        exclude = ['modified_date','program','confidence','level_of_care'] #,'hist_of_prior_program_SAO'
     # def save(self,program=None):
     #     first_info = super(ModelTestForms,self).save(commit=False)
     #     if program:

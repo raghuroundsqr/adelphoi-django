@@ -7,5 +7,13 @@ class ModelTestsSerializers(serializers.ModelSerializer):
     class Meta:
         model = ModelTests
         # fields ='__all__'
-        exclude = ['modified_date', 'program', 'confidence']
+        exclude = ['modified_date', 'program', 'confidence','level_of_care']
 
+
+
+    # def create(self, validated_data):
+    #     print('vd:', validated_data)
+    #
+    #
+    #
+    #     return validated_data

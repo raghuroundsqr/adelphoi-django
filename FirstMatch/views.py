@@ -3,9 +3,10 @@ import json
 from django.template import RequestContext
 from django.http import HttpResponse,JsonResponse,HttpResponseRedirect
 from django.urls import reverse_lazy
+from django.shortcuts import redirect, render
 from rest_framework.generics import ListCreateAPIView
 
-from .models import TestModels,ModelTests#,Mapping_Collection  #,ModelTestSub
+from .models import TestModels,ModelTests,Ade_Mapping,Adelphoi_Mapping#,Mapping_Collection  #,ModelTestSub
 from django.views.decorators.csrf import csrf_exempt
 from .forms import TestForms,TestForms2,ModelTestForms
 # from django.views import View
@@ -16,6 +17,7 @@ from django.views.generic import (View,TemplateView,
 import pandas as pd
 import numpy as np
 import pickle
+from rest_framework.parsers import JSONParser
 ###
 
 from django.shortcuts import get_list_or_404
@@ -24,7 +26,7 @@ from rest_framework.response import Response
 from  rest_framework import status
 from .serializers import ModelTestsSerializers
 from rest_framework.parsers import JSONParser
-
+from django.urls import reverse_lazy
 @csrf_exempt
 def adelphoi_insert(request):
     if request.method == 'POST':
@@ -175,14 +177,24 @@ class ModelView(CreateView):
             schizophrenia = form.cleaned_data.get('schizophrenia')
             number_of_foster_care_placements = form.cleaned_data.get('number_of_foster_care_placements')
 
-            # if ModelTests.objects.filter(client_code=client_code):
-            #     print("already exists")
-            #     return  super(AboutView).save()
+            episode_start = form.cleaned_data.get('episode_start')
+            primary_language = form.cleaned_data.get('primary_language')
+            enrollStart_date = form.cleaned_data.get('enrollStart_date')
+            english_second_lang = form.cleaned_data.get('english_second_lang')
+            type_of_drugs  = form.cleaned_data.get('type_of_drugs')
+            family_support = form.cleaned_data.get('family_support')
+            level_of_aggression = form.cleaned_data.get('level_of_aggression')
+            fire_setting = form.cleaned_data.get('fire_setting')
+            abuse_neglect = form.cleaned_data.get('abuse_neglect')
+            FAST_FamilyTogetherScore = form.cleaned_data.get('FAST_FamilyTogetherScore')
+            FAST_CaregiverAdvocacyScore = form.cleaned_data.get('FAST_CaregiverAdvocacyScore')
+            Screening_tool_Trauma = form.cleaned_data.get('Screening_tool_Trauma')
+
+
+
             print(client_code)
 
-
-
-            dt = {'Gender': gender, 'PrimaryRacecode': primaryRaceCode, 'CYF code': CYF_code, 'LS_Type': ls_type,
+            dt = {'Gender': gender, 'PrimaryRacecode': primaryRaceCode, 'CYF_code': CYF_code, 'LS_Type': ls_type,
                   'EpisodeNumber': episode_number,
                   'RefSourceName': RefSourceCode, 'Number of foster care placements': number_of_foster_care_placements,
                   'AgeAtEpisodeStart': ageAtEpisodeStart,
@@ -213,51 +225,127 @@ class ModelView(CreateView):
 
                   'CANS_LifeFunctioning': cans_LifeFunctioning ,
                  'CANS_YouthStrengths':cans_YouthStrengths, 'CANS_CareGiverStrengths':cans_CareGiverStrengths, 'CANS_Culture':cans_Culture,
-                 'CANS_YouthBehavior':cans_YouthBehavior, 'CANS_YouthRisk':cans_YouthRisk, 'CANS_Trauma_Exp': cans_Trauma_Exp
+                 'CANS_YouthBehavior':cans_YouthBehavior, 'CANS_YouthRisk':cans_YouthRisk, 'CANS_Trauma_Exp': cans_Trauma_Exp,
+                  'Family support': family_support, 'Level of aggression': level_of_aggression, 'Fire setting': fire_setting,
+                  'Abuse, or neglect': abuse_neglect, 'Screening tool for Trauma--Total score': Screening_tool_Trauma
+
+
+
 
             }
 
-            # 'CANS_LifeFunctioning': cans_LifeFunctioning,
-            # 'CANS_YouthStrengths': cans_YouthStrengths, 'CANS_CareGiverStrengths': cans_CareGiverStrengths, 'CANS_Culture': cans_Culture,
-            # 'CANS_YouthBehavior': cans_YouthBehavior, 'CANS_YouthRisk': cans_YouthRisk, 'CANS_Trauma_Exp': cans_Trauma_Exp
+
+
+
 
             data = pd.DataFrame(dt, index=[0])
-            # data.to_csv()
             print(data.columns)
-
-
             print(data.shape)
-
-            ###
-            # data = data.fillna(2)  # remove in front end
-
             print(data)
 
-            loaded_model = pickle.load(open("C:/Users/Raghu/Downloads/final_dt_48p_263r_2clases_smote.sav", "rb"))
+            # du = data[['Gender','PrimaryRacecode','LS_Type','CYF code','RefSourceName']]
+            # print(du)
+            # dd = pd.get_dummies(du,prefix_sep='_',drop_first=True)
+            # print(dd)
 
-            results = loaded_model.predict_proba(data)
-            print("results::", results)
+            Feature_names = ['EpisodeNumber', 'Number of foster care placements', 'AgeAtEpisodeStart',
+                             'Number of prior placements \n(excluding shelter and detention)', 'AgeAtEnrollStart',
+                             'Number of prior treatment terminations (excluding shelter or detention)',
+                             'Length of time since living at home', 'Termination directly to AV',
+                             'Death Caregiver', 'Borderline IQ (below 70)', 'Hist of prior program SAO',
+                             'Death Silblings', 'Alcohol Use', 'Drug Use', 'Incarcerated caregivers',
+                             'Incarcerated siblings', 'Number of prior AWOLS', 'Animal cruelty',
+                             'Number of prior hospitalizations', 'Compliant with medication',
+                             'Significant mental health symptoms', 'Severe mental health symptoms',
+                             'Autism Diagnosis', 'Borderline Personality', 'Psychosis',
+                             'Reactive Attachment Disorder', 'Schizophrenia', 'YLS_PriorCurrentOffenses_Score',
+                             'YLS_FamCircumstances_Score',
+                             'YLS_Edu_Employ_Score', 'YLS_Peer_Score', 'YLS_Subab_Score',
+                             'YLS_Leisure_Score', 'YLS_Personality_Score', 'YLS_Attitude_Score', 'Client self-harm',
+                             'CANS_LifeFunctioning',
+                             'CANS_YouthStrengths', 'CANS_CareGiverStrengths', 'CANS_Culture',
+                             'CANS_YouthBehavior', 'CANS_YouthRisk', 'CANS_Trauma_Exp', 'Family support',
+                             'Level of aggression', 'Fire setting',
+                             'Abuse, or neglect', 'Screening tool for Trauma--Total score']
 
-            Program_suggested = np.argmax(results[0]) + 1
-            Confidence = results[0][Program_suggested - 1]
-            print(f'Model is suggesting Program - {str(Program_suggested)} with confidence of {str(round(Confidence * 100, 2))}')
-            result = (f'Model is suggesting Program - {str(Program_suggested)} with confidence of {str(round(Confidence * 100, 2))}')
+            print("features::",data[Feature_names].shape)
+            dummies = pd.DataFrame()
+            print("dummies shape",dummies.shape)
 
 
-            # program = Program_suggested
-            # q = Adelphoi_Mapping2.objects.all()
-            # print(q)
+            for column in ['Gender', 'PrimaryRacecode', 'LS_Type', 'CYF_code', 'RefSourceName']:
+                dummies1 = pd.get_dummies(data[column], prefix=column)
+                dummies[dummies1.columns] = dummies1.copy(deep=False)
+            print("data columns head",(data[column]).head())
+            print("data columns shape", (data[column]).shape)
 
-            # ModelTests(program=Program_suggested).save()
-            # form.save(commit=False)
-            # form.program = Program_suggested
+            print("dummies1 shape",dummies1.shape)
 
-            # mcs = Mapping_Collection.objects.all()
-            # # print(q)
-            # for mc in mcs:
-            #     gender = mc.gender
+            cols = ['Gender_1', 'Gender_2', 'PrimaryRacecode_1', 'PrimaryRacecode_2',
+                    'PrimaryRacecode_3', 'LS_Type_1', 'LS_Type_2', 'LS_Type_4', 'LS_Type_5',
+                    'CYF_code_1', 'CYF_code_2', 'RefSourceName_1', 'RefSourceName_2',
+                    'RefSourceName_3', 'RefSourceName_4', 'RefSourceName_5',
+                    'RefSourceName_6', 'RefSourceName_7', 'RefSourceName_8',
+                    'RefSourceName_12', 'RefSourceName_13', 'RefSourceName_14',
+                    'RefSourceName_15', 'RefSourceName_16', 'RefSourceName_17',
+                    'RefSourceName_18', 'RefSourceName_22', 'RefSourceName_24',
+                    'RefSourceName_25', 'RefSourceName_26', 'RefSourceName_31',
+                    'RefSourceName_35', 'RefSourceName_36', 'RefSourceName_37',
+                    'RefSourceName_38', 'RefSourceName_39', 'RefSourceName_41',
+                    'RefSourceName_42', 'RefSourceName_43', 'RefSourceName_45',
+                    'RefSourceName_46', 'RefSourceName_48', 'RefSourceName_49',
+                    'RefSourceName_51', 'RefSourceName_52', 'RefSourceName_54']
 
+            for col in cols:
+                if col in dummies.columns:
+                    print('present', col)
+                else:
+                    dummies[col] = 0
 
+            dummies.drop(["RefSourceName_27"], axis=1, inplace=True)
+
+            print("dummies shape",dummies.shape)
+            print(("dumm",dummies.columns))
+            Xtest = data[Feature_names]
+            Xtest[dummies.columns] = dummies
+            Xtest.shape
+            print("xtest colimns",Xtest.columns)
+            ### LR JOY
+            # data = data.fillna(0,inplace=True)  # remove in front end
+            #pre-processing
+            #
+            # dummies  = pd.DataFrame()
+            # for column in du:
+            #     dummies1 = pd.get_dummies(data[column],prefix=column)
+            #     dummies[dummies1.columns] = dummies1.copy(deep=False)
+            #
+            # print(dummies)
+
+            level_model = pickle.load(open("C:/Users/Raghu/Downloads/dt_LR_Level_0.1.sav", "rb")) #final_dt_48p_263r_2clases_smote.sav
+            program_model = pickle.load(open("C:/Users/Raghu/Downloads/dt_T_Program.sav", "rb"))
+
+            # results = loaded_model.predict_proba(data)
+            # print("results::", results)
+            level_pred = level_model.predict(Xtest)
+            program_pred = program_model.predict(Xtest)
+            print(level_pred)
+            print("program",program_pred)
+
+            # Program_suggested = np.argmax(results[0]) + 1
+            # Confidence = results[0][Program_suggested - 1]
+            query = Ade_Mapping.objects.filter(program = program_pred,gender=gender,level_of_care = level_pred)
+            location_list = []
+            program_list = []
+            level_list = []
+            for i in query:
+                program_list.append(i.program_name)
+                level_list.append(i.level_name)
+                location_list.append(i.location_name)
+            # print(f'Model is suggesting Program - {str(Program_suggested)} with confidence of {str(round(Confidence * 100, 2))}')
+            # result = (f'Model is suggesting Program - {str(Program_suggested)} locations are {location_list}') #\n with confidence of {str(round(Confidence * 100, 2))}
+            result = (f'Model is suggesting Program - {program_list} -------\t level of care---{level_list}------- locations are {location_list}')  # \n with confidence of {str(round(Confidence * 100, 2))}
+
+            # result = (f'Model is suggesting Program - {str(program_pred)} \t level of care---{str(level_pred)} locations are {location_list}')  # \n with confidence of {str(round(Confidence * 100, 2))}
 
             p = ModelTests(client_code = client_code,gender = gender,primaryRaceCode= primaryRaceCode,ls_type = ls_type,
                            ageAtEpisodeStart = ageAtEpisodeStart,episode_number = episode_number,CYF_code = CYF_code,ageAtEnrollStart = ageAtEnrollStart,
@@ -274,9 +362,20 @@ class ModelView(CreateView):
                            significant_mental_health_symptoms = significant_mental_health_symptoms,number_of_prior_placements = number_of_prior_placements,psychosis = psychosis,
                            reactive_Attachment_Disorder = reactive_Attachment_Disorder,schizophrenia = schizophrenia,number_of_foster_care_placements = number_of_foster_care_placements,
 
-                           program = Program_suggested,confidence = Confidence)
+
+                           level_of_care = level_pred,episode_start = episode_start, primary_language = primary_language, enrollStart_date = enrollStart_date,
+            english_second_lang = english_second_lang, type_of_drugs = type_of_drugs, family_support = family_support, FAST_FamilyTogetherScore = FAST_FamilyTogetherScore,
+            FAST_CaregiverAdvocacyScore = FAST_CaregiverAdvocacyScore, fire_setting = fire_setting, abuse_neglect = abuse_neglect,
+            Screening_tool_Trauma = Screening_tool_Trauma, level_of_aggression = level_of_aggression,
+
+
+                           program = level_pred)#program = Program_suggested,confidence = Confidence
+
+
             p.save()
             return HttpResponse(result)
+        else:
+            form.errors()
 
 
             #############
@@ -300,27 +399,26 @@ class AdelphoiList(ListCreateAPIView):
     serializer_class = ModelTestsSerializers
     queryset = ModelTests.objects.all()
 
-
-    def perform_create(self, serializer: ModelTestsSerializers):
-        # try:
-        dt = {'Gender': serializer.validated_data.get('gender'), 'PrimaryRacecode': serializer.validated_data.get('primaryRaceCode'), 'CYF code': serializer.validated_data.get('CYF_code'), 'LS_Type': serializer.validated_data.get('ls_type'),
+    def post(self, request):
+        serializer = self.get_serializer_class()
+        serializer = serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        dt = {'Gender': serializer.validated_data.get('gender'),'PrimaryRacecode': serializer.validated_data.get('primaryRaceCode'),
+              'CYF_code': serializer.validated_data.get('CYF_code'),'LS_Type': serializer.validated_data.get('ls_type'),
               'EpisodeNumber': serializer.validated_data.get('episode_number'),
               'RefSourceName': serializer.validated_data.get('RefSourceCode'), 'Number of foster care placements': serializer.validated_data.get('number_of_foster_care_placements'),
-              'AgeAtEpisodeStart': serializer.validated_data.get('ageAtEpisodeStart'),
-              'Number of prior placements \n(excluding shelter and detention)': serializer.validated_data.get('number_of_prior_placements'),
+              'AgeAtEpisodeStart': serializer.validated_data.get('ageAtEpisodeStart'),'Number of prior placements \n(excluding shelter and detention)': serializer.validated_data.get('number_of_prior_placements'),
               'AgeAtEnrollStart': serializer.validated_data.get('ageAtEnrollStart'),
               'Number of prior treatment terminations (excluding shelter or detention)': serializer.validated_data.get('number_of_prior_treatment_terminations'),
               'Length of time since living at home': serializer.validated_data.get('length_of_time_since_living_at_home'),
               'Termination directly to AV': serializer.validated_data.get('termination_directly_to_AV'),
               'Death Caregiver': serializer.validated_data.get('death_Caregiver'), 'Borderline IQ (below 70)': serializer.validated_data.get('borderline_IQ'),
-              'Hist of prior program SAO': serializer.validated_data.get('hist_of_prior_program_SAO'),  # hist_of_prior_program_SAO
+              'Hist of prior program SAO': serializer.validated_data.get('hist_of_prior_program_SAO'),
               'Death Silblings': serializer.validated_data.get('death_Silblings'), 'Alcohol Use': serializer.validated_data.get('alcohol_Use'), 'Drug Use': serializer.validated_data.get('drug_Use'),
               'Incarcerated caregivers': serializer.validated_data.get('incarcerated_caregivers'),
               'Incarcerated siblings': serializer.validated_data.get('incarcerated_siblings'), 'Number of prior AWOLS': serializer.validated_data.get('number_of_prior_AWOLS'),
-              'Animal cruelty': serializer.validated_data.get('animal_cruelty'),
-              'Number of prior hospitalizations': serializer.validated_data.get('prior_hospitalizations'),
-              'Compliant with medication': serializer.validated_data.get('compliant_with_meds'),
-              'Significant mental health symptoms': serializer.validated_data.get('significant_mental_health_symptoms'),
+              'Animal cruelty': serializer.validated_data.get('animal_cruelty'),'Number of prior hospitalizations': serializer.validated_data.get('prior_hospitalizations'),
+              'Compliant with medication': serializer.validated_data.get('compliant_with_meds'),'Significant mental health symptoms': serializer.validated_data.get('significant_mental_health_symptoms'),
               'Severe mental health symptoms': serializer.validated_data.get('severe_mental_health_symptoms'),
               'Autism Diagnosis': serializer.validated_data.get('autism_Diagnosis'), 'Borderline Personality': serializer.validated_data.get('borderline_Personality'),
               'Psychosis': serializer.validated_data.get('psychosis'),
@@ -328,30 +426,182 @@ class AdelphoiList(ListCreateAPIView):
               'YLS_PriorCurrentOffenses_Score': serializer.validated_data.get('yls_PriorCurrentOffenses_Score'),
               'YLS_FamCircumstances_Score': serializer.validated_data.get('yls_FamCircumstances_Score'),
               'YLS_Edu_Employ_Score': serializer.validated_data.get('yls_Edu_Employ_Score'), 'YLS_Peer_Score': serializer.validated_data.get('yls_Peer_Score'),
-              'YLS_Subab_Score': serializer.validated_data.get('yls_Subab_Score'),
-              'YLS_Leisure_Score': serializer.validated_data.get('yls_Leisure_Score'), 'YLS_Personality_Score': serializer.validated_data.get('yls_Personality_Score'),
+              'YLS_Subab_Score': serializer.validated_data.get('yls_Subab_Score'),'YLS_Leisure_Score': serializer.validated_data.get('yls_Leisure_Score'), 'YLS_Personality_Score': serializer.validated_data.get('yls_Personality_Score'),
               'YLS_Attitude_Score': serializer.validated_data.get('yls_Attitude_Score'), 'Client self-harm': serializer.validated_data.get('client_self_harm'),
 
               'CANS_LifeFunctioning': serializer.validated_data.get('cans_LifeFunctioning'),
               'CANS_YouthStrengths': serializer.validated_data.get('cans_YouthStrengths'), 'CANS_CareGiverStrengths': serializer.validated_data.get('cans_CareGiverStrengths'),
               'CANS_Culture': serializer.validated_data.get('cans_Culture'),
               'CANS_YouthBehavior': serializer.validated_data.get('cans_YouthBehavior'), 'CANS_YouthRisk': serializer.validated_data.get('cans_YouthRisk'),
-              'CANS_Trauma_Exp': serializer.validated_data.get('cans_Trauma_Exp')
+              'CANS_Trauma_Exp': serializer.validated_data.get('cans_Trauma_Exp'),
 
+              'Family support': serializer.validated_data.get('family_support'), 'Level of aggression': serializer.validated_data.get('level_of_aggression'),
+              'Fire setting': serializer.validated_data.get('fire_setting'),
+              'Abuse, or neglect': serializer.validated_data.get('abuse_neglect'), 'Screening tool for Trauma--Total score': serializer.validated_data.get('Screening_tool_Trauma')
               }
+
+
         data = pd.DataFrame(dt, index=[0])
-        print(data.columns)
-        print(data.shape)
-        data = data.fillna(0)
-        loaded_model = pickle.load(open("C:/Users/Raghu/Downloads/final_dt_48p_263r_2clases_smote.sav", "rb"))
+
+        # data = data.fillna(0)
+
+        Feature_names = ['EpisodeNumber', 'Number of foster care placements', 'AgeAtEpisodeStart',
+                         'Number of prior placements \n(excluding shelter and detention)', 'AgeAtEnrollStart',
+                         'Number of prior treatment terminations (excluding shelter or detention)',
+                         'Length of time since living at home', 'Termination directly to AV',
+                         'Death Caregiver', 'Borderline IQ (below 70)', 'Hist of prior program SAO',
+                         'Death Silblings', 'Alcohol Use', 'Drug Use', 'Incarcerated caregivers',
+                         'Incarcerated siblings', 'Number of prior AWOLS', 'Animal cruelty',
+                         'Number of prior hospitalizations', 'Compliant with medication',
+                         'Significant mental health symptoms', 'Severe mental health symptoms',
+                         'Autism Diagnosis', 'Borderline Personality', 'Psychosis',
+                         'Reactive Attachment Disorder', 'Schizophrenia', 'YLS_PriorCurrentOffenses_Score',
+                         'YLS_FamCircumstances_Score',
+                         'YLS_Edu_Employ_Score', 'YLS_Peer_Score', 'YLS_Subab_Score',
+                         'YLS_Leisure_Score', 'YLS_Personality_Score', 'YLS_Attitude_Score', 'Client self-harm',
+                         'CANS_LifeFunctioning',
+                         'CANS_YouthStrengths', 'CANS_CareGiverStrengths', 'CANS_Culture',
+                         'CANS_YouthBehavior', 'CANS_YouthRisk', 'CANS_Trauma_Exp', 'Family support',
+                         'Level of aggression', 'Fire setting',
+                         'Abuse, or neglect', 'Screening tool for Trauma--Total score']
+
+        print("features::", data[Feature_names].shape)
+        dummies = pd.DataFrame()
+        # print("dummies shape", dummies.shape)
+
+        for column in ['Gender', 'PrimaryRacecode', 'LS_Type', 'CYF_code', 'RefSourceName']:
+            dummies1 = pd.get_dummies(data[column], prefix=column)
+            dummies[dummies1.columns] = dummies1.copy(deep=False)
+        print("data columns head", (data[column]).head())
+        print("data columns shape", (data[column]).shape)
+
+        print("dummies1 shape", dummies1.shape)
+
+        cols = ['Gender_1', 'Gender_2', 'PrimaryRacecode_1', 'PrimaryRacecode_2',
+                'PrimaryRacecode_3', 'LS_Type_1', 'LS_Type_2', 'LS_Type_4', 'LS_Type_5',
+                'CYF_code_1', 'CYF_code_2', 'RefSourceName_1', 'RefSourceName_2',
+                'RefSourceName_3', 'RefSourceName_4', 'RefSourceName_5',
+                'RefSourceName_6', 'RefSourceName_7', 'RefSourceName_8',
+                'RefSourceName_12', 'RefSourceName_13', 'RefSourceName_14',
+                'RefSourceName_15', 'RefSourceName_16', 'RefSourceName_17',
+                'RefSourceName_18', 'RefSourceName_22', 'RefSourceName_24',
+                'RefSourceName_25', 'RefSourceName_26', 'RefSourceName_31',
+                'RefSourceName_35', 'RefSourceName_36', 'RefSourceName_37',
+                'RefSourceName_38', 'RefSourceName_39', 'RefSourceName_41',
+                'RefSourceName_42', 'RefSourceName_43', 'RefSourceName_45',
+                'RefSourceName_46', 'RefSourceName_48', 'RefSourceName_49',
+                'RefSourceName_51', 'RefSourceName_52', 'RefSourceName_54']
+
+        for col in cols:
+            if col in dummies.columns:
+                print('present', col)
+            else:
+                dummies[col] = 0
+
+        dummies.drop(['CYF_code_3', 'RefSourceName_55'], axis=1, inplace=True)
+
+        print("dummies shape", dummies.shape)
+        print(("dumm", dummies.columns))
+        Xtest = data[Feature_names]
+        Xtest[dummies.columns] = dummies
+        print("Xtest shape",Xtest.shape)
+        print("xtest columns", Xtest.columns)
+        level_model = pickle.load(open("C:/Users/Raghu/Downloads/dt_LR_Level_0.1.sav", "rb"))  # final_dt_48p_263r_2clases_smote.sav
+        program_model = pickle.load(open("C:/Users/Raghu/Downloads/dt_T_Program.sav", "rb"))
+
+        level_pred = level_model.predict(Xtest)
+        program_pred = program_model.predict(Xtest)
+        print(level_pred)
+        print("program", program_pred)
+        query = Adelphoi_Mapping.objects.filter(program=program_pred, gender=serializer.validated_data.get('gender'), level_of_care=level_pred)
+
+        #######
+        location_list = []
+        program_list = []
+        level_list = []
+
+
+        for i in query:
+            program_list.append(i.program_name)
+            level_list.append(i.level_names)
+            location_list.append(i.location_names)
+
+        # print(program_list[0])
+        # serializer.save(program=program_pred, level_of_care=level_pred)
+
+        sample_dict = {}
+        for i in query:
+            sample_dict['program_name'] = i.program_name
+            sample_dict['level_name'] = i.level_names
+            sample_dict['location_names'] = i.location_names
+
+        serializer.save(program=program_pred, level_of_care=level_pred)
+
+
+
+        # return JsonResponse({"Message":f'Model is suggesting Program - {str(Program_suggested)} with confidence of {str(round(Confidence * 100, 2))}'}, status=200)
+
+        # return JsonResponse({"Program is":program_list,"level of care":level_list,"locations are":location_list})
+
+        # return Response({"program is":program_list,"level of care is ":level_list},template_name='ad_index.html')
+
+        return render(request,'success_prediction.html',{'question':sample_dict})
+    # def perform_create(self, serializer: ModelTestsSerializers):
+    #     # try:
+    #     dt = {'Gender': serializer.validated_data.get('gender'), 'PrimaryRacecode': serializer.validated_data.get('primaryRaceCode'), 'CYF code': serializer.validated_data.get('CYF_code'), 'LS_Type': serializer.validated_data.get('ls_type'),
+    #           'EpisodeNumber': serializer.validated_data.get('episode_number'),
+    #           'RefSourceName': serializer.validated_data.get('RefSourceCode'), 'Number of foster care placements': serializer.validated_data.get('number_of_foster_care_placements'),
+    #           'AgeAtEpisodeStart': serializer.validated_data.get('ageAtEpisodeStart'),
+    #           'Number of prior placements \n(excluding shelter and detention)': serializer.validated_data.get('number_of_prior_placements'),
+    #           'AgeAtEnrollStart': serializer.validated_data.get('ageAtEnrollStart'),
+    #           'Number of prior treatment terminations (excluding shelter or detention)': serializer.validated_data.get('number_of_prior_treatment_terminations'),
+    #           'Length of time since living at home': serializer.validated_data.get('length_of_time_since_living_at_home'),
+    #           'Termination directly to AV': serializer.validated_data.get('termination_directly_to_AV'),
+    #           'Death Caregiver': serializer.validated_data.get('death_Caregiver'), 'Borderline IQ (below 70)': serializer.validated_data.get('borderline_IQ'),
+    #           'Hist of prior program SAO': serializer.validated_data.get('hist_of_prior_program_SAO'),  # hist_of_prior_program_SAO
+    #           'Death Silblings': serializer.validated_data.get('death_Silblings'), 'Alcohol Use': serializer.validated_data.get('alcohol_Use'), 'Drug Use': serializer.validated_data.get('drug_Use'),
+    #           'Incarcerated caregivers': serializer.validated_data.get('incarcerated_caregivers'),
+    #           'Incarcerated siblings': serializer.validated_data.get('incarcerated_siblings'), 'Number of prior AWOLS': serializer.validated_data.get('number_of_prior_AWOLS'),
+    #           'Animal cruelty': serializer.validated_data.get('animal_cruelty'),
+    #           'Number of prior hospitalizations': serializer.validated_data.get('prior_hospitalizations'),
+    #           'Compliant with medication': serializer.validated_data.get('compliant_with_meds'),
+    #           'Significant mental health symptoms': serializer.validated_data.get('significant_mental_health_symptoms'),
+    #           'Severe mental health symptoms': serializer.validated_data.get('severe_mental_health_symptoms'),
+    #           'Autism Diagnosis': serializer.validated_data.get('autism_Diagnosis'), 'Borderline Personality': serializer.validated_data.get('borderline_Personality'),
+    #           'Psychosis': serializer.validated_data.get('psychosis'),
+    #           'Reactive Attachment Disorder': serializer.validated_data.get('reactive_Attachment_Disorder'), 'Schizophrenia': serializer.validated_data.get('schizophrenia'),
+    #           'YLS_PriorCurrentOffenses_Score': serializer.validated_data.get('yls_PriorCurrentOffenses_Score'),
+    #           'YLS_FamCircumstances_Score': serializer.validated_data.get('yls_FamCircumstances_Score'),
+    #           'YLS_Edu_Employ_Score': serializer.validated_data.get('yls_Edu_Employ_Score'), 'YLS_Peer_Score': serializer.validated_data.get('yls_Peer_Score'),
+    #           'YLS_Subab_Score': serializer.validated_data.get('yls_Subab_Score'),
+    #           'YLS_Leisure_Score': serializer.validated_data.get('yls_Leisure_Score'), 'YLS_Personality_Score': serializer.validated_data.get('yls_Personality_Score'),
+    #           'YLS_Attitude_Score': serializer.validated_data.get('yls_Attitude_Score'), 'Client self-harm': serializer.validated_data.get('client_self_harm'),
+    #
+    #           'CANS_LifeFunctioning': serializer.validated_data.get('cans_LifeFunctioning'),
+    #           'CANS_YouthStrengths': serializer.validated_data.get('cans_YouthStrengths'), 'CANS_CareGiverStrengths': serializer.validated_data.get('cans_CareGiverStrengths'),
+    #           'CANS_Culture': serializer.validated_data.get('cans_Culture'),
+    #           'CANS_YouthBehavior': serializer.validated_data.get('cans_YouthBehavior'), 'CANS_YouthRisk': serializer.validated_data.get('cans_YouthRisk'),
+    #           'CANS_Trauma_Exp': serializer.validated_data.get('cans_Trauma_Exp')
+    #
+    #           }
+    #     data = pd.DataFrame(dt, index=[0])
+    #     # print(data.columns)
+    #     # print(data.shape)
+    #     data = data.fillna(0)
+    #     loaded_model = pickle.load(open("C:/Users/Raghu/Downloads/final_dt_48p_263r_2clases_smote.sav", "rb"))
+    #     #
+    #     results = loaded_model.predict_proba(data)
+    #     # print("results::", results)
+    #     return results
+
+
+
         #
-        results = loaded_model.predict_proba(data)
-        print("results::", results)
-        #
-        Program_suggested = np.argmax(results[0]) + 1
-        Confidence = results[0][Program_suggested - 1]
-        serializer.save(program=Program_suggested,confidence=Confidence)
+        # Program_suggested = np.argmax(results[0]) + 1
+        # Confidence = results[0][Program_suggested - 1]
+        #serializer.save(program=Program_suggested,confidence=Confidence)
+        # print(f'Model is suggesting Program - {str(Program_suggested)} with confidence of {str(round(Confidence * 100, 2))}')
         # serializer.save()
-        # return Response(serializer.data, status=status.HTTP_201_CREATED)
-        # except Exception as e:
-        #     return Response({"error":"NOT FOUND"},status=404)
+
+
+
