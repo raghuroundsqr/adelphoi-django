@@ -15,6 +15,7 @@ urlpatterns = [
     path('CBV',views.CBView.as_view(success_url="/CBV")),
     path('AboutView',views.AboutView.as_view()),
     path('model_test/',views.ModelView.as_view(success_url="/model_test")),
-    path('list_view/',views.AdelphoiList.as_view())
+    path('list_view/',views.AdelphoiList.as_view()),
+    path('list_view/<pk>/',views.AdelphoiSubmission.as_view())
 
 ]

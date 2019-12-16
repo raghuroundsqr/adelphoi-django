@@ -34,6 +34,7 @@
   <component name="PropertiesComponent">
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="last_opened_file_path" value="$USER_HOME$/Documents/apk_api_original.py" />
+    <property name="restartRequiresConfirmation" value="false" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
     <property name="two.files.diff.last.used.file" value="$USER_HOME$/Documents/apk_api_original.py" />
   </component>
@@ -108,6 +109,8 @@
       <configuration name="PythonConfigurationType">
         <watch expression="mcs" language="Python" />
         <watch expression="mcs[0].gender" language="Python" />
+        <watch expression="print(i.program_name)" language="Python" />
+        <watch expression="program_list" language="Python" />
       </configuration>
     </watches-manager>
   </component>

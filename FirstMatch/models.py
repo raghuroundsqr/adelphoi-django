@@ -154,11 +154,10 @@ class ModelTests(models.Model):
         (32, 'Pike'), (34, 'Snyder'), (35, 'Tioga'), (36, 'Washington'), (37, 'Westmoreland'), (38, 'York'),
         (39, 'Armstrong'),
         (40, 'Columbia'), (41, 'Crawford'), (42, 'Cayahoga OH'), (43, 'Franklin OH'), (44, 'Greene'), (45, 'Indiana'),
-        (46, 'Lawrence'),
-        (47, 'MH'), (48, 'Mckean'), (49, 'Mercer'), (50, 'outside tri-county'), (51, 'Northampton'), (52, 'Pike'),
+        (46, 'Lawrence'), (48, 'Mckean'), (49, 'Mercer'), (50, 'outside tri-county'), (51, 'Northampton'), (52, 'Pike'),
         (53, 'Schukill'),
-        (54, 'Somerset'), (55, 'Union'), (56, 'Venango'))
-    CYF_CHOICES = ((1, 'CYF'), (2, 'Juvenile Justice'), (3, 'MH'))
+        (54, 'Somerset'), (55, 'Union'), (56, 'Venango'),(57,'Fulton'),(59,'WV'),(60,'SE PA'))
+    CYF_CHOICES = ((1, 'CYF'), (2, 'Juvenile Justice'))
     no_or_yes = ((0, 'no'), (1, 'yes'))
     Termination_av = ((0, 'no'), (1, 'unknown'), (2, 'one'), (3, 'two or more'))
     complaint = ((0, 'no'), (1, 'yes'), (9, 'N / A'))
@@ -170,6 +169,13 @@ class ModelTests(models.Model):
                           (4, '1 year or more ago'))
     primary_lang_choices = ((1,'English'),(2,'not English'))
     second_lang = ((0,'not at all'),(1,'very little'),(2,'average'),(3,'very well'))
+
+
+    program_choices = ((1,'substance abuse'),(2,'sex offender'),(3,'intensive supervision'))
+
+    facility_choices = ((1,'Group Home'),(2,'Secure'))
+    level_choices = ((1,'Mental Health'),(2,'Intensive'))
+
 
     name = models.CharField(db_column='name', max_length=100)
     dob = models.DateField(db_column='dob')
@@ -183,22 +189,22 @@ class ModelTests(models.Model):
     ageAtEnrollStart = models.IntegerField(db_column='AgeAtEnrollStart')
     RefSourceCode = models.IntegerField(db_column='RefSourceCode', choices=REF_CHOICES)
     termination_directly_to_AV = models.IntegerField(db_column='Termination_directly_to_AV', choices=Termination_av)
-    client_self_harm = models.IntegerField(db_column='Client_self_harm')
-    yls_PriorCurrentOffenses_Score = models.IntegerField(db_column='YLS_PriorCurrentOffenses_Score',blank=True)
-    yls_FamCircumstances_Score = models.IntegerField(db_column='YLS_FamCircumstances_Score',blank=True)
-    yls_Edu_Employ_Score = models.IntegerField(db_column='YLS_Edu_Employ_Score',blank=True)
-    yls_Peer_Score = models.IntegerField(db_column='YLS_Peer_Score',blank=True)
-    yls_Subab_Score = models.IntegerField(db_column='YLS_Subab_Score',blank=True)
-    yls_Leisure_Score = models.IntegerField(db_column='YLS_Leisure_Score',blank=True)
-    yls_Personality_Score = models.IntegerField(db_column='YLS_Personality_Score',blank=True)
-    yls_Attitude_Score = models.IntegerField(db_column='YLS_Attitude_Score',blank=True)
-    cans_LifeFunctioning = models.IntegerField(db_column='CANS_LifeFunctioning')
-    cans_YouthStrengths = models.IntegerField(db_column='CANS_YouthStrengths')
-    cans_CareGiverStrengths = models.IntegerField(db_column='CANS_CareGiverStrengths')
-    cans_Culture = models.IntegerField(db_column='CANS_Culture')
-    cans_YouthBehavior = models.IntegerField(db_column='CANS_YouthBehavior')
-    cans_YouthRisk = models.IntegerField(db_column='CANS_YouthRisk')
-    cans_Trauma_Exp = models.IntegerField(db_column='CANS_Trauma_Exp')
+    client_self_harm = models.FloatField(db_column='Client_self_harm',blank=True)
+    yls_PriorCurrentOffenses_Score = models.FloatField(db_column='YLS_PriorCurrentOffenses_Score',blank=True)
+    yls_FamCircumstances_Score = models.FloatField(db_column='YLS_FamCircumstances_Score',blank=True)
+    yls_Edu_Employ_Score = models.FloatField(db_column='YLS_Edu_Employ_Score',blank=True)
+    yls_Peer_Score = models.FloatField(db_column='YLS_Peer_Score',blank=True)
+    yls_Subab_Score = models.FloatField(db_column='YLS_Subab_Score',blank=True)
+    yls_Leisure_Score = models.FloatField(db_column='YLS_Leisure_Score',blank=True)
+    yls_Personality_Score = models.FloatField(db_column='YLS_Personality_Score',blank=True)
+    yls_Attitude_Score = models.FloatField(db_column='YLS_Attitude_Score',blank=True)
+    cans_LifeFunctioning = models.FloatField(db_column='CANS_LifeFunctioning',blank=True)
+    cans_YouthStrengths = models.FloatField(db_column='CANS_YouthStrengths',blank=True)
+    cans_CareGiverStrengths = models.FloatField(db_column='CANS_CareGiverStrengths',blank=True)
+    cans_Culture = models.FloatField(db_column='CANS_Culture',blank=True)
+    cans_YouthBehavior = models.FloatField(db_column='CANS_YouthBehavior',blank=True)
+    cans_YouthRisk = models.FloatField(db_column='CANS_YouthRisk',blank=True)
+    cans_Trauma_Exp = models.FloatField(db_column='CANS_Trauma_Exp',blank=True)
     incarcerated_caregivers = models.IntegerField(db_column='Incarcerated_caregivers', choices=no_or_yes)
     incarcerated_siblings = models.IntegerField(db_column='Incarcerated_siblings', choices=no_or_yes)
     number_of_prior_AWOLS = models.IntegerField(db_column='Number_of_prior_AWOLS', choices=prior_awols_choice)
@@ -239,14 +245,21 @@ class ModelTests(models.Model):
     english_second_lang = models.IntegerField(db_column='english_second_lang',choices=second_lang)
     level_of_care = models.IntegerField(db_column='level_of_care')
     type_of_drugs = models.TextField(db_column='type_of_drugs')
-    family_support = models.IntegerField(db_column='family_support')
-    level_of_aggression = models.IntegerField(db_column='level_of_aggression')
-    fire_setting = models.IntegerField(db_column='fire_setting')
-    abuse_neglect = models.IntegerField(db_column='abuse_neglect',choices=no_or_yes)
-    FAST_FamilyTogetherScore = models.IntegerField(db_column='FAST_FamilyTogetherScore')
-    FAST_CaregiverAdvocacyScore = models.IntegerField(db_column='FAST_CaregiverAdvocacyScore')
-    Screening_tool_Trauma = models.IntegerField(db_column ='Screening_tool_Trauma')
+    family_support = models.FloatField(db_column='family_support',null=True)
+    level_of_aggression = models.FloatField(db_column='level_of_aggression',null=True)
+    fire_setting = models.FloatField(db_column='fire_setting',null=True)
+    abuse_neglect = models.FloatField(db_column='abuse_neglect',choices=no_or_yes)
+    FAST_FamilyTogetherScore = models.FloatField(db_column='FAST_FamilyTogetherScore',blank=True)
+    FAST_CaregiverAdvocacyScore = models.FloatField(db_column='FAST_CaregiverAdvocacyScore',blank=True)
+    Screening_tool_Trauma = models.FloatField(db_column ='Screening_tool_Trauma',blank=True)
 
+    facility_type = models.IntegerField(db_column='facility_pred')
+
+
+    client_selected_program = models.CharField(max_length=10,choices=program_choices)
+
+    client_selected_level = models.CharField(max_length=10,choices=level_choices)
+    client_selected_facility = models.CharField(max_length=10,choices=facility_choices)
 
 
 
@@ -275,3 +288,5 @@ class Adelphoi_Mapping(models.Model):
 
     facility_type = models.IntegerField(db_column='facility_type')
     facility_names = models.CharField(db_column='facility_names',max_length=100)
+
+    program_model_suggested = models.CharField(db_column='program_model_suggested', max_length=100)
