@@ -177,6 +177,13 @@ class ModelTests(models.Model):
     level_choices = ((1,'Mental Health'),(2,'Intensive'))
 
 
+    location_choices = ((1,'Alliance'), (2,'Anchor'), (3,'Benet'), (4,'Colony'), (5,'Greystone'),(6,'Hall'),(6,'Hall/Loyalhannah'),
+    (7,'La Sa Quik'), (8,'Marker'), (9,'Middle Creek I'), (10,'Middle Creek II'),(11,'Middle Creek III'), (12,'Monestery Run'),\
+    (13,'Raphael'), (14,'Susans'), (15,'Sweeney'),(16,'Vincent'),(17,'Williams'),(18,'manor'))
+
+    program_model_suggested_choices = ((1,'Substance Abuse Group Home'),(2,'Sexual Offense Group Home with Mental Health Focus'),(3,'Sexual offense facilities'),(4,'Intensive Supervision Secure Facility for sexual offenses - '),
+                                       (5,'Intensive Supervision Group Home with Mental Health Focus'),(6,'Intensive Supervision Group Homes'),(7,'Intensive Supervision Secure Facilities'))
+
     name = models.CharField(db_column='name', max_length=100)
     dob = models.DateField(db_column='dob')
     client_code = models.IntegerField(db_column='Client_code',primary_key=True)
@@ -256,11 +263,22 @@ class ModelTests(models.Model):
     facility_type = models.IntegerField(db_column='facility_pred')
 
 
-    client_selected_program = models.CharField(max_length=10,choices=program_choices)
+    # client_selected_program = models.CharField(max_length=10,choices=program_choices)
+    #
+    # client_selected_level = models.CharField(max_length=10,choices=level_choices)
+    # client_selected_facility = models.CharField(max_length=10,choices=facility_choices)
+    # client_selected_locations = models.CharField(max_length=100,choices=location_choices)
 
-    client_selected_level = models.CharField(max_length=10,choices=level_choices)
-    client_selected_facility = models.CharField(max_length=10,choices=facility_choices)
+    client_selected_program = models.CharField(max_length=100)
 
+    client_selected_level = models.CharField(max_length=100)
+    client_selected_facility = models.CharField(max_length=100)
+    client_selected_locations = models.CharField(max_length=100)
+
+
+    # program_model_suggested = models.CharField(max_length=100,choices=program_model_suggested_choices)
+    Program_Completion = models.IntegerField(db_column='Program Completion',choices=no_or_yes)
+    Returned_to_Care = models.IntegerField(db_column='Returned_to_Care', choices=no_or_yes)
 
 
 class Ade_Mapping(models.Model):
@@ -290,3 +308,5 @@ class Adelphoi_Mapping(models.Model):
     facility_names = models.CharField(db_column='facility_names',max_length=100)
 
     program_model_suggested = models.CharField(db_column='program_model_suggested', max_length=100)
+
+

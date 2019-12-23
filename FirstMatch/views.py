@@ -4,7 +4,7 @@ from django.template import RequestContext
 from django.http import HttpResponse,JsonResponse,HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.shortcuts import redirect, render
-from rest_framework.generics import ListCreateAPIView, UpdateAPIView
+from rest_framework.generics import ListCreateAPIView, UpdateAPIView,RetrieveUpdateAPIView, ListAPIView
 
 from .models import TestModels,ModelTests,Ade_Mapping,Adelphoi_Mapping#,Mapping_Collection  #,ModelTestSub
 from django.views.decorators.csrf import csrf_exempt
@@ -24,7 +24,8 @@ from django.shortcuts import get_list_or_404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from  rest_framework import status
-from .serializers import ModelTestsSerializers, ModelTestsSerializers_selected_program
+from .serializers import ModelTestsSerializers, ModelTestsSerializers_selected_program,\
+    ModelTestsSerializer_program_model_suggested, ProgramSerialzer,LocationSerialzer,ProgramLocationSerialzer,ProgramLevelSerialzer
 from rest_framework.parsers import JSONParser
 from django.urls import reverse_lazy
 @csrf_exempt
@@ -117,7 +118,6 @@ class CBView(CreateView):
 
 
 
-
 class ModelView(CreateView):
     form_class = ModelTestForms
     template_name = 'ad_index.html'
@@ -134,7 +134,7 @@ class ModelView(CreateView):
             ageAtEpisodeStart = form.cleaned_data.get('ageAtEpisodeStart')
             episode_number = form.cleaned_data.get('episode_number')
             CYF_code = form.cleaned_data.get('CYF_code')
-            ageAtEnrollStart = form.cleaned_data.get('ageAtEnrollStart')
+            # ageAtEnrollStart = form.cleaned_data.get('ageAtEnrollStart')
             RefSourceCode = form.cleaned_data.get('RefSourceCode')
             termination_directly_to_AV = form.cleaned_data.get('termination_directly_to_AV')
             client_self_harm = form.cleaned_data.get('client_self_harm')
@@ -199,7 +199,6 @@ class ModelView(CreateView):
                   'RefSourceName': RefSourceCode, 'Number of foster care placements': number_of_foster_care_placements,
                   'AgeAtEpisodeStart': ageAtEpisodeStart,
                   'Number of prior placements \n(excluding shelter and detention)': number_of_prior_placements,
-                  'AgeAtEnrollStart': ageAtEnrollStart,
                   'Number of prior treatment terminations (excluding shelter or detention)': number_of_prior_treatment_terminations,
                   'Length of time since living at home': length_of_time_since_living_at_home,
                   'Termination directly to AV': termination_directly_to_AV,
@@ -228,11 +227,7 @@ class ModelView(CreateView):
                  'CANS_YouthBehavior':cans_YouthBehavior, 'CANS_YouthRisk':cans_YouthRisk, 'CANS_Trauma_Exp': cans_Trauma_Exp,
                   'Family support': family_support, 'Level of aggression': level_of_aggression, 'Fire setting': fire_setting,
                   'Abuse, or neglect': abuse_neglect, 'Screening tool for Trauma--Total score': Screening_tool_Trauma
-
-
-
-
-            }
+            } #'AgeAtEnrollStart': ageAtEnrollStart,
 
 
 
@@ -249,7 +244,7 @@ class ModelView(CreateView):
             # print(dd)
 
             Feature_names = ['EpisodeNumber', 'Number of foster care placements', 'AgeAtEpisodeStart',
-                             'Number of prior placements \n(excluding shelter and detention)', 'AgeAtEnrollStart',
+                             'Number of prior placements \n(excluding shelter and detention)',
                              'Number of prior treatment terminations (excluding shelter or detention)',
                              'Length of time since living at home', 'Termination directly to AV',
                              'Death Caregiver', 'Borderline IQ (below 70)', 'Hist of prior program SAO',
@@ -266,7 +261,7 @@ class ModelView(CreateView):
                              'CANS_YouthStrengths', 'CANS_CareGiverStrengths', 'CANS_Culture',
                              'CANS_YouthBehavior', 'CANS_YouthRisk', 'CANS_Trauma_Exp', 'Family support',
                              'Level of aggression', 'Fire setting',
-                             'Abuse, or neglect', 'Screening tool for Trauma--Total score']
+                             'Abuse, or neglect', 'Screening tool for Trauma--Total score'] #'AgeAtEnrollStart',
 
             print("features::",data[Feature_names].shape)
             dummies = pd.DataFrame()
@@ -400,34 +395,30 @@ class AdelphoiList(ListCreateAPIView):
     # serializer_class =  ModelTestsSerializers_selected_program
     queryset = ModelTests.objects.all()
 
+    # def update(self,request,*args, **kwargs):
+    #     instance = self.get_object()
+    #     serializer = ModelTestsSerializers(instance=instance,data=request.data.get("client_selected_program"))
+    #     serializer.is_valid(raise_exception=True)
+    #     print("am here")
+    #     serializer.save()
+    #     # return Response("serializer.data")
+    #
+    # def options(self, request, *args, **kwargs):
+    #     return Response({"sid":"Rawal"})
 
 
-    # def perform_update(self,serializer: ModelTestsSerializers,**kwargs):
-    #     kwargs['client_selected_program'] = self.get_object()
-    #     return
-
-    def update(self,request,*args, **kwargs):
-        instance = self.get_object()
-        serializer = ModelTestsSerializers(instance=instance,data=request.data.get("client_selected_program"))
-        serializer.is_valid(raise_exception=True)
-        print("am here")
-        serializer.save()
-        # return Response("serializer.data")
-
-    def options(self, request, *args, **kwargs):
-        return Response({"sid":"Rawal"})
-
+    def get(self,request):
+        return Response("Success")
     def post(self, request):
         serializer = self.get_serializer_class()
         serializer = serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        dt = {'Gender': serializer.validated_data.get('gender'),'PrimaryRacecode': serializer.validated_data.get('primaryRaceCode'),
+        dt = {'Gender': serializer.validated_data.get('gender'),'PrimaryRacecode': serializer.validated_data.get('primaryRaceCode'),'AgeAtEnrollStart': serializer.validated_data.get('ageAtEnrollStart'),
               'CYF_code': serializer.validated_data.get('CYF_code'),'LS_Type': serializer.validated_data.get('ls_type'),
               'EpisodeNumber': serializer.validated_data.get('episode_number'),
               'RefSourceName': serializer.validated_data.get('RefSourceCode'), 'Number of foster care placements': serializer.validated_data.get('number_of_foster_care_placements'),
               'AgeAtEpisodeStart': serializer.validated_data.get('ageAtEpisodeStart'),'Number of prior placements \n(excluding shelter and detention)': serializer.validated_data.get('number_of_prior_placements'),
-              'AgeAtEnrollStart': serializer.validated_data.get('ageAtEnrollStart'),
               'Number of prior treatment terminations (excluding shelter or detention)': serializer.validated_data.get('number_of_prior_treatment_terminations'),
               'Length of time since living at home': serializer.validated_data.get('length_of_time_since_living_at_home'),
               'Termination directly to AV': serializer.validated_data.get('termination_directly_to_AV'),
@@ -457,7 +448,7 @@ class AdelphoiList(ListCreateAPIView):
               'Family support': serializer.validated_data.get('family_support'), 'Level of aggression': serializer.validated_data.get('level_of_aggression'),
               'Fire setting': serializer.validated_data.get('fire_setting'),
               'Abuse, or neglect': serializer.validated_data.get('abuse_neglect'), 'Screening tool for Trauma--Total score': serializer.validated_data.get('Screening_tool_Trauma')
-              }
+              } #
 
 
         data = pd.DataFrame(dt, index=[0])
@@ -588,7 +579,7 @@ class AdelphoiList(ListCreateAPIView):
 
 
         Feature_names = ['EpisodeNumber', 'Number of foster care placements', 'AgeAtEpisodeStart',
-                         'Number of prior placements \n(excluding shelter and detention)', 'AgeAtEnrollStart',
+                         'Number of prior placements \n(excluding shelter and detention)',
                          'Number of prior treatment terminations (excluding shelter or detention)',
                          'Length of time since living at home', 'Termination directly to AV',
                          'Death Caregiver', 'Borderline IQ (below 70)', 'Hist of prior program SAO',
@@ -606,6 +597,7 @@ class AdelphoiList(ListCreateAPIView):
                          'CANS_YouthBehavior', 'CANS_YouthRisk', 'CANS_Trauma_Exp', 'Family support',
                          'Level of aggression', 'Fire setting',
                          'Abuse, or neglect', 'Screening tool for Trauma--Total score']
+        #'AgeAtEnrollStart',
 
 
         # 11/12/2019
@@ -708,9 +700,9 @@ class AdelphoiList(ListCreateAPIView):
         # print("xtest columns", Xtest.columns)
 
 
-        level_model = pickle.load(open("C:/Users/Raghu/Downloads/DT_LC_10Dec.sav", "rb"))  # final_dt_48p_263r_2clases_smote.sav #dt_LR_Level_0.1
-        program_model = pickle.load(open("C:/Users/Raghu/Downloads/DT_P_10Dec.sav", "rb")) #dt_T_Program
-        facility_model= pickle.load(open("C:/Users/Raghu/Downloads/DT_FT_10Dec.sav", "rb")) #DT_FT_10Dec
+        level_model = pickle.load(open("C:/Users/Raghu/Downloads/LR_LC_19Dec.sav", "rb"))  # final_dt_48p_263r_2clases_smote.sav #dt_LR_Level_0.1
+        program_model = pickle.load(open("C:/Users/Raghu/Downloads/DT_P_19Dec.sav", "rb")) #dt_T_Program
+        facility_model= pickle.load(open("C:/Users/Raghu/Downloads/LR_FT_19Dec.sav", "rb")) #DT_FT_10Dec
 
         level_pred = level_model.predict(Xtest)
         program_pred = program_model.predict(Xtest)
@@ -718,9 +710,14 @@ class AdelphoiList(ListCreateAPIView):
 
         program_proba = program_model.predict_proba(Xtest)
 
-
         Program_suggested = np.argmax(program_proba[0]) + 1
         Confidence = program_proba[0][Program_suggested - 1]
+
+        Program_suggested1 = np.argmax(program_proba[0]) + 1
+        Confidence1 = program_proba[0][Program_suggested1 - 1]
+        print("Confidence",Confidence)
+        print("Confidence1",Confidence1)
+
 
 
 
@@ -728,9 +725,15 @@ class AdelphoiList(ListCreateAPIView):
         print("facility_preds",facility_preds)
 
         print(f"suggested program{Program_suggested}, with Confidence {Confidence}")
-        print("data family",data['Family support'][0])
+
+        print("program_pred",program_pred)
 
         query = Adelphoi_Mapping.objects.filter(program=program_pred, gender=serializer.validated_data.get('gender'), level_of_care=level_pred,facility_type = facility_preds)
+
+        query2 = Adelphoi_Mapping.objects.filter(program=program_pred, gender=serializer.validated_data.get('gender'),level_of_care=level_pred)#, level_of_care=level_pred
+        print(query)
+        for qq in query2:
+            print(qq)
         serializer.save(program=program_pred, level_of_care=level_pred,facility_type =facility_preds,confidence = Confidence,
                         family_support = data['Family support'][0],
                         level_of_aggression = data['Level of aggression'][0],
@@ -767,118 +770,253 @@ class AdelphoiList(ListCreateAPIView):
                 location_list.append(i.location_names)
                 facility_names.append(i.facility_names)
                 program_model.append(i.program_model_suggested)
+
+            print("location_list",location_list[0])
             return Response(
                 {"program": program_pred, "program list is": program_list, "level of care is ": level_list,
-                 "location names": location_list, "facility names": facility_names,"Confidence":Confidence,"program_model_suggested":program_model})
+                 "location names": location_list, "facility names": facility_names,"Confidence":Confidence,"program_model_suggested":program_model,
+                 "response":"one"})
+        elif query2.count() > 0:
+            for i in query:
+                program_list.append(i.program_name)
+                level_list.append(i.level_names)
+                location_list.append(i.location_names)
+                facility_names.append(i.facility_names)
+                program_model.append(i.program_model_suggested)
+            return Response(
+                {"program": program_pred, "program list is": program_list, "level of care is ": level_list,
+                 "location names": location_list, "facility names": facility_names, "Confidence": Confidence,
+                 "program_model_suggested": program_model,"response":"two"})
+
         else:
-            return Response({"program": program_pred,"Level of care":level_pred,"ERROR":"Matching values not found"})
+            return Response({"program": program_pred,"Level of care":level_pred,"Confidence":Confidence,"Facility Type":facility_preds,"ERROR":"Matching values not found"})
 
 
         return Response({"data":"success"})
 
-        # print(program_list[0])
-        # serializer.save(program=program_pred, level_of_care=level_pred)
-
-        # sample_dict = {}
-        # for i in query:
-        #     sample_dict['program_name'] = i.program_name
-        #     sample_dict['level_name'] = i.level_names
-        #     sample_dict['location_names'] = i.location_names
 
 
 
 
 
-        # return JsonResponse({"Message":f'Model is suggesting Program - {str(Program_suggested)} with confidence of {str(round(Confidence * 100, 2))}'}, status=200)
-
-        # return JsonResponse({"Program is":program_list,"level of care":level_list,"locations are":location_list})
-
-         #,template_name='ad_index.html'
-
-        # return render(request,'success_prediction.html',{'question':sample_dict})
-    # def perform_create(self, serializer: ModelTestsSerializers):
-    #     # try:
-    #     dt = {'Gender': serializer.validated_data.get('gender'), 'PrimaryRacecode': serializer.validated_data.get('primaryRaceCode'), 'CYF code': serializer.validated_data.get('CYF_code'), 'LS_Type': serializer.validated_data.get('ls_type'),
-    #           'EpisodeNumber': serializer.validated_data.get('episode_number'),
-    #           'RefSourceName': serializer.validated_data.get('RefSourceCode'), 'Number of foster care placements': serializer.validated_data.get('number_of_foster_care_placements'),
-    #           'AgeAtEpisodeStart': serializer.validated_data.get('ageAtEpisodeStart'),
-    #           'Number of prior placements \n(excluding shelter and detention)': serializer.validated_data.get('number_of_prior_placements'),
-    #           'AgeAtEnrollStart': serializer.validated_data.get('ageAtEnrollStart'),
-    #           'Number of prior treatment terminations (excluding shelter or detention)': serializer.validated_data.get('number_of_prior_treatment_terminations'),
-    #           'Length of time since living at home': serializer.validated_data.get('length_of_time_since_living_at_home'),
-    #           'Termination directly to AV': serializer.validated_data.get('termination_directly_to_AV'),
-    #           'Death Caregiver': serializer.validated_data.get('death_Caregiver'), 'Borderline IQ (below 70)': serializer.validated_data.get('borderline_IQ'),
-    #           'Hist of prior program SAO': serializer.validated_data.get('hist_of_prior_program_SAO'),  # hist_of_prior_program_SAO
-    #           'Death Silblings': serializer.validated_data.get('death_Silblings'), 'Alcohol Use': serializer.validated_data.get('alcohol_Use'), 'Drug Use': serializer.validated_data.get('drug_Use'),
-    #           'Incarcerated caregivers': serializer.validated_data.get('incarcerated_caregivers'),
-    #           'Incarcerated siblings': serializer.validated_data.get('incarcerated_siblings'), 'Number of prior AWOLS': serializer.validated_data.get('number_of_prior_AWOLS'),
-    #           'Animal cruelty': serializer.validated_data.get('animal_cruelty'),
-    #           'Number of prior hospitalizations': serializer.validated_data.get('prior_hospitalizations'),
-    #           'Compliant with medication': serializer.validated_data.get('compliant_with_meds'),
-    #           'Significant mental health symptoms': serializer.validated_data.get('significant_mental_health_symptoms'),
-    #           'Severe mental health symptoms': serializer.validated_data.get('severe_mental_health_symptoms'),
-    #           'Autism Diagnosis': serializer.validated_data.get('autism_Diagnosis'), 'Borderline Personality': serializer.validated_data.get('borderline_Personality'),
-    #           'Psychosis': serializer.validated_data.get('psychosis'),
-    #           'Reactive Attachment Disorder': serializer.validated_data.get('reactive_Attachment_Disorder'), 'Schizophrenia': serializer.validated_data.get('schizophrenia'),
-    #           'YLS_PriorCurrentOffenses_Score': serializer.validated_data.get('yls_PriorCurrentOffenses_Score'),
-    #           'YLS_FamCircumstances_Score': serializer.validated_data.get('yls_FamCircumstances_Score'),
-    #           'YLS_Edu_Employ_Score': serializer.validated_data.get('yls_Edu_Employ_Score'), 'YLS_Peer_Score': serializer.validated_data.get('yls_Peer_Score'),
-    #           'YLS_Subab_Score': serializer.validated_data.get('yls_Subab_Score'),
-    #           'YLS_Leisure_Score': serializer.validated_data.get('yls_Leisure_Score'), 'YLS_Personality_Score': serializer.validated_data.get('yls_Personality_Score'),
-    #           'YLS_Attitude_Score': serializer.validated_data.get('yls_Attitude_Score'), 'Client self-harm': serializer.validated_data.get('client_self_harm'),
-    #
-    #           'CANS_LifeFunctioning': serializer.validated_data.get('cans_LifeFunctioning'),
-    #           'CANS_YouthStrengths': serializer.validated_data.get('cans_YouthStrengths'), 'CANS_CareGiverStrengths': serializer.validated_data.get('cans_CareGiverStrengths'),
-    #           'CANS_Culture': serializer.validated_data.get('cans_Culture'),
-    #           'CANS_YouthBehavior': serializer.validated_data.get('cans_YouthBehavior'), 'CANS_YouthRisk': serializer.validated_data.get('cans_YouthRisk'),
-    #           'CANS_Trauma_Exp': serializer.validated_data.get('cans_Trauma_Exp')
-    #
-    #           }
-    #     data = pd.DataFrame(dt, index=[0])
-    #     # print(data.columns)
-    #     # print(data.shape)
-    #     data = data.fillna(0)
-    #     loaded_model = pickle.load(open("C:/Users/Raghu/Downloads/final_dt_48p_263r_2clases_smote.sav", "rb"))
-    #     #
-    #     results = loaded_model.predict_proba(data)
-    #     # print("results::", results)
-    #     return results
 
 
+class AdelphoiSubmission(RetrieveUpdateAPIView):  #UpdateAPIView
 
-        #
-        # Program_suggested = np.argmax(results[0]) + 1
-        # Confidence = results[0][Program_suggested - 1]
-        #serializer.save(program=Program_suggested,confidence=Confidence)
-        # print(f'Model is suggesting Program - {str(Program_suggested)} with confidence of {str(round(Confidence * 100, 2))}')
-        # serializer.save()
-
-
-class AdelphoiSubmission(UpdateAPIView):
-
-    serializer_class = ModelTestsSerializers_selected_program
+    serializer_class = ProgramLevelSerialzer #ModelTestsSerializers_selected_program, ModelTestsSerializer_program_model_suggested
+    # serializer_class = ModelTestsSerializer_program_model_suggested
     queryset = ModelTests.objects.all()
+    # def update(self,request, *args, **kwargs):
 
-    def options(self, request, *args, **kwargs):
+
+    # def options(self, request, *args, **kwargs):
+    #     serializer = self.get_serializer_class()
+    #     serializer = serializer(data=request.data)
+    #     serializer.is_valid(raise_exception=True)
+    #
+    #     mt: ModelTests = ModelTests.objects.filter(client_code=kwargs['pk'])[0]
+    #     print(mt.program)
+    #     query = Adelphoi_Mapping.objects.filter(program=mt.program, gender=mt.gender,
+    #                                             level_of_care=mt.level_of_care)
+    #     location_list = []
+    #     program_list = []
+    #     level_list = []
+    #     print("Client Program is",serializer.validated_data.get('client_selected_program'))
+    #     for i in query:
+    #         program_list.append(i.program_name)
+    #         level_list.append(i.level_names)
+    #         location_list.append(i.location_names)
+    #     data = {
+    #         'location_list': location_list
+    #     }
+    #     return Response(data)
+    # def options(self, request, *args, **kwargs):
+    #     serializer = self.get_serializer_class()
+    #     serializer = serializer(data=request.data)
+    #     serializer.is_valid(raise_exception=True)
+    #
+    #     mt: ModelTests = ModelTests.objects.filter(client_code=kwargs['pk'])[0]
+    #     print(mt.program)
+    #     print(mt.gender)
+    #
+    #     query = Adelphoi_Mapping.objects.filter(gender=mt.gender) #,program_model_suggested = serializer.validated_data.get("program_model_suggested")
+    #     suggested_programs = []
+    #     location_names = []
+    #     for i in query:
+    #         suggested_programs.append(i.program_model_suggested)
+    #         # location_names.append(i.location_names)
+    #     data = {
+    #         'program_model_suggested': suggested_programs,
+    #         # "location_names":location_names
+    #     }
+    #
+    #     return Response(data)
+    # def put(self, request, *args, **kwargs):
+    #
+    #     mt: ModelTests = ModelTests.objects.filter(client_code=kwargs['pk'])[0]
+    #     print(mt.program)
+    #     print(mt.gender)
+    #
+    #     query = Adelphoi_Mapping.objects.filter(gender=mt.gender)  # ,program_model_suggested = serializer.validated_data.get("program_model_suggested")
+    #     suggested_programs = []
+    #     location_names = []
+    #     for i in query:
+    #         suggested_programs.append(i.program_model_suggested)
+    #         # location_names.append(i.location_names)
+    #     data = {
+    #         'program_model_suggested': suggested_programs,
+    #         # "location_names":location_names
+    #     }
+    #
+    #     return Response(data)
+    #     # return Response("Success")
+    def put(self,request, *args, **kwargs):
+        mt: ModelTests = ModelTests.objects.filter(client_code=kwargs['pk'])[0]
+        print(mt.program)
+        print(mt.gender)
+        suggested_programs2 = request.GET['suggested_programs']
+        location = request.GET['location_names']
+
+        query = Adelphoi_Mapping.objects.filter(gender=mt.gender)  # ,program_model_suggested = serializer.validated_data.get("program_model_suggested")
+        suggested_programs = []
+        suggested_location = []
+        location_names = []
+
+        selected_program = []
+        selected_level = []
+        selected_facility = []
+        if query.count()>0:
+            for i in query:
+                suggested_programs.append(i.program_model_suggested)
+                suggested_location.append(i.location_names)
+
+            query_location = Adelphoi_Mapping.objects.filter(program_model_suggested=suggested_programs2)
+            for q in query_location:
+                location_names.append(q.location_names)
+                selected_program.append(q.program)
+                selected_level.append(q.level_of_care)
+                selected_facility.append(q.facility_type)
+        data = {"suggested_programs":suggested_programs,"location_names":suggested_location}
+
+        mt.client_selected_level=int(selected_level[0])
+        mt.client_selected_facility = int(selected_facility[0])
+        mt.client_selected_program = int(selected_program[0])
+        mt.save()
+
+        return Response({"data":data})
+
+
+    def get(self,request, *args, **kwargs):
+        mt: ModelTests = ModelTests.objects.filter(client_code=kwargs['pk'])[0]
+        print(mt.program)
+        query = Adelphoi_Mapping.objects.filter(gender=mt.gender)
+        suggested_programs = []
+        locatin_name = []
+        for i in query:
+            suggested_programs.append(i.program_model_suggested)
+            locatin_name.append(i.location_names)
+        data = {"suggested_programs": suggested_programs}
+        return Response(data)
+
+class Adelphoi_program(ListAPIView):
+    serializer_class =  ProgramSerialzer
+    def get(self, request, *args, **kwargs):
         serializer = self.get_serializer_class()
         serializer = serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
         mt: ModelTests = ModelTests.objects.filter(client_code=kwargs['pk'])[0]
         print(mt.program)
-        query = Adelphoi_Mapping.objects.filter(program=mt.program, gender=mt.gender,
-                                                level_of_care=mt.level_of_care)
-        location_list = []
-        program_list = []
-        level_list = []
-        print("Client Program is",serializer.validated_data.get('client_selected_program'))
+        print(mt.gender)
+
+        query = Adelphoi_Mapping.objects.filter(gender=mt.gender) #,program_model_suggested = serializer.validated_data.get("program_model_suggested")
+        suggested_programs = []
+        location_names = []
         for i in query:
-            program_list.append(i.program_name)
-            level_list.append(i.level_names)
-            location_list.append(i.location_names)
+            suggested_programs.append(i.program_model_suggested)
+            # location_names.append(i.location_names)
         data = {
-            'location_list': location_list
+            'program_model_suggested': suggested_programs,
         }
         return Response(data)
+
+class Adelphoi_location(ListAPIView):
+    serializer_class =  LocationSerialzer
+    def get(self, request):
+        serializer = self.get_serializer_class()
+        serializer = serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        client_selected_program = request.GET['client_selected_program']
+        query = Adelphoi_Mapping.objects.filter(program_model_suggested = client_selected_program) #,program_model_suggested = serializer.validated_data.get("program_model_suggested")
+        suggested_location = []
+        for i in query:
+            suggested_location.append(i.location_names)
+        data = {
+            'Suggested Locations': suggested_location,
+        }
+        return Response(data)
+
+class AdelphoiResult(UpdateAPIView):  #UpdateAPIView
+
+    serializer_class = ProgramLocationSerialzer
+    queryset = ModelTests.objects.all()
+
+    def put(self,request, *args, **kwargs):
+        serializer = self.get_serializer_class()
+        serializer = serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        mt: ModelTests = ModelTests.objects.filter(client_code=kwargs['pk'])[0]
+        client_selected_program = serializer.validated_data.get('client_selected_program') #request.GET['client_selected_program']
+        client_selected_location = serializer.validated_data.get('client_selected_locations') #request.GET['client_selected_location']
+
+        query = Adelphoi_Mapping.objects.filter(gender =mt.gender)
+        location_names = []
+
+        selected_program = []
+        selected_level = []
+        selected_facility = []
+        if query.count()>0:
+            query_location = Adelphoi_Mapping.objects.filter(program_model_suggested = client_selected_program)
+            for q in query_location:
+                location_names.append(q.location_names)
+                selected_program.append(q.program)
+                selected_level.append(q.level_of_care)
+                selected_facility.append(q.facility_type)
+        else:
+            return Response({"Response":"not found"})
+
+        mt.client_selected_level = int(selected_level[0])
+        mt.client_selected_facility = int(selected_facility[0])
+        mt.client_selected_program = int(selected_program[0])
+        mt.client_selected_locations = location_names
+        mt.save()
+        return Response({"result":"values are inserted"})
+
+
+class ProgramCompletionLevel(UpdateAPIView):
+    serializer_class = ProgramLevelSerialzer
+
+    def put(self,request, *args, **kwargs):
+        serializer = self.get_serializer_class()
+        serializer = serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+
+        mt: ModelTests = ModelTests.objects.filter(client_code=kwargs['pk'])[0]
+        query = ModelTests.objects.filter(client_code=kwargs['pk'])
+        print(query)
+
+        mt.Program_Completion = serializer.validated_data.get('Program_Completion')
+        mt.Returned_to_Care = serializer.validated_data.get('Returned_to_Care')
+        mt.save()
+        # else:
+        #     return Response({"result":"Client no exists"})
+        return Response({"data":"success"})
+
+
+
+
 
 
