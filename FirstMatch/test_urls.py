@@ -15,18 +15,12 @@ urlpatterns = [
     path('CBV',views.CBView.as_view(success_url="/CBV")),
     path('AboutView',views.AboutView.as_view()),
     path('model_test/',views.ModelView.as_view(success_url="/model_test")),
-
     path('list_view/',views.AdelphoiList.as_view()),
-    # path('list_view/<pk>/',views.AdelphoiSubmission.as_view()),#w --not need
+    #path('list_view/<pk>/',views.AdelphoiSubmission.as_view()),#not need
     path('program/<pk>/',views.Adelphoi_program.as_view()), #w
     path('location/<pk>/',views.Adelphoi_location.as_view()), #w
     path('update_list/<pk>/',views.AdelphoiResult.as_view()), #w
     path('program_complete/<pk>/',views.ProgramCompletionLevel.as_view()), #w
-    path('admins/<int:gender>/', views.AdminUpdate.as_view()),
     path('search/',views.ClientList.as_view())
-
-
-
-    # path('list_view/<pk>/<gender>',views.AdelphoiSubmission.as_view()),
 
 ]

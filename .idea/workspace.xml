@@ -2,32 +2,20 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="32ebb356-1aca-40e1-98c9-7a7e1f1762fe" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/FirstMatch/test_models.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/FirstMatch/test_views.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sources/DT_P_19Dec.sav" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sources/DT_P_23Dec.sav" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sources/LR_FT_19Dec.sav" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sources/LR_FT_23Dec.sav" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sources/LR_LC_19Dec.sav" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sources/LR_LC_23Dec.sav" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FirstMatch/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/FirstMatch/admin.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FirstMatch/migrations/0002_ade_mapping_location_name.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/FirstMatch/migrations/0003_ade_mapping_program_name.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/FirstMatch/migrations/0004_ade_mapping_level_name.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/FirstMatch/migrations/0005_auto_20191205_1406.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/FirstMatch/migrations/0006_auto_20191205_1408.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/FirstMatch/migrations/0007_adelphoi_mapping.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/FirstMatch/migrations/0008_modeltests_client_selected_program.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/FirstMatch/migrations/0009_auto_20191211_1518.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/FirstMatch/migrations/0010_modeltests_facility_type.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/FirstMatch/migrations/0011_auto_20191212_1101.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/FirstMatch/migrations/0012_auto_20191212_1110.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/FirstMatch/migrations/0013_auto_20191212_1147.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/FirstMatch/migrations/0014_auto_20191216_1204.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/FirstMatch/migrations/0015_auto_20191216_1215.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/FirstMatch/migrations/0016_modeltests_program_model_suggested.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/FirstMatch/migrations/0017_auto_20191216_1238.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/FirstMatch/migrations/0018_auto_20191216_1243.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/FirstMatch/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/FirstMatch/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/FirstMatch/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/FirstMatch/serializers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FirstMatch/tests.py" beforeDir="false" afterPath="$PROJECT_DIR$/FirstMatch/tests.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/FirstMatch/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/FirstMatch/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/FirstMatch/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/FirstMatch/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sources/mongo_scripts" beforeDir="false" afterPath="$PROJECT_DIR$/sources/mongo_scripts" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -38,8 +26,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Python Script" />
         <option value="HTML File" />
+        <option value="Python Script" />
       </list>
     </option>
   </component>
@@ -51,17 +39,17 @@
   <component name="PropertiesComponent">
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/sources" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/FirstMatch/test_views.py" />
     <property name="restartRequiresConfirmation" value="false" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
-    <property name="two.files.diff.last.used.file" value="$USER_HOME$/Documents/apk_api_original.py" />
+    <property name="two.files.diff.last.used.file" value="$PROJECT_DIR$/FirstMatch/test_views.py" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="D:\Adelphoi\AdelphoiProject\sources" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\Adelphoi\AdelphoiProject\templates" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\Adelphoi\AdelphoiProject\sources" />
     </key>
   </component>
   <component name="RunDashboard">
