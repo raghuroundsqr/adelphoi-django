@@ -43,7 +43,7 @@ class TestModels(models.Model):
     Autism = ((0 ,'no'),(1,'yes'))
     border = ((0 ,'no'),(1,'yes'))
     complaint = ((0,'no'),(1,'yes'),(9,'N / A'))
-
+    Exclusionary_Criteria =models.BooleanField(db_column='Exclusionary_Criteria',default=False)
 
     Client_code = models.IntegerField(db_column = 'Client_code', blank=True, null=True)
     First_name = models.CharField(db_column='First_name',max_length=100,blank=True, null=True)
@@ -187,13 +187,8 @@ class ModelTests(models.Model):
                                        (5,'Intensive Supervision Group Home with Mental Health Focus'),(6,'Intensive Supervision Group Homes'),(7,'Intensive Supervision Secure Facilities'))
 
     name = models.CharField(db_column='name', max_length=100)
+    # last_name = models.CharField(db_column='Last_name',max_length=100)
     dob = models.DateField(db_column='dob')
-
-    # def calculate_age(self):
-    #     import datetime
-    #     return int((datetime.datetime.now() - self.birthday).days / 365.25)
-    #
-    # age = property(calculate_age)
     age = models.IntegerField(db_column='Age',null=True)
     client_code = models.IntegerField(db_column='Client_code',primary_key=True)
     gender = models.IntegerField(db_column='Gender', choices=GENDER_CHOICES)
@@ -231,6 +226,7 @@ class ModelTests(models.Model):
     autism_Diagnosis = models.IntegerField(db_column='Autism_Diagnosis', choices=no_or_yes)
     borderline_Personality = models.IntegerField(db_column='Borderline_Personality', choices=no_or_yes)
     compliant_with_meds = models.IntegerField(db_column='Compliant_with_meds', choices=complaint)
+    Exclusionary_Criteria = models.BooleanField(db_column='Exclusionary_Criteria', default=True)
     severe_mental_health_symptoms = models.IntegerField(db_column='Severe_mental_health_symptoms',choices=Severe_MH_symptoms)
     number_of_prior_treatment_terminations = models.IntegerField(db_column='Number_of_prior_treatment_terminations')
     length_of_time_since_living_at_home = models.IntegerField(db_column='Length_of_time_since_living_at_home')

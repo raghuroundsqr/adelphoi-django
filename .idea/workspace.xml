@@ -2,20 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="32ebb356-1aca-40e1-98c9-7a7e1f1762fe" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/FirstMatch/test_models.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/FirstMatch/test_views.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sources/DT_P_19Dec.sav" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sources/DT_P_23Dec.sav" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sources/LR_FT_19Dec.sav" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sources/LR_FT_23Dec.sav" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sources/LR_LC_19Dec.sav" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sources/LR_LC_23Dec.sav" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/FirstMatch/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/FirstMatch/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FirstMatch/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/FirstMatch/serializers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FirstMatch/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/FirstMatch/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/FirstMatch/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/FirstMatch/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sources/mongo_scripts" beforeDir="false" afterPath="$PROJECT_DIR$/sources/mongo_scripts" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />

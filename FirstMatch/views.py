@@ -399,374 +399,338 @@ class AdelphoiList(ListCreateAPIView):
         serializer = self.get_serializer_class()
         serializer = serializer(data=request.data)
         serializer.is_valid(raise_exception=True) #raise_exception=True
+        if serializer.validated_data.get('Exclusionary_Criteria') == True:
+            dt = {'Gender': serializer.validated_data.get('gender'),'PrimaryRacecode': serializer.validated_data.get('primaryRaceCode'),'AgeAtEnrollStart': serializer.validated_data.get('ageAtEnrollStart'),
+                  'CYF_code': serializer.validated_data.get('CYF_code'),'LS_Type': serializer.validated_data.get('ls_type'),
+                  'EpisodeNumber': serializer.validated_data.get('episode_number'),
+                  'RefSourceName': serializer.validated_data.get('RefSourceCode'), 'Number of foster care placements': serializer.validated_data.get('number_of_foster_care_placements'),
+                  'AgeAtEpisodeStart': serializer.validated_data.get('ageAtEpisodeStart'),'Number of prior placements \n(excluding shelter and detention)': serializer.validated_data.get('number_of_prior_placements'),
+                  'Number of prior treatment terminations (excluding shelter or detention)': serializer.validated_data.get('number_of_prior_treatment_terminations'),
+                  'Length of time since living at home': serializer.validated_data.get('length_of_time_since_living_at_home'),
+                  'Termination directly to AV': serializer.validated_data.get('termination_directly_to_AV'),
+                  'Death Caregiver': serializer.validated_data.get('death_Caregiver'), 'Borderline IQ (below 70)': serializer.validated_data.get('borderline_IQ'),
+                  'Hist of prior program SAO': serializer.validated_data.get('hist_of_prior_program_SAO'),
+                  'Death Silblings': serializer.validated_data.get('death_Silblings'), 'Alcohol Use': serializer.validated_data.get('alcohol_Use'), 'Drug Use': serializer.validated_data.get('drug_Use'),
+                  'Incarcerated caregivers': serializer.validated_data.get('incarcerated_caregivers'),
+                  'Incarcerated siblings': serializer.validated_data.get('incarcerated_siblings'), 'Number of prior AWOLS': serializer.validated_data.get('number_of_prior_AWOLS'),
+                  'Animal cruelty': serializer.validated_data.get('animal_cruelty'),'Number of prior hospitalizations': serializer.validated_data.get('prior_hospitalizations'),
+                  'Compliant with medication': serializer.validated_data.get('compliant_with_meds'),'Significant mental health symptoms': serializer.validated_data.get('significant_mental_health_symptoms'),
+                  'Severe mental health symptoms': serializer.validated_data.get('severe_mental_health_symptoms'),
+                  'Autism Diagnosis': serializer.validated_data.get('autism_Diagnosis'), 'Borderline Personality': serializer.validated_data.get('borderline_Personality'),
+                  'Psychosis': serializer.validated_data.get('psychosis'),
+                  'Reactive Attachment Disorder': serializer.validated_data.get('reactive_Attachment_Disorder'), 'Schizophrenia': serializer.validated_data.get('schizophrenia'),
+                  'YLS_PriorCurrentOffenses_Score': serializer.validated_data.get('yls_PriorCurrentOffenses_Score'),
+                  'YLS_FamCircumstances_Score': serializer.validated_data.get('yls_FamCircumstances_Score'),
+                  'YLS_Edu_Employ_Score': serializer.validated_data.get('yls_Edu_Employ_Score'), 'YLS_Peer_Score': serializer.validated_data.get('yls_Peer_Score'),
+                  'YLS_Subab_Score': serializer.validated_data.get('yls_Subab_Score'),'YLS_Leisure_Score': serializer.validated_data.get('yls_Leisure_Score'), 'YLS_Personality_Score': serializer.validated_data.get('yls_Personality_Score'),
+                  'YLS_Attitude_Score': serializer.validated_data.get('yls_Attitude_Score'), 'Client self-harm': serializer.validated_data.get('client_self_harm'),
 
-        dt = {'Gender': serializer.validated_data.get('gender'),'PrimaryRacecode': serializer.validated_data.get('primaryRaceCode'),'AgeAtEnrollStart': serializer.validated_data.get('ageAtEnrollStart'),
-              'CYF_code': serializer.validated_data.get('CYF_code'),'LS_Type': serializer.validated_data.get('ls_type'),
-              'EpisodeNumber': serializer.validated_data.get('episode_number'),
-              'RefSourceName': serializer.validated_data.get('RefSourceCode'), 'Number of foster care placements': serializer.validated_data.get('number_of_foster_care_placements'),
-              'AgeAtEpisodeStart': serializer.validated_data.get('ageAtEpisodeStart'),'Number of prior placements \n(excluding shelter and detention)': serializer.validated_data.get('number_of_prior_placements'),
-              'Number of prior treatment terminations (excluding shelter or detention)': serializer.validated_data.get('number_of_prior_treatment_terminations'),
-              'Length of time since living at home': serializer.validated_data.get('length_of_time_since_living_at_home'),
-              'Termination directly to AV': serializer.validated_data.get('termination_directly_to_AV'),
-              'Death Caregiver': serializer.validated_data.get('death_Caregiver'), 'Borderline IQ (below 70)': serializer.validated_data.get('borderline_IQ'),
-              'Hist of prior program SAO': serializer.validated_data.get('hist_of_prior_program_SAO'),
-              'Death Silblings': serializer.validated_data.get('death_Silblings'), 'Alcohol Use': serializer.validated_data.get('alcohol_Use'), 'Drug Use': serializer.validated_data.get('drug_Use'),
-              'Incarcerated caregivers': serializer.validated_data.get('incarcerated_caregivers'),
-              'Incarcerated siblings': serializer.validated_data.get('incarcerated_siblings'), 'Number of prior AWOLS': serializer.validated_data.get('number_of_prior_AWOLS'),
-              'Animal cruelty': serializer.validated_data.get('animal_cruelty'),'Number of prior hospitalizations': serializer.validated_data.get('prior_hospitalizations'),
-              'Compliant with medication': serializer.validated_data.get('compliant_with_meds'),'Significant mental health symptoms': serializer.validated_data.get('significant_mental_health_symptoms'),
-              'Severe mental health symptoms': serializer.validated_data.get('severe_mental_health_symptoms'),
-              'Autism Diagnosis': serializer.validated_data.get('autism_Diagnosis'), 'Borderline Personality': serializer.validated_data.get('borderline_Personality'),
-              'Psychosis': serializer.validated_data.get('psychosis'),
-              'Reactive Attachment Disorder': serializer.validated_data.get('reactive_Attachment_Disorder'), 'Schizophrenia': serializer.validated_data.get('schizophrenia'),
-              'YLS_PriorCurrentOffenses_Score': serializer.validated_data.get('yls_PriorCurrentOffenses_Score'),
-              'YLS_FamCircumstances_Score': serializer.validated_data.get('yls_FamCircumstances_Score'),
-              'YLS_Edu_Employ_Score': serializer.validated_data.get('yls_Edu_Employ_Score'), 'YLS_Peer_Score': serializer.validated_data.get('yls_Peer_Score'),
-              'YLS_Subab_Score': serializer.validated_data.get('yls_Subab_Score'),'YLS_Leisure_Score': serializer.validated_data.get('yls_Leisure_Score'), 'YLS_Personality_Score': serializer.validated_data.get('yls_Personality_Score'),
-              'YLS_Attitude_Score': serializer.validated_data.get('yls_Attitude_Score'), 'Client self-harm': serializer.validated_data.get('client_self_harm'),
+                  'CANS_LifeFunctioning': serializer.validated_data.get('cans_LifeFunctioning'),
+                  'CANS_YouthStrengths': serializer.validated_data.get('cans_YouthStrengths'), 'CANS_CareGiverStrengths': serializer.validated_data.get('cans_CareGiverStrengths'),
+                  'CANS_Culture': serializer.validated_data.get('cans_Culture'),
+                  'CANS_YouthBehavior': serializer.validated_data.get('cans_YouthBehavior'), 'CANS_YouthRisk': serializer.validated_data.get('cans_YouthRisk'),
+                  'CANS_Trauma_Exp': serializer.validated_data.get('cans_Trauma_Exp'),
 
-              'CANS_LifeFunctioning': serializer.validated_data.get('cans_LifeFunctioning'),
-              'CANS_YouthStrengths': serializer.validated_data.get('cans_YouthStrengths'), 'CANS_CareGiverStrengths': serializer.validated_data.get('cans_CareGiverStrengths'),
-              'CANS_Culture': serializer.validated_data.get('cans_Culture'),
-              'CANS_YouthBehavior': serializer.validated_data.get('cans_YouthBehavior'), 'CANS_YouthRisk': serializer.validated_data.get('cans_YouthRisk'),
-              'CANS_Trauma_Exp': serializer.validated_data.get('cans_Trauma_Exp'),
-
-              'Family support': serializer.validated_data.get('family_support'), 'Level of aggression': serializer.validated_data.get('level_of_aggression'),
-              'Fire setting': serializer.validated_data.get('fire_setting'),
-              'Abuse, or neglect': serializer.validated_data.get('abuse_neglect'), 'Screening tool for Trauma--Total score': serializer.validated_data.get('Screening_tool_Trauma')
-              } #
+                  'Family support': serializer.validated_data.get('family_support'), 'Level of aggression': serializer.validated_data.get('level_of_aggression'),
+                  'Fire setting': serializer.validated_data.get('fire_setting'),
+                  'Abuse, or neglect': serializer.validated_data.get('abuse_neglect'), 'Screening tool for Trauma--Total score': serializer.validated_data.get('Screening_tool_Trauma')
+                  } #
 
 
-        data = pd.DataFrame(dt, index=[0])
+            data = pd.DataFrame(dt, index=[0])
 
-        # Impute empty values with mean values
+            # Impute empty values with mean values
 
-        if data['Family support'][0] is None:
-            if data['Gender'][0] == 1:
-                data['Family support'] = 1.148148
+            if data['Family support'][0] is None:
+                if data['Gender'][0] == 1:
+                    data['Family support'] = 1.148148
+                else:
+                    data['Family support'] = 0.963964
+            if data['Level of aggression'][0] is None:
+                if data['Gender'][0] == 2:
+                    data['Level of aggression'] = 2.369863
+                else:
+                    data['Level of aggression'] = 2.053333
+            if data['Fire setting'][0] is None:
+                if data['Gender'][0] == 1:
+                    data['Fire setting'] = 0.068493
+                else:
+                    data['Fire setting'] = 0.213333
+            if data['Client self-harm'][0] is None:
+                if data['Gender'][0] == 1:
+                    data['Client self-harm'] = 0.479452
+                else:
+                    data['Client self-harm'] = 0.197309
+            # if data['Abuse, or neglect'][0] is None:
+            #     if data['Gender'][0] == 1:
+            #         data['Abuse, or neglect'] = 0.613636
+            #     else:
+            #         data['Abuse, or neglect'] = 0.535398
+            if data['CANS_LifeFunctioning'][0] is None:
+                if data['Gender'][0] == 1:
+                    data['CANS_LifeFunctioning'] = 12.945205
+                else:
+                    data['CANS_LifeFunctioning'] = 11.475556
+
+            if data['CANS_YouthStrengths'][0] is None:
+                if data['Gender'][0] == 1:
+                    data['CANS_YouthStrengths'] = 13.704225
+                else:
+                    data['CANS_YouthStrengths'] = 13.157407
+            if data['CANS_CareGiverStrengths'][0] is None:
+                if data['Gender'][0] == 1:
+                    data['CANS_CareGiverStrengths'] = 10.129032
+                else:
+                    data['CANS_CareGiverStrengths'] = 7.107692
+            if data['CANS_Culture'][0] is None:
+                if data['Gender'][0] == 1:
+                    data['CANS_Culture'] = 0.05797
+                else:
+                    data['CANS_Culture'] = 0.148718
+            if data['CANS_YouthBehavior'][0] is None:
+                if data['Gender'][0] == 1:
+                    data['CANS_YouthBehavior'] = 9.438356
+                else:
+                    data['CANS_YouthBehavior'] = 7.733333
+            if data['CANS_YouthRisk'][0] is None:
+                if data['Gender'][0] == 1:
+                    data['CANS_YouthRisk'] = 4.191781
+                else:
+                    data['CANS_YouthRisk'] = 3.986667
+            if data['CANS_Trauma_Exp'][0] is None:
+                if data['Gender'][0] == 1:
+                    data['CANS_Trauma_Exp'] = 5.042857
+                else:
+                    data['CANS_Trauma_Exp'] = 4.360976
+            # if data['FAST_FamilyTogetherScore'][0] is None:
+            #     if data['Gender'][0] == 1:
+            #         data['FAST_FamilyTogetherScore'] = 7.377358
+            #     else:
+            #         data['FAST_FamilyTogetherScore'] = 7.245283
+            # if data['FAST_CaregiverAdvocacyScore'][0] is None:
+            #     if data['Gender'][0] == 1:
+            #         data['FAST_CaregiverAdvocacyScore'] = 6.674419
+            #     else:
+            #         data['FAST_CaregiverAdvocacyScore'] = 5.887500
+            if data['YLS_PriorCurrentOffenses_Score'][0] is None:
+                if data['Gender'][0] == 1:
+                    data['YLS_PriorCurrentOffenses_Score'] = 0.684211
+                else:
+                    data['YLS_PriorCurrentOffenses_Score'] = 0.566667
+            if data['YLS_FamCircumstances_Score'][0] is None:
+                if data['Gender'][0] == 1:
+                    data['YLS_FamCircumstances_Score'] = 3.750000
+                else:
+                    data['YLS_FamCircumstances_Score'] = 2.811111
+            if data['YLS_Edu_Employ_Score'][0] is None:
+                if data['Gender'][0] == 1:
+                    data['YLS_Edu_Employ_Score'] = 2.944444
+                else:
+                    data['YLS_Edu_Employ_Score'] = 2.322222
+            if data['YLS_Peer_Score'][0] is None:
+                if data['Gender'][0] == 1:
+                    data['YLS_Peer_Score'] = 2.833333
+                else:
+                    data['YLS_Peer_Score'] = 1.944444
+            if data['YLS_Subab_Score'][0] is None:
+                if data['Gender'][0] == 1:
+                    data['YLS_Subab_Score'] = 2.166667
+                else:
+                    data['YLS_Subab_Score'] = 1.311111
+            if data['YLS_Leisure_Score'][0] is None:
+                if data['Gender'][0] == 1:
+                    data['YLS_Leisure_Score'] = 1.944444
+                else:
+                    data['YLS_Leisure_Score'] = 2.000000
+            if data['YLS_Personality_Score'][0] is None:
+                if data['Gender'][0] == 1:
+                    data['YLS_Personality_Score'] = 3.555556
+                else:
+                    data['YLS_Personality_Score'] = 3.188889
+            if data['YLS_Attitude_Score'][0] is None:
+                if data['Gender'][0] == 1:
+                    data['YLS_Attitude_Score'] = 1.944444
+                else:
+                    data['YLS_Attitude_Score'] = 1.377778
+            if data['Screening tool for Trauma--Total score'][0] is None:
+                if data['Gender'][0] == 1:
+                    data['Screening tool for Trauma--Total score'] = 14.595238
+                else:
+                    data['Screening tool for Trauma--Total score'] = 14.634409
+
+            # data = data.fillna(0) #,axis = 1,inplace=True
+
+            Feature_names = ['EpisodeNumber', 'Number of foster care placements', 'AgeAtEpisodeStart',
+                             'Number of prior placements \n(excluding shelter and detention)',
+                             'Number of prior treatment terminations (excluding shelter or detention)',
+                             'Length of time since living at home', 'Termination directly to AV',
+                             'Death Caregiver', 'Borderline IQ (below 70)', 'Hist of prior program SAO',
+                             'Death Silblings', 'Alcohol Use', 'Drug Use', 'Incarcerated caregivers',
+                             'Incarcerated siblings', 'Number of prior AWOLS', 'Animal cruelty',
+                             'Number of prior hospitalizations', 'Compliant with medication',
+                             'Significant mental health symptoms', 'Severe mental health symptoms',
+                             'Autism Diagnosis', 'Borderline Personality', 'Psychosis',
+                             'Reactive Attachment Disorder', 'Schizophrenia', 'YLS_PriorCurrentOffenses_Score',
+                             'YLS_FamCircumstances_Score',
+                             'YLS_Edu_Employ_Score', 'YLS_Peer_Score', 'YLS_Subab_Score',
+                             'YLS_Leisure_Score', 'YLS_Personality_Score', 'YLS_Attitude_Score', 'Client self-harm',
+                             'CANS_LifeFunctioning',
+                             'CANS_YouthStrengths', 'CANS_CareGiverStrengths', 'CANS_Culture',
+                             'CANS_YouthBehavior', 'CANS_YouthRisk', 'CANS_Trauma_Exp', 'Family support',
+                             'Level of aggression', 'Fire setting',
+                             'Abuse, or neglect', 'Screening tool for Trauma--Total score']
+            #'AgeAtEnrollStart',
+            # 11/12/2019
+            numeric_cols = ['Gender', 'PrimaryRacecode', 'LS_Type', 'CYF_code', 'RefSourceName', 'EpisodeNumber',
+                            'Number of foster care placements', 'AgeAtEpisodeStart',
+
+                            'Number of prior placements \n(excluding shelter and detention)', 'AgeAtEnrollStart',
+
+                            'Number of prior treatment terminations (excluding shelter or detention)',
+
+                            'Length of time since living at home', 'Termination directly to AV',
+
+                            'Death Caregiver', 'Borderline IQ (below 70)', 'Hist of prior program SAO',
+
+                            'Death Silblings', 'Alcohol Use', 'Drug Use', 'Incarcerated caregivers',
+
+                            'Incarcerated siblings', 'Number of prior AWOLS', 'Animal cruelty',
+
+                            'Number of prior hospitalizations', 'Compliant with medication',
+
+                            'Significant mental health symptoms', 'Severe mental health symptoms',
+
+                            'Autism Diagnosis', 'Borderline Personality', 'Psychosis',
+
+                            'Reactive Attachment Disorder', 'Schizophrenia'] #'Program',, 'Level_of_Care', 'FacilityType'
+
+            dummies = pd.DataFrame()
+            #converting float to integer
+            for col in numeric_cols:
+                data[col] = pd.to_numeric(data[col], errors='coerce', downcast='integer')
+
+            data['PrimaryRacecode'].fillna(data['PrimaryRacecode'].mode()[0],inplace = True)
+            data['PrimaryRacecode'] = data['PrimaryRacecode'].astype('int')
+
+            for column in ['Gender', 'PrimaryRacecode', 'LS_Type', 'CYF_code', 'RefSourceName']:
+                dummies1 = pd.get_dummies(data[column], prefix=column)
+                dummies[dummies1.columns] = dummies1.copy(deep=False)
+
+            cols = ['Gender_1', 'Gender_2', 'PrimaryRacecode_1', 'PrimaryRacecode_2',
+                    'PrimaryRacecode_3','PrimaryRacecode_4','LS_Type_1', 'LS_Type_2','LS_Type_3','LS_Type_4', 'LS_Type_5',
+                    'CYF_code_1', 'CYF_code_2', 'RefSourceName_1','RefSourceName_2', 'RefSourceName_3',
+                    'RefSourceName_4', 'RefSourceName_5', 'RefSourceName_6','RefSourceName_7', 'RefSourceName_8', 'RefSourceName_9','RefSourceName_10',
+                    'RefSourceName_11','RefSourceName_12','RefSourceName_13', 'RefSourceName_14', 'RefSourceName_15',
+                    'RefSourceName_16', 'RefSourceName_17', 'RefSourceName_18','RefSourceName_19','RefSourceName_20',
+                    'RefSourceName_21','RefSourceName_22','RefSourceName_23','RefSourceName_24', 'RefSourceName_25',
+                    'RefSourceName_26', 'RefSourceName_27','RefSourceName_28','RefSourceName_29','RefSourceName_30',
+                    'RefSourceName_31','RefSourceName_32','RefSourceName_34', 'RefSourceName_35',
+                    'RefSourceName_36', 'RefSourceName_37', 'RefSourceName_38',
+                    'RefSourceName_39','RefSourceName_40', 'RefSourceName_41', 'RefSourceName_42',
+                    'RefSourceName_43', 'RefSourceName_44','RefSourceName_45','RefSourceName_46','RefSourceName_47',
+                    'RefSourceName_48','RefSourceName_49','RefSourceName_50','RefSourceName_51', 'RefSourceName_52',
+                    'RefSourceName_53','RefSourceName_54','RefSourceName_55','RefSourceName_56','RefSourceName_57',
+                    'RefSourceName_59','RefSourceName_60']
+
+            for col in cols:
+                if col in dummies.columns:
+                    print('present', col)
+                else:
+                    dummies[col] = 0
+
+            Xtest = data[Feature_names]
+            Xtest[dummies.columns] = dummies
+            # print("Xtest shape",Xtest.shape)
+            # print("xtest columns", Xtest.columns)
+
+
+            level_model = pickle.load(open("C:/Users/Raghu/Downloads/LR_LC_23Dec.sav", "rb"))  # final_dt_48p_263r_2clases_smote.sav #dt_LR_Level_0.1
+            program_model = pickle.load(open("C:/Users/Raghu/Downloads/DT_P_23Dec.sav", "rb")) #dt_T_Program
+            facility_model= pickle.load(open("C:/Users/Raghu/Downloads/LR_FT_23Dec.sav", "rb")) #DT_FT_10Dec
+
+            level_pred = level_model.predict(Xtest)
+            program_pred = program_model.predict(Xtest)
+            facility_preds = facility_model.predict(Xtest)
+
+            program_proba = program_model.predict_proba(Xtest)
+
+            Program_suggested = np.argmax(program_proba[0]) + 1
+            Confidence = program_proba[0][Program_suggested - 1]
+
+            Program_suggested1 = np.argmax(program_proba[0]) + 1
+            Confidence1 = program_proba[0][Program_suggested1 - 1]
+            print("Confidence",Confidence)
+            print("Confidence1",Confidence1)
+
+            print("level",level_pred)
+            print("facility_preds",facility_preds)
+
+            print(f"suggested program{Program_suggested}, with Confidence {Confidence}")
+
+            print("program_pred",program_pred)
+
+            query = Adelphoi_Mapping.objects.filter(program=program_pred, gender=serializer.validated_data.get('gender'), level_of_care=level_pred,facility_type = facility_preds)
+
+            query2 = Adelphoi_Mapping.objects.filter(program=program_pred, gender=serializer.validated_data.get('gender'),level_of_care=level_pred)#, level_of_care=level_pred
+            print(query)
+            for qq in query2:
+                print(qq)
+            serializer.save(program=program_pred, level_of_care=level_pred,facility_type =facility_preds,confidence = Confidence,
+                            family_support = data['Family support'][0],
+                            level_of_aggression = data['Level of aggression'][0],
+                            fire_setting = data['Fire setting'][0],
+                            client_self_harm = data['Client self-harm'][0],
+                            cans_LifeFunctioning = data['CANS_LifeFunctioning'][0],
+                            cans_YouthStrengths = data['CANS_YouthStrengths'][0],
+                            cans_CareGiverStrengths = data['CANS_CareGiverStrengths'][0],
+                            cans_Culture = data['CANS_Culture'][0],
+                            cans_YouthBehavior = data['CANS_YouthBehavior'][0],
+                            cans_YouthRisk = data['CANS_YouthRisk'][0],
+                            cans_Trauma_Exp = data['CANS_Trauma_Exp'][0],
+                            yls_PriorCurrentOffenses_Score = data['YLS_PriorCurrentOffenses_Score'][0],
+                            yls_FamCircumstances_Score = data['YLS_FamCircumstances_Score'][0],
+                            yls_Edu_Employ_Score  = data['YLS_Edu_Employ_Score'][0],
+                            yls_Peer_Score = data['YLS_Peer_Score'][0],
+                            yls_Subab_Score = data['YLS_Subab_Score'][0],
+                            yls_Leisure_Score = data['YLS_Leisure_Score'][0],
+                            yls_Personality_Score = data['YLS_Personality_Score'][0],
+                            yls_Attitude_Score = data['YLS_Attitude_Score'][0],
+                            Screening_tool_Trauma = data['Screening tool for Trauma--Total score'][0]) #family_support = data['Family support'],
+                            # FAST_FamilyTogetherScore = data['FAST_FamilyTogetherScore'][0],
+                            # FAST_CaregiverAdvocacyScore = data['FAST_CaregiverAdvocacyScore'][0],
+            #######
+            location_list = []
+            program_list = []
+            level_list = []
+            facility_names = []
+            program_model = []
+            if query.count()>0:
+                for i in query:
+                    program_list.append(i.program_name)
+                    level_list.append(i.level_names)
+                    location_list.append(i.location_names)
+                    facility_names.append(i.facility_names)
+                    program_model.append(i.program_model_suggested)
+
+                print("location_list",location_list[0])
+                return Response(
+                    {"program": program_pred, "program list is": program_list, "level of care is ": level_list,
+                     "location names": location_list, "facility names": facility_names,"Confidence":Confidence,"program_model_suggested":program_model})
+            elif query2.count() > 0:
+                for i in query:
+                    program_list.append(i.program_name)
+                    level_list.append(i.level_names)
+                    location_list.append(i.location_names)
+                    facility_names.append(i.facility_names)
+                    program_model.append(i.program_model_suggested)
+                return Response(
+                    {"program": program_pred, "program list is": program_list, "level of care is ": level_list,
+                     "location names": location_list, "facility names": facility_names, "Confidence": Confidence,
+                     "program_model_suggested": program_model})
+
             else:
-                data['Family support'] = 0.963964
-        if data['Level of aggression'][0] is None:
-            if data['Gender'][0] == 2:
-                data['Level of aggression'] = 2.369863
-            else:
-                data['Level of aggression'] = 2.053333
-        if data['Fire setting'][0] is None:
-            if data['Gender'][0] == 1:
-                data['Fire setting'] = 0.068493
-            else:
-                data['Fire setting'] = 0.213333
-        if data['Client self-harm'][0] is None:
-            if data['Gender'][0] == 1:
-                data['Client self-harm'] = 0.479452
-            else:
-                data['Client self-harm'] = 0.197309
-        # if data['Abuse, or neglect'][0] is None:
-        #     if data['Gender'][0] == 1:
-        #         data['Abuse, or neglect'] = 0.613636
-        #     else:
-        #         data['Abuse, or neglect'] = 0.535398
-        if data['CANS_LifeFunctioning'][0] is None:
-            if data['Gender'][0] == 1:
-                data['CANS_LifeFunctioning'] = 12.945205
-            else:
-                data['CANS_LifeFunctioning'] = 11.475556
-
-        if data['CANS_YouthStrengths'][0] is None:
-            if data['Gender'][0] == 1:
-                data['CANS_YouthStrengths'] = 13.704225
-            else:
-                data['CANS_YouthStrengths'] = 13.157407
-        if data['CANS_CareGiverStrengths'][0] is None:
-            if data['Gender'][0] == 1:
-                data['CANS_CareGiverStrengths'] = 10.129032
-            else:
-                data['CANS_CareGiverStrengths'] = 7.107692
-        if data['CANS_Culture'][0] is None:
-            if data['Gender'][0] == 1:
-                data['CANS_Culture'] = 0.05797
-            else:
-                data['CANS_Culture'] = 0.148718
-        if data['CANS_YouthBehavior'][0] is None:
-            if data['Gender'][0] == 1:
-                data['CANS_YouthBehavior'] = 9.438356
-            else:
-                data['CANS_YouthBehavior'] = 7.733333
-        if data['CANS_YouthRisk'][0] is None:
-            if data['Gender'][0] == 1:
-                data['CANS_YouthRisk'] = 4.191781
-            else:
-                data['CANS_YouthRisk'] = 3.986667
-        if data['CANS_Trauma_Exp'][0] is None:
-            if data['Gender'][0] == 1:
-                data['CANS_Trauma_Exp'] = 5.042857
-            else:
-                data['CANS_Trauma_Exp'] = 4.360976
-        # if data['FAST_FamilyTogetherScore'][0] is None:
-        #     if data['Gender'][0] == 1:
-        #         data['FAST_FamilyTogetherScore'] = 7.377358
-        #     else:
-        #         data['FAST_FamilyTogetherScore'] = 7.245283
-        # if data['FAST_CaregiverAdvocacyScore'][0] is None:
-        #     if data['Gender'][0] == 1:
-        #         data['FAST_CaregiverAdvocacyScore'] = 6.674419
-        #     else:
-        #         data['FAST_CaregiverAdvocacyScore'] = 5.887500
-        if data['YLS_PriorCurrentOffenses_Score'][0] is None:
-            if data['Gender'][0] == 1:
-                data['YLS_PriorCurrentOffenses_Score'] = 0.684211
-            else:
-                data['YLS_PriorCurrentOffenses_Score'] = 0.566667
-        if data['YLS_FamCircumstances_Score'][0] is None:
-            if data['Gender'][0] == 1:
-                data['YLS_FamCircumstances_Score'] = 3.750000
-            else:
-                data['YLS_FamCircumstances_Score'] = 2.811111
-        if data['YLS_Edu_Employ_Score'][0] is None:
-            if data['Gender'][0] == 1:
-                data['YLS_Edu_Employ_Score'] = 2.944444
-            else:
-                data['YLS_Edu_Employ_Score'] = 2.322222
-        if data['YLS_Peer_Score'][0] is None:
-            if data['Gender'][0] == 1:
-                data['YLS_Peer_Score'] = 2.833333
-            else:
-                data['YLS_Peer_Score'] = 1.944444
-        if data['YLS_Subab_Score'][0] is None:
-            if data['Gender'][0] == 1:
-                data['YLS_Subab_Score'] = 2.166667
-            else:
-                data['YLS_Subab_Score'] = 1.311111
-        if data['YLS_Leisure_Score'][0] is None:
-            if data['Gender'][0] == 1:
-                data['YLS_Leisure_Score'] = 1.944444
-            else:
-                data['YLS_Leisure_Score'] = 2.000000
-        if data['YLS_Personality_Score'][0] is None:
-            if data['Gender'][0] == 1:
-                data['YLS_Personality_Score'] = 3.555556
-            else:
-                data['YLS_Personality_Score'] = 3.188889
-        if data['YLS_Attitude_Score'][0] is None:
-            if data['Gender'][0] == 1:
-                data['YLS_Attitude_Score'] = 1.944444
-            else:
-                data['YLS_Attitude_Score'] = 1.377778
-        if data['Screening tool for Trauma--Total score'][0] is None:
-            if data['Gender'][0] == 1:
-                data['Screening tool for Trauma--Total score'] = 14.595238
-            else:
-                data['Screening tool for Trauma--Total score'] = 14.634409
-
-        # data = data.fillna(0) #,axis = 1,inplace=True
-
-        Feature_names = ['EpisodeNumber', 'Number of foster care placements', 'AgeAtEpisodeStart',
-                         'Number of prior placements \n(excluding shelter and detention)',
-                         'Number of prior treatment terminations (excluding shelter or detention)',
-                         'Length of time since living at home', 'Termination directly to AV',
-                         'Death Caregiver', 'Borderline IQ (below 70)', 'Hist of prior program SAO',
-                         'Death Silblings', 'Alcohol Use', 'Drug Use', 'Incarcerated caregivers',
-                         'Incarcerated siblings', 'Number of prior AWOLS', 'Animal cruelty',
-                         'Number of prior hospitalizations', 'Compliant with medication',
-                         'Significant mental health symptoms', 'Severe mental health symptoms',
-                         'Autism Diagnosis', 'Borderline Personality', 'Psychosis',
-                         'Reactive Attachment Disorder', 'Schizophrenia', 'YLS_PriorCurrentOffenses_Score',
-                         'YLS_FamCircumstances_Score',
-                         'YLS_Edu_Employ_Score', 'YLS_Peer_Score', 'YLS_Subab_Score',
-                         'YLS_Leisure_Score', 'YLS_Personality_Score', 'YLS_Attitude_Score', 'Client self-harm',
-                         'CANS_LifeFunctioning',
-                         'CANS_YouthStrengths', 'CANS_CareGiverStrengths', 'CANS_Culture',
-                         'CANS_YouthBehavior', 'CANS_YouthRisk', 'CANS_Trauma_Exp', 'Family support',
-                         'Level of aggression', 'Fire setting',
-                         'Abuse, or neglect', 'Screening tool for Trauma--Total score']
-        #'AgeAtEnrollStart',
-        # 11/12/2019
-        numeric_cols = ['Gender', 'PrimaryRacecode', 'LS_Type', 'CYF_code', 'RefSourceName', 'EpisodeNumber',
-                        'Number of foster care placements', 'AgeAtEpisodeStart',
-
-                        'Number of prior placements \n(excluding shelter and detention)', 'AgeAtEnrollStart',
-
-                        'Number of prior treatment terminations (excluding shelter or detention)',
-
-                        'Length of time since living at home', 'Termination directly to AV',
-
-                        'Death Caregiver', 'Borderline IQ (below 70)', 'Hist of prior program SAO',
-
-                        'Death Silblings', 'Alcohol Use', 'Drug Use', 'Incarcerated caregivers',
-
-                        'Incarcerated siblings', 'Number of prior AWOLS', 'Animal cruelty',
-
-                        'Number of prior hospitalizations', 'Compliant with medication',
-
-                        'Significant mental health symptoms', 'Severe mental health symptoms',
-
-                        'Autism Diagnosis', 'Borderline Personality', 'Psychosis',
-
-                        'Reactive Attachment Disorder', 'Schizophrenia'] #'Program',, 'Level_of_Care', 'FacilityType'
-
-        dummies = pd.DataFrame()
-        #converting float to integer
-        for col in numeric_cols:
-            data[col] = pd.to_numeric(data[col], errors='coerce', downcast='integer')
-
-        data['PrimaryRacecode'].fillna(data['PrimaryRacecode'].mode()[0],inplace = True)
-        data['PrimaryRacecode'] = data['PrimaryRacecode'].astype('int')
-
-        for column in ['Gender', 'PrimaryRacecode', 'LS_Type', 'CYF_code', 'RefSourceName']:
-            dummies1 = pd.get_dummies(data[column], prefix=column)
-            dummies[dummies1.columns] = dummies1.copy(deep=False)
-
-        cols = ['Gender_1', 'Gender_2', 'PrimaryRacecode_1', 'PrimaryRacecode_2',
-                'PrimaryRacecode_3','PrimaryRacecode_4','LS_Type_1', 'LS_Type_2','LS_Type_3','LS_Type_4', 'LS_Type_5',
-                'CYF_code_1', 'CYF_code_2', 'RefSourceName_1','RefSourceName_2', 'RefSourceName_3',
-                'RefSourceName_4', 'RefSourceName_5', 'RefSourceName_6','RefSourceName_7', 'RefSourceName_8', 'RefSourceName_9','RefSourceName_10',
-                'RefSourceName_11','RefSourceName_12','RefSourceName_13', 'RefSourceName_14', 'RefSourceName_15',
-                'RefSourceName_16', 'RefSourceName_17', 'RefSourceName_18','RefSourceName_19','RefSourceName_20',
-                'RefSourceName_21','RefSourceName_22','RefSourceName_23','RefSourceName_24', 'RefSourceName_25',
-                'RefSourceName_26', 'RefSourceName_27','RefSourceName_28','RefSourceName_29','RefSourceName_30',
-                'RefSourceName_31','RefSourceName_32','RefSourceName_34', 'RefSourceName_35',
-                'RefSourceName_36', 'RefSourceName_37', 'RefSourceName_38',
-                'RefSourceName_39','RefSourceName_40', 'RefSourceName_41', 'RefSourceName_42',
-                'RefSourceName_43', 'RefSourceName_44','RefSourceName_45','RefSourceName_46','RefSourceName_47',
-                'RefSourceName_48','RefSourceName_49','RefSourceName_50','RefSourceName_51', 'RefSourceName_52',
-                'RefSourceName_53','RefSourceName_54','RefSourceName_55','RefSourceName_56','RefSourceName_57',
-                'RefSourceName_59','RefSourceName_60']
-
-        for col in cols:
-            if col in dummies.columns:
-                print('present', col)
-            else:
-                dummies[col] = 0
-
-        # print("dummies shape", dummies.shape)
-        # commented on 11/12/19
-        # for column in ['Gender', 'PrimaryRacecode', 'LS_Type', 'CYF_code', 'RefSourceName']:
-        #     dummies1 = pd.get_dummies(data[column], prefix=column)
-        #     dummies[dummies1.columns] = dummies1.copy(deep=False)
-        # print("data columns head", (data[column]).head())
-        # print("data columns shape", (data[column]).shape)
-        #
-        # print("dummies1 shape", dummies1.shape)
-        #
-        #
-        # cols = ['Gender_1', 'Gender_2', 'PrimaryRacecode_1', 'PrimaryRacecode_2',
-        #         'PrimaryRacecode_3', 'LS_Type_1', 'LS_Type_2', 'LS_Type_4', 'LS_Type_5',
-        #         'CYF_code_1', 'CYF_code_2', 'RefSourceName_1', 'RefSourceName_2',
-        #         'RefSourceName_3', 'RefSourceName_4', 'RefSourceName_5',
-        #         'RefSourceName_6', 'RefSourceName_7', 'RefSourceName_8',
-        #         'RefSourceName_12', 'RefSourceName_13', 'RefSourceName_14',
-        #         'RefSourceName_15', 'RefSourceName_16', 'RefSourceName_17',
-        #         'RefSourceName_18', 'RefSourceName_22', 'RefSourceName_24',
-        #         'RefSourceName_25', 'RefSourceName_26', 'RefSourceName_31',
-        #         'RefSourceName_35', 'RefSourceName_36', 'RefSourceName_37',
-        #         'RefSourceName_38', 'RefSourceName_39', 'RefSourceName_41',
-        #         'RefSourceName_42', 'RefSourceName_43', 'RefSourceName_45',
-        #         'RefSourceName_46', 'RefSourceName_48', 'RefSourceName_49',
-        #         'RefSourceName_51', 'RefSourceName_52', 'RefSourceName_54']
-        #
-        # for col in cols:
-        #     if col in dummies.columns:
-        #         print('present', col)
-        #     else:
-        #         dummies[col] = 0
-        #
-        # dummies.drop([ 'RefSourceName_22'], axis=1, inplace=True)
-        #
-        # print("dummies shape", dummies.shape)
-        # print(("dumm", dummies.columns))
-        Xtest = data[Feature_names]
-        Xtest[dummies.columns] = dummies
-        # print("Xtest shape",Xtest.shape)
-        # print("xtest columns", Xtest.columns)
-
-
-        level_model = pickle.load(open("C:/Users/Raghu/Downloads/LR_LC_23Dec.sav", "rb"))  # final_dt_48p_263r_2clases_smote.sav #dt_LR_Level_0.1
-        program_model = pickle.load(open("C:/Users/Raghu/Downloads/DT_P_23Dec.sav", "rb")) #dt_T_Program
-        facility_model= pickle.load(open("C:/Users/Raghu/Downloads/LR_FT_23Dec.sav", "rb")) #DT_FT_10Dec
-
-        level_pred = level_model.predict(Xtest)
-        program_pred = program_model.predict(Xtest)
-        facility_preds = facility_model.predict(Xtest)
-
-        program_proba = program_model.predict_proba(Xtest)
-
-        Program_suggested = np.argmax(program_proba[0]) + 1
-        Confidence = program_proba[0][Program_suggested - 1]
-
-        Program_suggested1 = np.argmax(program_proba[0]) + 1
-        Confidence1 = program_proba[0][Program_suggested1 - 1]
-        print("Confidence",Confidence)
-        print("Confidence1",Confidence1)
-
-        print("level",level_pred)
-        print("facility_preds",facility_preds)
-
-        print(f"suggested program{Program_suggested}, with Confidence {Confidence}")
-
-        print("program_pred",program_pred)
-
-        query = Adelphoi_Mapping.objects.filter(program=program_pred, gender=serializer.validated_data.get('gender'), level_of_care=level_pred,facility_type = facility_preds)
-
-        query2 = Adelphoi_Mapping.objects.filter(program=program_pred, gender=serializer.validated_data.get('gender'),level_of_care=level_pred)#, level_of_care=level_pred
-        print(query)
-        for qq in query2:
-            print(qq)
-        serializer.save(program=program_pred, level_of_care=level_pred,facility_type =facility_preds,confidence = Confidence,
-                        family_support = data['Family support'][0],
-                        level_of_aggression = data['Level of aggression'][0],
-                        fire_setting = data['Fire setting'][0],
-                        client_self_harm = data['Client self-harm'][0],
-                        cans_LifeFunctioning = data['CANS_LifeFunctioning'][0],
-                        cans_YouthStrengths = data['CANS_YouthStrengths'][0],
-                        cans_CareGiverStrengths = data['CANS_CareGiverStrengths'][0],
-                        cans_Culture = data['CANS_Culture'][0],
-                        cans_YouthBehavior = data['CANS_YouthBehavior'][0],
-                        cans_YouthRisk = data['CANS_YouthRisk'][0],
-                        cans_Trauma_Exp = data['CANS_Trauma_Exp'][0],
-                        yls_PriorCurrentOffenses_Score = data['YLS_PriorCurrentOffenses_Score'][0],
-                        yls_FamCircumstances_Score = data['YLS_FamCircumstances_Score'][0],
-                        yls_Edu_Employ_Score  = data['YLS_Edu_Employ_Score'][0],
-                        yls_Peer_Score = data['YLS_Peer_Score'][0],
-                        yls_Subab_Score = data['YLS_Subab_Score'][0],
-                        yls_Leisure_Score = data['YLS_Leisure_Score'][0],
-                        yls_Personality_Score = data['YLS_Personality_Score'][0],
-                        yls_Attitude_Score = data['YLS_Attitude_Score'][0],
-                        Screening_tool_Trauma = data['Screening tool for Trauma--Total score'][0]) #family_support = data['Family support'],
-                        # FAST_FamilyTogetherScore = data['FAST_FamilyTogetherScore'][0],
-                        # FAST_CaregiverAdvocacyScore = data['FAST_CaregiverAdvocacyScore'][0],
-        #######
-        location_list = []
-        program_list = []
-        level_list = []
-        facility_names = []
-        program_model = []
-        if query.count()>0:
-            for i in query:
-                program_list.append(i.program_name)
-                level_list.append(i.level_names)
-                location_list.append(i.location_names)
-                facility_names.append(i.facility_names)
-                program_model.append(i.program_model_suggested)
-
-            print("location_list",location_list[0])
-            return Response(
-                {"program": program_pred, "program list is": program_list, "level of care is ": level_list,
-                 "location names": location_list, "facility names": facility_names,"Confidence":Confidence,"program_model_suggested":program_model})
-        elif query2.count() > 0:
-            for i in query:
-                program_list.append(i.program_name)
-                level_list.append(i.level_names)
-                location_list.append(i.location_names)
-                facility_names.append(i.facility_names)
-                program_model.append(i.program_model_suggested)
-            return Response(
-                {"program": program_pred, "program list is": program_list, "level of care is ": level_list,
-                 "location names": location_list, "facility names": facility_names, "Confidence": Confidence,
-                 "program_model_suggested": program_model})
-
-        else:
-            return Response({"program": program_pred,"Level of care":level_pred,"Confidence":Confidence,"Facility Type":facility_preds,"ERROR":"Matching values not found"})
-
+                return Response({"program": program_pred,"Level of care":level_pred,"Confidence":Confidence,"Facility Type":facility_preds,"ERROR":"Matching values not found"})
+        serializer.save()
         return Response({"data":"success"})
 
 class AdelphoiSubmission(RetrieveUpdateAPIView):  #UpdateAPIView
