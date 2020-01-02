@@ -43,7 +43,7 @@ class TestModels(models.Model):
     Autism = ((0 ,'no'),(1,'yes'))
     border = ((0 ,'no'),(1,'yes'))
     complaint = ((0,'no'),(1,'yes'),(9,'N / A'))
-
+    Exclusionary_Criteria = models.BooleanField(db_column='Exclusionary_Criteria', default=False)
 
     Client_code = models.IntegerField(db_column = 'Client_code', blank=True, null=True)
     First_name = models.CharField(db_column='First_name',max_length=100,blank=True, null=True)
@@ -106,6 +106,7 @@ class ModelTest(models.Model):
     Autism_Diagnosis = models.IntegerField(db_column='Autism_Diagnosis')
     Borderline_Personality = models.IntegerField(db_column='Borderline_Personality')
     Compliant_with_meds = models.IntegerField(db_column='Compliant_with_meds')
+    Exclusionary_Criteria = models.BooleanField(db_column='Exclusionary_Criteria', default=True)
     Death_Silblings = models.IntegerField(db_column='Death Silblings') #
     Death_Caregiver = models.IntegerField(db_column='Death_Caregiver')
     Alcohol_Use = models.IntegerField(db_column='Alcohol_Use')
@@ -183,6 +184,7 @@ class ModelTests(models.Model):
     dob = models.DateField(db_column='dob')
     client_code = models.IntegerField(db_column='Client_code',primary_key=True)
     gender = models.IntegerField(db_column='Gender', choices=GENDER_CHOICES)
+    age = models.IntegerField(db_column='Age',null=True)
     primaryRaceCode = models.IntegerField(db_column='PrimaryRacecode', choices=RACE_CHOICES)
     ls_type = models.IntegerField(db_column='LS_Type', choices=LS_CHOICES)
     ageAtEpisodeStart = models.IntegerField(db_column='AgeAtEpisodeStart')
@@ -217,6 +219,7 @@ class ModelTests(models.Model):
     autism_Diagnosis = models.IntegerField(db_column='Autism_Diagnosis', choices=no_or_yes)
     borderline_Personality = models.IntegerField(db_column='Borderline_Personality', choices=no_or_yes)
     compliant_with_meds = models.IntegerField(db_column='Compliant_with_meds', choices=complaint)
+    Exclusionary_Criteria = models.BooleanField(db_column='Exclusionary_Criteria', default=True)
     severe_mental_health_symptoms = models.IntegerField(db_column='Severe_mental_health_symptoms',choices=Severe_MH_symptoms)
     number_of_prior_treatment_terminations = models.IntegerField(db_column='Number_of_prior_treatment_terminations')
     length_of_time_since_living_at_home = models.IntegerField(db_column='Length_of_time_since_living_at_home')

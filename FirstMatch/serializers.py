@@ -7,7 +7,7 @@ class ModelTestsSerializers(serializers.ModelSerializer):
     class Meta:
         model = ModelTests
         # fields ='__all__'
-        exclude = ['modified_date', 'program', 'confidence','level_of_care','facility_type','client_selected_program','client_selected_level','client_selected_facility','client_selected_locations',
+        exclude = ['modified_date', 'program','model_program', 'confidence','level_of_care','facility_type','client_selected_program','client_selected_level','client_selected_facility','client_selected_locations',
                    'Program_Completion', 'Returned_to_Care'] #,,'client_selected_program','client_selected_level','client_selected_facility'
 
 class ModelTestsSerializers_selected_program(serializers.ModelSerializer):
@@ -57,4 +57,14 @@ class AdminInterface(serializers.ModelSerializer):
     class Meta:
         model = Adelphoi_Mapping
         fields = '__all__'
+        # fields = ['gender','program']
+
+class LocationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ModelTests
+        fields = ['client_selected_locations']
+
+class PlacementSerializer(serializers.ModelSerializer):
+    class Meta:
+        fields = ['model_program','referred_program']
 

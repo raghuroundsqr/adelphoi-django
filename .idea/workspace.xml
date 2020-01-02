@@ -3,14 +3,33 @@
   <component name="ChangeListManager">
     <list default="true" id="32ebb356-1aca-40e1-98c9-7a7e1f1762fe" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AdelphoiProject/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/AdelphoiProject/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FirstMatch/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/FirstMatch/admin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FirstMatch/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/FirstMatch/forms.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FirstMatch/migrations/0002_auto_20191220_1451.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/FirstMatch/migrations/0003_auto_20191223_1216.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/FirstMatch/migrations/0004_auto_20191225_0531.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/FirstMatch/migrations/0005_modeltests_age.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/FirstMatch/migrations/0006_remove_modeltests_age.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/FirstMatch/migrations/0007_modeltests_age.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/FirstMatch/migrations/0008_testmodels_exclusionary_criteria.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/FirstMatch/migrations/0009_modeltests_exclusionary_criteria.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/FirstMatch/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/FirstMatch/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FirstMatch/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/FirstMatch/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FirstMatch/test_models.py" beforeDir="false" afterPath="$PROJECT_DIR$/FirstMatch/test_models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FirstMatch/test_views.py" beforeDir="false" afterPath="$PROJECT_DIR$/FirstMatch/test_views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FirstMatch/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/FirstMatch/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/FirstMatch/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/FirstMatch/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sources/mongo_scripts" beforeDir="false" afterPath="$PROJECT_DIR$/sources/mongo_scripts" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FavoritesManager">
+    <favorites_list name="AdelphoiProject" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -34,11 +53,11 @@
     <property name="two.files.diff.last.used.file" value="$PROJECT_DIR$/FirstMatch/test_views.py" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="D:\Adelphoi\AdelphoiProject\templates" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\Adelphoi\AdelphoiProject\sources" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Adelphoi\AdelphoiProject\templates" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -103,13 +122,14 @@
     </option>
   </component>
   <component name="XDebuggerManager">
-    <watches-manager>
-      <configuration name="PythonConfigurationType">
-        <watch expression="mcs" language="Python" />
-        <watch expression="mcs[0].gender" language="Python" />
-        <watch expression="print(i.program_name)" language="Python" />
-        <watch expression="program_list" language="Python" />
-      </configuration>
-    </watches-manager>
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/FirstMatch/views.py</url>
+          <line>1</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
