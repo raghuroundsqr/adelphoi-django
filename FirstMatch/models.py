@@ -2,11 +2,9 @@ from djongo import models
 from django import forms
 from datetime import datetime
 from django.urls import reverse
-# from django_better_admin_arrayfield.models.fields import ArrayField
 # Create your models here.
-from django.contrib.postgres.fields import ArrayField
 from jsonfield import JSONField
-
+from django.contrib.postgres.fields import ArrayField
 class ModelTests(models.Model):
 
 
@@ -188,22 +186,43 @@ class ModelTests(models.Model):
 
     # program_model_suggested = models.CharField(max_length=100,choices=program_model_suggested_choices)
 
-from array_field_select.fields import ArrayField
-class LocationCollection(models.Model):
-    location = models.IntegerField()
+### Char
 
-    class Meta:
-        abstract = True
-#
-# class LocationCollectionForm(forms.ModelForm):
-#     class Meta:
-#         Model = LocationCollection
-#         fields = []
+class ListFormField(forms.CharField):
+    def to_python(self, value):
+        if value is None:
+            value = ""
+        return value.split(",")
 
+    def prepare_value(self, value):
+        if value is None:
+            value = []
+        return ",".join(value)
 
+class CustomListField(models.ListField):
+    def formfield(self, **kwargs):
+        return ListFormField(max_length=1000)
+
+## INt
+
+class ListFormIntField(forms.CharField):
+    def to_python(self, value):
+        if value is None:
+            value = ""
+        # return value.split(",")
+        return list(map(int, value.split(",")))
+
+    def prepare_value(self, value):
+        if value is None:
+            value = []
+        return ",".join(map(str, value))
+
+class CustomListIntField(models.ListField):
+    def formfield(self, **kwargs):
+        return ListFormIntField()
+
+###
 class Adelphoi_Mapping(models.Model):
-    # record_no = models.IntegerField(db_column='record_no')
-    # _id = models.AutoField(primary_key=True)
     program = models.IntegerField(db_column='program')
     program_name = models.CharField(db_column='program_name', max_length=100)
 
@@ -213,24 +232,8 @@ class Adelphoi_Mapping(models.Model):
     level_of_care = models.IntegerField(db_column='level_of_care')
     level_names = models.CharField(db_column='level_names', max_length=100)
 
-    # location = models.EmbeddedModelField(model_container=LocationCollection)
-
-    # location = models.ListField(models.IntegerField())
-    # location_names = ArrayField(models.CharField(db_column='location_names',max_length=100))
-
-    # from django.core.validators import int_list_validator
-    # location = models.CharField(validators=int_list_validator)
-
-    # location = models.ArrayModelField(model_container=LocationCollection) #woking
-
-    # location = models.ArrayReferenceField(to_field=)
-    # location = ArrayField(
-    #     models.IntegerField()
-    # )
-    location = ArrayField(models.IntegerField(db_column='location'))
-    location_names = ArrayField(models.CharField(db_column='location_names', max_length=100))
-    # location = models.ListField(models.IntegerField(db_column='location'))
-    # location_names = models.ListField(models.CharField(db_column='location_names', max_length=100))
+    location = CustomListIntField()
+    location_names = CustomListField()
 
     facility_type = models.IntegerField(db_column='facility_type')
     facility_names = models.CharField(db_column='facility_names',max_length=100)
@@ -239,8 +242,7 @@ class Adelphoi_Mapping(models.Model):
 
     program_type = models.CharField(db_column='program_type',max_length=100)
 
-    # class Meta:
-    #     db_table = 'FirstMatch_adelphoi_mapping'
+
 
 
 

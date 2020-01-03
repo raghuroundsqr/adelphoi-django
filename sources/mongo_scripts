@@ -1,23 +1,220 @@
-db.FirstMatch_adelphoi_mapping.insertMany([
-
-{"gender": 2, "program": 1, "level_of_care": 2, "location":[12], "facility_type": 1, "location_names": ["Monastery run"], "program_name": "Substance Abuse", "facility_names": "Group Home", "level_names": "Intensive", "gender_name": "Male","program_model_suggested" : "Substance Abuse Group Home"},
-
-{"gender": 2, "program": 2, "level_of_care": 1, "location": [16], "facility_type": 1, "location_names": ["Vincent home"], "program_name": "Sexual Offense", "facility_names": "Group Home", "level_names": "Mental health", "gender_name": "Male","program_model_suggested" : "Sexual Offense Group Home with Mental health Focus"},
-
-{"gender": 2, "program": 2, "level_of_care": 2, "location": [3,13,6,17,7], "facility_type": 1, "location_names": ["Benet Home","Raphael","Hall/Loyalhanna", "Williams","La Sa Quik"], "program_name": "Sexual Offense", "facility_names": "Group Home", "level_names": "Intensive", "gender_name": "Male","program_model_suggested" : "Sexual Offense Facilities"},
-
-{"gender": 2, "program": 2, "level_of_care": 2, "location": [9], "facility_type": 2, "location_names": ["Middle Creek 1"], "program_name": "Sexual Offense", "facility_names": "Secure", "level_names": "Mental health", "gender_name": "Male","program_model_suggested" : "Intensive Supervision Secure Facility for Sexual Offense"},
-
-{"gender": 1, "program": 3, "level_of_care": 1, "location": [4,8,14], "facility_type": 1, "location_names": ["Colony house","Marker house","Susans place"], "program_name": "Intensive Supervision", "facility_names": "Group Home", "level_names": "Intensive", "gender_name": "Female","program_model_suggested" : "Intensive Supervision Group Home with Mental Health Focus"},
-
-{"gender": 1, "program": 3, "level_of_care": 2, "location": [1], "facility_type": 1, "location_names": ["Alliance House"], "program_name": "Intensive Supervision", "facility_names": "Group Home", "level_names": "Intensive", "gender_name": "Female","program_model_suggested" : "Intensive Supervision Group Homes"},
-
-{"gender": 2, "program": 3, "level_of_care": 2, "location": [2,5,15], "facility_type": 1, "location_names": ["Anchor House", "Greystone House", "Sweeney Home"], "program_name": "Intensive Supervision", "facility_names": "Group Home", "level_names": "Intensive", "gender_name": "Male","program_model_suggested" : "Intensive Supervision Group Homes"},
-
-{"gender": 1, "program": 3, "level_of_care": 2, "location": [10], "facility_type": 2, "location_names": ["Middle Creek 2"], "program_name": "Intensive Supervision", "facility_names": "Secure", "level_names": "Intensive", "gender_name": "Female","program_model_suggested" : "Intensive Supervision Secure Facilities"},
-
-{"gender": 2, "program": 3, "level_of_care": 2, "location": [11,18], "facility_type": 2, "location_names": ["Middle Creek 3" ,"Manor"], "program_name": "Intensive Supervision", "facility_names": "Secure", "level_names": "Intensive", "gender_name": "Male","program_model_suggested" : "Intensive Supervision Secure Facilities"}])
+db.FirstMatch_adelphoi_mapping.insertMany([{"gender": 2, "program": 1, "level_of_care": 2, "location":[12], "facility_type": 1, "location_names": ["Monastery run"], "program_name": "Substance Abuse", "facility_names": "Group Home", "level_names": "Intensive", "gender_name": "Male","program_model_suggested" : "Substance Abuse Group Home","program_type" : "SUBAB"},
+{"gender": 2, "program": 2, "level_of_care": 1, "location": [16], "facility_type": 1, "location_names": ["Vincent home"], "program_name": "Sexual Offense", "facility_names": "Group Home", "level_names": "Mental health", "gender_name": "Male","program_model_suggested" : "Sexual Offense Group Home with Mental health Focus","program_type" : "SEXOF-MH"},
+{"gender": 2, "program": 2, "level_of_care": 2, "location": [3,13,6,17,7], "facility_type": 1, "location_names": ["Benet Home","Raphael","Hall/Loyalhanna", "Williams","La Sa Quik"], "program_name": "Sexual Offense", "facility_names": "Group Home", "level_names": "Intensive", "gender_name": "Male","program_model_suggested" : "Sexual Offense Facilities","program_type" : "SEXOF"},
+{"gender": 2, "program": 2, "level_of_care": 2, "location": [9], "facility_type": 2, "location_names": ["Middle Creek 1"], "program_name": "Sexual Offense", "facility_names": "Secure", "level_names": "Mental health", "gender_name": "Male","program_model_suggested" : "Intensive Supervision Secure Facility for Sexual Offense""program_type" : "SEXOF-SECURE"},
+{"gender": 1, "program": 3, "level_of_care": 1, "location": [4,8,14], "facility_type": 1, "location_names": ["Colony house","Marker house","Susans place"], "program_name": "Intensive Supervision", "facility_names": "Group Home", "level_names": "Intensive", "gender_name": "Female","program_model_suggested" : "Intensive Supervision Group Home with Mental Health Focus","program_type" : "MHFO"},
+{"gender": 1, "program": 3, "level_of_care": 2, "location": [1], "facility_type": 1, "location_names": ["Alliance House"], "program_name": "Intensive Supervision", "facility_names": "Group Home", "level_names": "Intensive", "gender_name": "Female","program_model_suggested" : "Intensive Supervision Group Homes","program_type" : "ISF"},
+{"gender": 2, "program": 3, "level_of_care": 2, "location": [2,5,15], "facility_type": 1, "location_names": ["Anchor House", "Greystone House", "Sweeney Home"], "program_name": "Intensive Supervision", "facility_names": "Group Home", "level_names": "Intensive", "gender_name": "Male","program_model_suggested" : "Intensive Supervision Group Homes","program_type" : "ISM"},
+{"gender": 1, "program": 3, "level_of_care": 2, "location": [10], "facility_type": 2, "location_names": ["Middle Creek 2"], "program_name": "Intensive Supervision", "facility_names": "Secure", "level_names": "Intensive", "gender_name": "Female","program_model_suggested" : "Intensive Supervision Secure Facilities","program_type" : "SECURE-FEMALE"},
+{"gender": 2, "program": 3, "level_of_care": 2, "location": [11,18], "facility_type": 2, "location_names": ["Middle Creek 3" ,"Manor"], "program_name": "Intensive Supervision", "facility_names": "Secure", "level_names": "Intensive", "gender_name": "Male","program_model_suggested" : "Intensive Supervision Secure Facilities","program_type" : "SECURE-MALE"}])
 
 
+
+/* 1 */
+{
+    "_id" : ObjectId("5e0d91ec3124492e22a62190"),
+    "gender" : 2.0,
+    "program" : 1.0,
+    "level_of_care" : 2.0,
+    "location" : [
+        12.0
+    ],
+    "facility_type" : 1.0,
+    "location_names" : [
+        "Monastery run"
+    ],
+    "program_name" : "Substance Abuse",
+    "facility_names" : "Group Home",
+    "level_names" : "Intensive",
+    "gender_name" : "Male",
+    "program_model_suggested" : "Substance Abuse Group Home",
+    "program_type" : "SUBAB"
+}
+
+/* 2 */
+{
+    "_id" : ObjectId("5e0d91ec3124492e22a62191"),
+    "gender" : 2.0,
+    "program" : 2.0,
+    "level_of_care" : 1.0,
+    "location" : [
+        16.0
+    ],
+    "facility_type" : 1.0,
+    "location_names" : [
+        "Vincent home"
+    ],
+    "program_name" : "Sexual Offense",
+    "facility_names" : "Group Home",
+    "level_names" : "Mental health",
+    "gender_name" : "Male",
+    "program_model_suggested" : "Sexual Offense Group Home with Mental health Focus",
+    "program_type" : "SEXOF-MH"
+}
+
+/* 3 */
+{
+    "_id" : ObjectId("5e0d91ec3124492e22a62192"),
+    "gender" : 2.0,
+    "program" : 2.0,
+    "level_of_care" : 2.0,
+    "location" : [
+        3.0,
+        13.0,
+        6.0,
+        17.0,
+        7.0
+    ],
+    "facility_type" : 1.0,
+    "location_names" : [
+        "Benet Home",
+        "Raphael",
+        "Hall/Loyalhanna",
+        "Williams",
+        "La Sa Quik"
+    ],
+    "program_name" : "Sexual Offense",
+    "facility_names" : "Group Home",
+    "level_names" : "Intensive",
+    "gender_name" : "Male",
+    "program_model_suggested" : "Sexual Offense Facilities",
+    "program_type" : "SEXOF"
+}
+
+/* 4 */
+{
+    "_id" : ObjectId("5e0d91ec3124492e22a62193"),
+    "gender" : 2.0,
+    "program" : 2.0,
+    "level_of_care" : 2.0,
+    "location" : [
+        9.0
+    ],
+    "facility_type" : 2.0,
+    "location_names" : [
+        "Middle Creek 1"
+    ],
+    "program_name" : "Sexual Offense",
+    "facility_names" : "Secure",
+    "level_names" : "Mental health",
+    "gender_name" : "Male",
+    "program_model_suggested" : "Intensive Supervision Secure Facility for Sexual Offense",
+    "program_type" : "SEXOF-SECURE"
+}
+
+/* 5 */
+{
+    "_id" : ObjectId("5e0d91ec3124492e22a62194"),
+    "gender" : 1.0,
+    "program" : 3.0,
+    "level_of_care" : 1.0,
+    "location" : [
+        4.0,
+        8.0,
+        14.0
+    ],
+    "facility_type" : 1.0,
+    "location_names" : [
+        "Colony house",
+        "Marker house",
+        "Susans place"
+    ],
+    "program_name" : "Intensive Supervision",
+    "facility_names" : "Group Home",
+    "level_names" : "Intensive",
+    "gender_name" : "Female",
+    "program_model_suggested" : "Intensive Supervision Group Home with Mental Health Focus",
+    "program_type" : "MHFO"
+}
+
+/* 6 */
+{
+    "_id" : ObjectId("5e0d91ec3124492e22a62195"),
+    "gender" : 1.0,
+    "program" : 3.0,
+    "level_of_care" : 2.0,
+    "location" : [
+        1.0
+    ],
+    "facility_type" : 1.0,
+    "location_names" : [
+        "Alliance House"
+    ],
+    "program_name" : "Intensive Supervision",
+    "facility_names" : "Group Home",
+    "level_names" : "Intensive",
+    "gender_name" : "Female",
+    "program_model_suggested" : "Intensive Supervision Group Homes",
+    "program_type" : "ISF"
+}
+
+/* 7 */
+{
+    "_id" : ObjectId("5e0d91ec3124492e22a62196"),
+    "gender" : 2.0,
+    "program" : 3.0,
+    "level_of_care" : 2.0,
+    "location" : [
+        2.0,
+        5.0,
+        15.0
+    ],
+    "facility_type" : 1.0,
+    "location_names" : [
+        "Anchor House",
+        "Greystone House",
+        "Sweeney Home"
+    ],
+    "program_name" : "Intensive Supervision",
+    "facility_names" : "Group Home",
+    "level_names" : "Intensive",
+    "gender_name" : "Male",
+    "program_model_suggested" : "Intensive Supervision Group Homes",
+    "program_type" : "ISM"
+}
+
+/* 8 */
+{
+    "_id" : ObjectId("5e0d91ec3124492e22a62197"),
+    "gender" : 1.0,
+    "program" : 3.0,
+    "level_of_care" : 2.0,
+    "location" : [
+        10.0
+    ],
+    "facility_type" : 2.0,
+    "location_names" : [
+        "Middle Creek 2"
+    ],
+    "program_name" : "Intensive Supervision",
+    "facility_names" : "Secure",
+    "level_names" : "Intensive",
+    "gender_name" : "Female",
+    "program_model_suggested" : "Intensive Supervision Secure Facilities",
+    "program_type" : "SECURE-FEMALE"
+}
+
+/* 9 */
+{
+    "_id" : ObjectId("5e0d91ec3124492e22a62198"),
+    "gender" : 2.0,
+    "program" : 3.0,
+    "level_of_care" : 2.0,
+    "location" : [
+        11.0,
+        18.0
+    ],
+    "facility_type" : 2.0,
+    "location_names" : [
+        "Middle Creek 3",
+        "Manor"
+    ],
+    "program_name" : "Intensive Supervision",
+    "facility_names" : "Secure",
+    "level_names" : "Intensive",
+    "gender_name" : "Male",
+    "program_model_suggested" : "Intensive Supervision Secure Facilities",
+    "program_type" : "SECURE-MALE"
+}
 
 db.FirstMatch_adelphoi_mapping.insertMany([{"gender": 2, "program": 1, "level_of_care": 2, "location":[12], "facility_type": 1, "location_names": ["Monastery run"], "program_name": "Substance Abuse", "facility_names": "Group Home", "level_names": "Intensive", "gender_name": "Male"}, {"gender": 2, "program": 2, "level_of_care": 1, "location": [16], "facility_type": 1, "location_names": ["Vincent home"], "program_name": "Sexual Offense", "facility_names": "Group Home", "level_names": "Mental health", "gender_name": "Male"}, {"gender": 2, "program": 2, "level_of_care": 2, "location": [3,13,6,17,7], "facility_type": 1, "location_names": ["Benet Home","Raphael","Hall/Loyalhanna", "Williams","La Sa Quik"], "program_name": "Sexual Offense", "facility_names": "Group Home", "level_names": "Intensive", "gender_name": "Male"}, {"gender": 2, "program": 2, "level_of_care": 2, "location": [9], "facility_type": 2, "location_names": ["Middle Creek 1"], "program_name": "Sexual Offense", "facility_names": "Secure", "level_names": "Mental health", "gender_name": "Male"}, {"gender": 1, "program": 3, "level_of_care": 1, "location": [4,8,14], "facility_type": 1, "location_names": ["Colony house","Marker house","Susans place"], "program_name": "Intensive Supervision", "facility_names": "Group Home", "level_names": "Intensive", "gender_name": "Female"}, {"gender": 1, "program": 3, "level_of_care": 2, "location": [1], "facility_type": 1, "location_names": ["Alliance House"], "program_name": "Intensive Supervision", "facility_names": "Group Home", "level_names": "Intensive", "gender_name": "Female"}, {"gender": 2, "program": 3, "level_of_care": 2, "location": [2,5,15], "facility_type": 1, "location_names": ["Anchor House", "Greystone House", "Sweeney Home"], "program_name": "Intensive Supervision", "facility_names": "Group Home", "level_names": "Intensive", "gender_name": "Male"}, {"gender": 1, "program": 3, "level_of_care": 2, "location": [10], "facility_type": 2, "location_names": ["Middle Creek 2"], "program_name": "Intensive Supervision", "facility_names": "Secure", "level_names": "Intensive", "gender_name": "Female"}, {"gender": 2, "program": 3, "level_of_care": 2, "location": [11,18], "facility_type": 2, "location_names": ["Middle Creek 3" ,"Manor"], "program_name": "Intensive Supervision", "facility_names": "Secure", "level_names": "Intensive", "gender_name": "Male"}])

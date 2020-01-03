@@ -64,7 +64,5 @@ class LocationSerializer(serializers.ModelSerializer):
         model = ModelTests
         fields = ['client_selected_locations']
 
-class PlacementSerializer(serializers.ModelSerializer):
-    class Meta:
-        fields = ['model_program','referred_program']
+
 

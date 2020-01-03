@@ -1,13 +1,14 @@
 from rest_framework import serializers
 # from rest_framework import ModelTests
-from .models import ModelTests
+from .models import ModelTests,Adelphoi_Mapping
 
 class ModelTestsSerializers(serializers.ModelSerializer):
 
     class Meta:
         model = ModelTests
         # fields ='__all__'
-        exclude = ['modified_date', 'program', 'confidence','level_of_care','facility_type','client_selected_program','client_selected_level','client_selected_facility','client_selected_locations','Program_Completion', 'Returned_to_Care']
+        exclude = ['modified_date', 'program','model_program', 'confidence','level_of_care','facility_type','client_selected_program','client_selected_level','client_selected_facility','client_selected_locations',
+                   'Program_Completion', 'Returned_to_Care'] #,,'client_selected_program','client_selected_level','client_selected_facility'
 
 class ModelTestsSerializers_selected_program(serializers.ModelSerializer):
 
@@ -16,6 +17,7 @@ class ModelTestsSerializers_selected_program(serializers.ModelSerializer):
     class Meta:
         model = ModelTests
         fields = ['client_selected_program','client_selected_level','client_selected_facility','client_selected_locations'] #,'client_selected_level','client_selected_facility'
+
 
 
 class ModelTestsSerializer_program_model_suggested(serializers.ModelSerializer):
@@ -40,6 +42,7 @@ class ProgramLocationSerialzer(serializers.ModelSerializer):
         model = ModelTests
         fields = ['client_selected_program','client_selected_locations']
 
+
 class ProgramLevelSerialzer(serializers.ModelSerializer):
     class Meta:
         model = ModelTests
@@ -49,3 +52,19 @@ class FilterSerialzer(serializers.ModelSerializer):
     class Meta:
         model = ModelTests
         fields = '__all__'
+
+class AdminInterface(serializers.ModelSerializer):
+    class Meta:
+        model = Adelphoi_Mapping
+        fields = '__all__'
+        # fields = ['gender','program']
+
+class LocationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ModelTests
+        fields = ['client_selected_locations']
+
+class PlacementSerializer(serializers.ModelSerializer):
+    class Meta:
+        fields = ['model_program','referred_program']
+
