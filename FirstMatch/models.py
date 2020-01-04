@@ -223,6 +223,7 @@ class CustomListIntField(models.ListField):
 
 ###
 class Adelphoi_Mapping(models.Model):
+    # _id = models.ObjectIdField()
     program = models.IntegerField(db_column='program')
     program_name = models.CharField(db_column='program_name', max_length=100)
 
@@ -241,6 +242,7 @@ class Adelphoi_Mapping(models.Model):
     program_model_suggested = models.CharField(db_column='program_model_suggested', max_length=100)
 
     program_type = models.CharField(db_column='program_type',max_length=100)
+
 
 
 

@@ -381,7 +381,7 @@ class AdelphoiList(ListCreateAPIView):
                 return Response({"program": program_type, "ERROR":"Matching values not found"})
         else:
             serializer.save()
-            return Response({"data":"Thanx"})
+            return Response({"Result":"Thanx for registering with ADELPHOI"})
         return Response({"data": "Failure"})
 
 class Adelphoi_placement(ListAPIView):
@@ -444,6 +444,7 @@ class AdelphoiResult(UpdateAPIView):  #UpdateAPIView
         mt.save()
         return Response({"result":"values are inserted"})
 
+#Update program completion and returned to care to values after a while. Values will be  updated
 class ProgramCompletionLevel(UpdateAPIView): #UpdateAPIView
     serializer_class = ProgramLevelSerialzer
     queryset = ModelTests.objects.all()
@@ -459,15 +460,41 @@ class ProgramCompletionLevel(UpdateAPIView): #UpdateAPIView
         # else:
         #     return Response({"result":"Client no exists"})
         return Response({"data":"success"})
-
+#To search results based on client_code or name
 class ClientList(ListAPIView):
     queryset = ModelTests.objects.all()
     serializer_class = FilterSerialzer
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['client_code','name']
 
+#to save adelphoi mapping values from admin
+@csrf_exempt
+def saveData(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        #
+        program = data['program']
+        program_name = data['program_name']
+        gender = data['gender']
+        gender_name = data['gender_name']
+        level_of_care = data['level_of_care']
+        level_names = data['level_names']
 
+        location = data['location']
+        location_names = data['location_names']
 
+        facility_type = data['facility_type']
+        facility_names = data['facility_names']
+        program_model_suggested = data['program_model_suggested']
+        program_type = data['program_type']
+
+        Adelphoi_Mapping(location = location,location_names = location_names,program = program,program_name = program_name,\
+                         gender =gender,gender_name = gender_name,level_of_care = level_of_care,level_names =level_names,\
+                         facility_type = facility_type,facility_names =facility_names,program_model_suggested = program_model_suggested,\
+                         program_type = program_type).save()
+        return JsonResponse({"data":"success"})
+    else:
+        return JsonResponse({"data","Method not allowed"})
 
 ###############################
 
@@ -542,7 +569,7 @@ class AdminUpdate(ListCreateAPIView):
     # def post(self, request):
     #     serializer = self.get_serializer_class()
     #     serializer = serializer(data=request.data)
-    #     serializer.is_valid(raise_exception=True) #raise_exception=True
+    #     # serializer.is_valid(raise_exception=True) #raise_exception=True
     #     serializer.save()
     #
     #     return Response({"data":"okay"})
@@ -563,48 +590,6 @@ class Location_Mapping(UpdateAPIView):
 
 
 
-@csrf_exempt
-def saveData(request):
-    if request.method == 'POST':
-        data = json.loads(request.body)
-        #
-        program = data['program']
-        program_name = data['program_name']
-        gender = data['gender']
-        gender_name = data['gender_name']
-        level_of_care = data['level_of_care']
-        level_names = data['level_names']
 
-        location = data['location']
-        location_names = data['location_names']
-
-        facility_type = data['facility_type']
-        facility_names = data['facility_names']
-        program_model_suggested = data['program_model_suggested']
-        program_type = data['program_type']
-
-        Adelphoi_Mapping(location = location,location_names = location_names,program = program,program_name = program_name,gender =gender,gender_name = gender_name,level_of_care = level_of_care,level_names =level_names,facility_type = facility_type,facility_names =facility_names,program_model_suggested = program_model_suggested,program_type = program_type).save()
-        # program = request.POST.get('program')
-        # program_name =request.POST.get('program_name')
-        # gender =request.POST.get('gender')
-        # gender_name =request.POST.get('gender_name')
-        # level_of_care =request.POST.get('level_of_care')
-        # level_names =request.POST.get('level_names')
-        #
-        # location = request.POST.getlist('location')
-        # location_names =request.POST.getlist('location_names')
-        #
-        # facility_type =request.POST.get('facility_type')
-        # facility_names = request.POST.get('facility_names')
-        # program_model_suggested = request.POST.get('program_model_suggested')
-        # program_type = request.POST.get('program_type')
-
-
-        print("program:",program)
-        print("location",location)
-
-        return JsonResponse({"data":"success"})
-    else:
-        return JsonResponse({"data","Method not allowed"})
 
 
