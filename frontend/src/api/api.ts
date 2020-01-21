@@ -34,10 +34,7 @@ export const updateConfiguration = async (
 
 export const insertClient = async (client: Types.Client) => {
   try {
-    const response = await axios.post(
-      `${baseApiUrl}/first_match/list_view/`,
-      client
-    );
+    const response = await axios.post(`${baseApiUrl}/list_view/`, client);
 
     console.log("inserted new client. the client is ");
     console.log(response);
