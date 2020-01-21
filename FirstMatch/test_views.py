@@ -4,7 +4,8 @@ from django.template import RequestContext
 from django.http import HttpResponse,JsonResponse,HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.shortcuts import redirect, render
-from rest_framework.generics import ListCreateAPIView, UpdateAPIView,RetrieveUpdateAPIView, ListAPIView, RetrieveUpdateDestroyAPIView,CreateAPIView
+from rest_framework.generics import ListCreateAPIView, UpdateAPIView,RetrieveUpdateAPIView, ListAPIView,RetrieveAPIView,\
+    RetrieveUpdateDestroyAPIView,CreateAPIView
 
 from .models import ModelTests,Adelphoi_Mapping#,Mapping_Collection  #,ModelTestSub,,Ade_Mapping
 from django.views.decorators.csrf import csrf_exempt
@@ -25,7 +26,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from  rest_framework import status
 from .serializers import ModelTestsSerializers,LocationSerializer, ModelTestsSerializers_selected_program,\
-    ModelTestsSerializer_program_model_suggested, ProgramSerialzer,LocationSerialzer,ProgramLocationSerialzer,ProgramLevelSerialzer,AdminInterface,FilterSerialzer
+    ModelTestsSerializer_program_model_suggested, ProgramSerialzer,LocationSerialzer,ProgramLocationSerialzer,ProgramLevelSerialzer,\
+    AdminInterface,FilterSerialzer,Adelphoi_placementSerializer
 from rest_framework.parsers import JSONParser
 from django.urls import reverse_lazy
 from django_filters.rest_framework import DjangoFilterBackend
@@ -316,9 +318,12 @@ class AdelphoiList(ListCreateAPIView):
             query2 = Adelphoi_Mapping.objects.filter(program=program_pred, gender=serializer.validated_data.get('gender'),level_of_care=level_pred)#, level_of_care=level_pred
 
             program_result = []
-            for i in query:
-                program_result.append(i.program_type)
-            print("program_result",program_result[0])
+            if query.count() > 0:
+                for i in query:
+                    program_result.append(i.program_type)
+            else:
+                a = 'Matching not found'
+                program_result.append(a)
             serializer.save(program=program_pred,model_program = program_result[0],level_of_care=level_pred,facility_type =facility_preds,confidence = Confidence,
                             family_support = data['Family support'][0],
                             level_of_aggression = data['Level of aggression'][0],
@@ -358,11 +363,11 @@ class AdelphoiList(ListCreateAPIView):
                     program_model.append(i.program_model_suggested)
                     program_type.append(i.program_type)
 
-                print("location_list",location_list[0])
-                # return Response(
-                    # {"program": program_pred, "program list is": program_list, "level of care is ": level_list,
-                    #  "location names": location_list, "facility names": facility_names,"Confidence":Confidence,"program_model_suggested":program_model})
-                return Response({"program":program_type,"Confidence":Confidence})
+                #print("location_list",location_list[0])
+                return Response(
+                    {"program": program_pred,"program_type":program_type, "program list is": program_list, "level of care is ": level_list,
+                    "location names": location_list, "facility names": facility_names,"Confidence":Confidence,"program_model_suggested":program_model,"gender":serializer.validated_data.get('gender')})
+                #return Response({"program":program_type,"Confidence":Confidence})
             elif query2.count() > 0:
                 for i in query:
                     program_list.append(i.program_name)
@@ -370,27 +375,33 @@ class AdelphoiList(ListCreateAPIView):
                     location_list.append(i.location_names)
                     facility_names.append(i.facility_names)
                     program_model.append(i.program_model_suggested)
-                # return Response(
-                #     {"program": program_pred, "program list is": program_list, "level of care is ": level_list,
-                #      "location names": location_list, "facility names": facility_names, "Confidence": Confidence,
-                #      "program_model_suggested": program_model})
-                return Response({"program": program_type, "Confidence": Confidence})
+                return Response(
+                     {"program": program_pred, "program list is": program_list, "level of care is ": level_list,
+                    "location names": location_list, "facility names": facility_names, "Confidence": Confidence,
+                     "program_model_suggested": program_model})
+                #return Response({"program": program_type, "Confidence": Confidence})
 
             else:
-                # return Response({"program": program_pred,"Level of care":level_pred,"Confidence":Confidence,"Facility Type":facility_preds,"ERROR":"Matching values not found"})
-                return Response({"program": program_type, "ERROR":"Matching values not found"})
+                return Response({"program": program_pred,"Level of care":level_pred,"Confidence":Confidence,"Facility Type":facility_preds,"ERROR":"Matching values not found","gender":serializer.validated_data.get('gender')})
+                #return Response({"program": program_type, "ERROR":"Matching values not found"})
         else:
             serializer.save()
-            return Response({"data":"Thanx"})
+            return Response({"Result":"Thanx for registering with ADELPHOI"})
         return Response({"data": "Failure"})
 
 
-class Adelphoi_placement(ListAPIView):
-    def get(self, request, *args, **kwargs):
-        mt: ModelTests = ModelTests.objects.filter(client_code=kwargs['pk'])[0]
-        referred_program = mt.referred_program
-        model_program = mt.model_program
-        return Response({"Referred program":referred_program,"Model Program":model_program})
+# class Adelphoi_placement(ListAPIView):
+#     def get(self, request, *args, **kwargs):
+#         mt: ModelTests = ModelTests.objects.filter(client_code=kwargs['pk'])
+#         if mt.exists():
+#             referred_program = mt.referred_program
+#             model_program = mt.model_program
+#             return Response({"Referred program":referred_program,"Model Program":model_program})
+#         else:
+#             return Response({"result":"client not exists"})
+class Adelphoi_placement(RetrieveAPIView):
+    serializer_class = Adelphoi_placementSerializer
+    queryset = ModelTests.objects.all()
 
 class AdelphoiSubmission(RetrieveUpdateAPIView):  #UpdateAPIView
 
@@ -462,18 +473,21 @@ class Adelphoi_program(ListAPIView):
 class Adelphoi_location(ListAPIView):
     def get(self, request, *args, **kwargs):
         client_selected_program = request.GET['client_selected_program']
-        mt: ModelTests = ModelTests.objects.filter(client_code=kwargs['pk'])[0]
-        query = Adelphoi_Mapping.objects.filter(program_type = client_selected_program) #,program_model_suggested = serializer.validated_data.get("program_model_suggested")
-        suggested_location = []
-        if query.count()>0:
-            for i in query:
-                suggested_location.append(i.location_names)
+        mt: ModelTests = ModelTests.objects.filter(client_code=kwargs['pk'])
+        if mt.exists():
+            query = Adelphoi_Mapping.objects.filter(program_type = client_selected_program) #,program_model_suggested = serializer.validated_data.get("program_model_suggested")
+            suggested_location = []
+            if query.count()>0:
+                for i in query:
+                    suggested_location.append(i.location_names)
+            else:
+                return Response({"result":"NO MATCHES FOUND"})
+            return Response({
+                'Suggested Locations': suggested_location[0]
+            })
         else:
-            return Response({"result":"NO MATCHES FOUND"})
-        data = {
-            'Suggested Locations': suggested_location,
-        }
-        return Response(data)
+            return Response({"result":"client not exists"})
+        return Response({"result":"failure"})
 
 class AdelphoiResult(UpdateAPIView):  #UpdateAPIView
 
@@ -485,33 +499,36 @@ class AdelphoiResult(UpdateAPIView):  #UpdateAPIView
         serializer = serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        mt: ModelTests = ModelTests.objects.filter(client_code=kwargs['pk'])[0]
-        client_selected_program = serializer.validated_data.get('client_selected_program') #request.GET['client_selected_program']
-        client_selected_location = serializer.validated_data.get('client_selected_locations') #request.GET['client_selected_location']
+        mt: ModelTests = ModelTests.objects.filter(client_code=kwargs['pk']).first()
+        if mt:
+            client_selected_program = serializer.validated_data.get('client_selected_program') #request.GET['client_selected_program']
+            client_selected_location = serializer.validated_data.get('client_selected_locations') #request.GET['client_selected_location']
 
 
-        location_names = []
+            location_names = []
 
-        selected_program = []
-        selected_level = []
-        selected_facility = []
-        query_location = Adelphoi_Mapping.objects.filter(program_type = client_selected_program)
-        if query_location.count()>0:
-            for q in query_location:
-                location_names.append(q.location_names)
-                selected_program.append(q.program)
-                selected_level.append(q.level_of_care)
-                selected_facility.append(q.facility_type)
+            selected_program = []
+            selected_level = []
+            selected_facility = []
+            query_location = Adelphoi_Mapping.objects.filter(program_type = client_selected_program)
+            if query_location.count()>0:
+                for q in query_location:
+                    location_names.append(q.location_names)
+                    selected_program.append(q.program)
+                    selected_level.append(q.level_of_care)
+                    selected_facility.append(q.facility_type)
+            else:
+                return Response({"Response":"not found"})
+
+            mt.client_selected_level = int(selected_level[0])
+            mt.client_selected_facility = int(selected_facility[0])
+            # mt.client_selected_program = int(selected_program[0])
+            mt.client_selected_program = client_selected_program
+            mt.client_selected_locations = client_selected_location
+            mt.save()
+            return Response({"result":"values are inserted"})
         else:
-            return Response({"Response":"not found"})
-
-        mt.client_selected_level = int(selected_level[0])
-        mt.client_selected_facility = int(selected_facility[0])
-        # mt.client_selected_program = int(selected_program[0])
-        mt.client_selected_program = client_selected_program
-        mt.client_selected_locations = client_selected_location
-        mt.save()
-        return Response({"result":"values are inserted"})
+            return Response({"result":"client not exists"})
 
 class ProgramCompletionLevel(UpdateAPIView): #UpdateAPIView
     serializer_class = ProgramLevelSerialzer
@@ -521,13 +538,16 @@ class ProgramCompletionLevel(UpdateAPIView): #UpdateAPIView
         serializer = self.get_serializer_class()
         serializer = serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        mt: ModelTests = ModelTests.objects.filter(client_code=kwargs['pk'])[0]
-        mt.Program_Completion = serializer.validated_data.get('Program_Completion')
-        mt.Returned_to_Care = serializer.validated_data.get('Returned_to_Care')
-        mt.save()
-        # else:
-        #     return Response({"result":"Client no exists"})
-        return Response({"data":"success"})
+        mt: ModelTests = ModelTests.objects.filter(client_code=kwargs['pk']).first()
+        if mt:
+            mt.Program_Completion = serializer.validated_data.get('Program_Completion')
+            mt.Returned_to_Care = serializer.validated_data.get('Returned_to_Care')
+            mt.save()
+            # else:
+            #     return Response({"result":"Client no exists"})
+            return Response({"data":"success"})
+        else:
+            return Response({"result":"client not exists"})
 
 
 
@@ -543,7 +563,7 @@ class AdminUpdate(ListCreateAPIView):
         serializer.save()
 
         return Response({"data":"okay"})
-
+#To search results based on client_code or name
 class ClientList(ListAPIView):
     queryset = ModelTests.objects.all()
     serializer_class = FilterSerialzer
@@ -560,11 +580,14 @@ class Location_Mapping(UpdateAPIView):
         serializer = self.get_serializer_class()
         serializer = serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        mt: ModelTests = ModelTests.objects.filter(client_code=kwargs['pk'])[0]
-        mt.client_selected_locations = serializer.validated_data.get('client_selected_locations')
-        mt.save()
-        return Response({"data":"success"})
-
+        mt: ModelTests = ModelTests.objects.filter(client_code=kwargs['pk'])
+        if mt.exists():
+            mt.client_selected_locations = serializer.validated_data.get('client_selected_locations')
+            mt.save()
+            return Response({"data":"success"})
+        else:
+            return Response({"result": "client not exists"})
+#to save adelphoi mapping values from admin
 @csrf_exempt
 def saveData(request):
     if request.method == 'POST':
@@ -585,8 +608,12 @@ def saveData(request):
         program_model_suggested = data['program_model_suggested']
         program_type = data['program_type']
 
-        Adelphoi_Mapping(location = location,location_names = location_names,program = program,program_name = program_name,gender =gender,gender_name = gender_name,level_of_care = level_of_care,level_names =level_names,facility_type = facility_type,facility_names =facility_names,program_model_suggested = program_model_suggested,program_type = program_type).save()
+        Adelphoi_Mapping(location=list(eval(location)), location_names=location_names.split(','), program=program, program_name=program_name, \
+                         gender=gender, gender_name=gender_name, level_of_care=level_of_care, level_names=level_names, \
+                         facility_type=facility_type, facility_names=facility_names,
+                         program_model_suggested=program_model_suggested, \
+                         program_type=program_type).save()
 
-        return JsonResponse({"data":"success"})
+        return JsonResponse({"data":"Data inserted successfully"})
     else:
         return JsonResponse({"data","Method not allowed"})

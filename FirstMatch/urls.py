@@ -25,7 +25,20 @@ urlpatterns = [
     ###
     path('program/<pk>/', views.Adelphoi_program.as_view()),  # w
     path('locations/<pk>',views.Location_Mapping.as_view()),
-    path('save',views.saveData)
+    path('save',views.saveData),
+    ####
+    path('test',views.NewAPI_1.as_view()),
+    path('test2/<pk>/',views.NewAPI2.as_view()),
+
+    path('Final/',views.Final.as_view()),
+    path('music_insert',views.MusicianListView.as_view()),
+    path('music_insert/<pk>/',views.MusicianView.as_view()),
+
+    path('list_view/<pk>/',views.UpdateLogic.as_view()),
+
+    path('new/<pk>/',views.UpDate.as_view()),
+
+    path('update_exists_client/<pk>/',views.update_logic)
     ###
     # path('insert_data',views.adelphoi_insert,name = 'insert_d'),
     # path('CBV',views.CBView.as_view(success_url="/CBV")),

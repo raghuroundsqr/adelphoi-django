@@ -4,6 +4,9 @@
     <list default="true" id="32ebb356-1aca-40e1-98c9-7a7e1f1762fe" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/FirstMatch/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/FirstMatch/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FirstMatch/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/FirstMatch/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FirstMatch/test_views.py" beforeDir="false" afterPath="$PROJECT_DIR$/FirstMatch/test_views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FirstMatch/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/FirstMatch/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/FirstMatch/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/FirstMatch/views.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -31,10 +34,10 @@
   <component name="PropertiesComponent">
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/FirstMatch/test_urls.py" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/FirstMatch/test_views.py" />
     <property name="restartRequiresConfirmation" value="false" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
-    <property name="two.files.diff.last.used.file" value="$PROJECT_DIR$/FirstMatch/test_urls.py" />
+    <property name="two.files.diff.last.used.file" value="$PROJECT_DIR$/FirstMatch/test_views.py" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">

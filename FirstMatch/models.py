@@ -106,12 +106,12 @@ class ModelTests(models.Model):
     #####
     #social/family Hx:
     incarcerated_caregivers = models.IntegerField(db_column='Incarcerated_caregivers', choices=no_or_yes,blank=True)
-    death_Caregiver = models.IntegerField(db_column='Death_Caregiver', choices=no_or_yes)
-    incarcerated_siblings = models.IntegerField(db_column='Incarcerated_siblings', choices=no_or_yes)
-    death_Silblings = models.IntegerField(db_column='Death Silblings', choices=no_or_yes)
-    alcohol_Use = models.IntegerField(db_column='Alcohol_Use', choices=no_or_yes)
-    drug_Use = models.IntegerField(db_column='Drug_Use', choices=no_or_yes)
-    abuse_neglect = models.FloatField(db_column='abuse_neglect',choices=no_or_yes)
+    death_Caregiver = models.IntegerField(db_column='Death_Caregiver', choices=no_or_yes,blank=True)
+    incarcerated_siblings = models.IntegerField(db_column='Incarcerated_siblings', choices=no_or_yes,blank=True)
+    death_Silblings = models.IntegerField(db_column='Death Silblings', choices=no_or_yes,blank=True)
+    alcohol_Use = models.IntegerField(db_column='Alcohol_Use', choices=no_or_yes,blank=True)
+    drug_Use = models.IntegerField(db_column='Drug_Use', choices=no_or_yes,blank=True)
+    abuse_neglect = models.FloatField(db_column='abuse_neglect',choices=no_or_yes,blank=True)
     #Assessment Score:
     yls_FamCircumstances_Score = models.FloatField(db_column='YLS_FamCircumstances_Score', blank=True)
     yls_Edu_Employ_Score = models.FloatField(db_column='YLS_Edu_Employ_Score', blank=True)
@@ -138,9 +138,9 @@ class ModelTests(models.Model):
     cans_Trauma_Exp = models.FloatField(db_column='CANS_Trauma_Exp', blank=True)
 
 
-    primaryRaceCode = models.IntegerField(db_column='PrimaryRacecode', choices=RACE_CHOICES)
-    ageAtEpisodeStart = models.IntegerField(db_column='AgeAtEpisodeStart')
-    ageAtEnrollStart = models.IntegerField(db_column='AgeAtEnrollStart')
+    primaryRaceCode = models.IntegerField(db_column='PrimaryRacecode', choices=RACE_CHOICES,blank=True)
+    ageAtEpisodeStart = models.IntegerField(db_column='AgeAtEpisodeStart',blank=True)
+    ageAtEnrollStart = models.IntegerField(db_column='AgeAtEnrollStart',blank=True)  #need to remove
 
     # sexually_acting_out_in_past_program = models.IntegerField(db_column='sexually_acting_out_in_past_program',
     #                                                           choices=SAO_past_program)
@@ -171,13 +171,16 @@ class ModelTests(models.Model):
 #####################################
 
 
-    enrollStart_date = models.DateField(db_column='enrollStart_date',blank=True)
-    english_second_lang = models.IntegerField(db_column='english_second_lang',choices=second_lang)
-    type_of_drugs = models.TextField(db_column='type_of_drugs',blank=True)
-    FAST_FamilyTogetherScore = models.FloatField(db_column='FAST_FamilyTogetherScore',blank=True)
-    FAST_CaregiverAdvocacyScore = models.FloatField(db_column='FAST_CaregiverAdvocacyScore',blank=True)
+    enrollStart_date = models.DateField(db_column='enrollStart_date',blank=True,null=True)
+    english_second_lang = models.IntegerField(db_column='english_second_lang',choices=second_lang,blank=True)
+    type_of_drugs = models.TextField(db_column='type_of_drugs',blank=True,null=True)
+    FAST_FamilyTogetherScore = models.FloatField(db_column='FAST_FamilyTogetherScore',blank=True,null=True)
+    FAST_CaregiverAdvocacyScore = models.FloatField(db_column='FAST_CaregiverAdvocacyScore',blank=True,null=True)
 
-    referred_program = models.CharField(db_column='referred_program',max_length=100,choices = referred_program_choices)
+    referred_program = models.CharField(db_column='referred_program',max_length=100,choices = referred_program_choices,blank=True)
+
+
+    condition_program = models.IntegerField(db_column='condition_program')
     # client_selected_program = models.CharField(max_length=10,choices=program_choices)
     #
     # client_selected_level = models.CharField(max_length=10,choices=level_choices)
@@ -243,6 +246,23 @@ class Adelphoi_Mapping(models.Model):
 
     program_type = models.CharField(db_column='program_type',max_length=100)
 
+
+
+
+class Musician(models.Model):
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
+    instrument = models.CharField(max_length=100)
+
+    def __unicode__(self):
+        return self.first_name
+
+
+class Album(models.Model):
+    artist = models.ForeignKey(Musician, on_delete=models.CASCADE, related_name='album_musician', null=True, blank=True)
+    name = models.CharField(max_length=100)
+    release_date = models.DateField()
+    num_stars = models.IntegerField()
 
 
 
