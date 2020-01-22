@@ -11,10 +11,11 @@ export interface ConfigurationContainerState {
   isLoading: boolean;
   error: string;
   hasError: boolean;
+  config_update_response: string | null;
 }
 
 export interface ConfigurationContainerProp extends ContainerProps {
-  updateConfiguration: (configuration: Types.Configuration) => void;
+  updateConfiguration: (configuration: Types.Configuration) => Promise<string>;
 }
 
 export class ConfigurationContainer extends React.Component<
@@ -29,14 +30,25 @@ export class ConfigurationContainer extends React.Component<
     return {
       isLoading: false,
       hasError: false,
-      error: ""
+      error: "",
+      config_update_response: null
     };
   }
 
   updateConfiguration = async (configuration: Types.Configuration) => {
-    // const { history } = this.props;
-    await this.props.updateConfiguration(configuration);
-    // history.push("/new-configuration/2");
+    try {
+      this.setState({ isLoading: true });
+      const response = await this.props.updateConfiguration(configuration);
+      this.setState({
+        isLoading: false,
+        config_update_response: response
+      });
+    } catch (error) {
+      this.setState({
+        isLoading: false,
+        config_update_response: "An error occured. Please try again."
+      });
+    }
   };
 
   render() {

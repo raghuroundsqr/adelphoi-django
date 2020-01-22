@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
-import { useHistory } from "react-router-dom";
+// import { useHistory } from "react-router-dom";
 import { Formik, ErrorMessage } from "formik";
 import Button from "@material-ui/core/Button";
 import { ConfigurationSchema } from "./ValidationSchema";
@@ -8,12 +8,11 @@ import {
   wrap,
   subHeading,
   fieldRow,
-  flexRow,
   mainContent,
   twoCol,
   inputField,
   label,
-  fieldBox
+  txtDetail
 } from "./styles";
 import * as Types from "../api/definitions";
 
@@ -23,10 +22,11 @@ interface ConfigurationFormProps {
   isLoading: boolean;
   hasError: boolean;
   error: string;
+  config_update_response: string | null;
 }
 
 const ConfigurationForm: React.FC<ConfigurationFormProps> = props => {
-  const history = useHistory();
+  // const history = useHistory();
 
   return (
     <div css={wrap}>
@@ -36,16 +36,20 @@ const ConfigurationForm: React.FC<ConfigurationFormProps> = props => {
           enableReinitialize
           validationSchema={ConfigurationSchema}
           onSubmit={async (values, helpers) => {
-            console.log("submtting the form on step2");
-            console.log(values);
-            // add values to client state
             await props.onFormSubmit(values);
-            // helpers.resetForm();
           }}
         >
           {({ values, handleSubmit, handleChange }) => (
             <form name="newClientForm2" onSubmit={handleSubmit}>
               <h1 css={subHeading}>Program</h1>
+              {props.config_update_response && (
+                <div
+                  css={txtDetail}
+                  style={{ marginTop: 10, marginBottom: 10 }}
+                >
+                  {props.config_update_response}
+                </div>
+              )}
               <div css={fieldRow}>
                 <div css={twoCol}>
                   <label css={label}>Program</label>

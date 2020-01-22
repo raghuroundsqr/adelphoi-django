@@ -17,17 +17,9 @@ export const updateConfiguration = async (
 ) => {
   try {
     const response = await axios.post(`${baseApiUrl}/save`, configuration);
-
-    console.log("inserted new configuration. the configuration is ");
-    console.log(response);
-    const r = {
-      ...response.data,
-      program_type: response.data.program_type[0]
-    };
-    return (r as unknown) as Partial<Types.Configuration>;
+    return response.data.data;
   } catch (error) {
-    console.error("api function insertClient error");
-    // console.log(error);
+    console.error("api function updateConfiguration error");
     throwError(error);
   }
 };
@@ -35,9 +27,6 @@ export const updateConfiguration = async (
 export const insertClient = async (client: Types.Client) => {
   try {
     const response = await axios.post(`${baseApiUrl}/list_view/`, client);
-
-    console.log("inserted new client. the client is ");
-    console.log(response);
     const r = {
       ...response.data,
       program_type: response.data.program_type[0]
@@ -45,7 +34,6 @@ export const insertClient = async (client: Types.Client) => {
     return (r as unknown) as Partial<Types.Client>;
   } catch (error) {
     console.error("api function insertClient error");
-    // console.log(error);
     throwError(error);
   }
 };
@@ -61,8 +49,6 @@ export const insertPrediction = async (client: Types.Client) => {
       referred_program: data["referred_program"],
       model_program: data["model_program"]
     };
-    console.log("inserted new prediction. the client is ");
-    console.log(newCl);
     return newCl;
   } catch (error) {
     console.error("api function insertPrediction error");
@@ -79,7 +65,7 @@ export const fetchLocations = async (
       `${baseApiUrl}/location/${client_code}?client_selected_program=${selected_program}`
     );
     const data = (response.data as unknown) as LocationsResponse;
-    console.log("received locations from server ", data);
+
     return data["Suggested Locations"];
   } catch (error) {
     console.error("api function getLocations error");
@@ -100,7 +86,6 @@ export const saveLocationAndProgram = async (
         client_selected_locations: selected_location
       }
     );
-    console.log(response);
     return response.data;
   } catch (error) {
     console.error("api function getLocations error");
@@ -121,7 +106,6 @@ export const updateProgramCompletion = async (
         Returned_to_Care
       }
     );
-    console.log(response);
     return response.data.data;
   } catch (error) {
     console.error("api function getLocations error");
@@ -137,7 +121,6 @@ export const searchClient = async (
     const response = await axios.get(
       `${baseApiUrl}/search/?name=${client_name}&client_code=${client_code}`
     );
-    console.log(response);
     return response.data;
   } catch (error) {
     console.error("api function searchClient error");

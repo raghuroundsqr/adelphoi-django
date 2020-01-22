@@ -21,19 +21,14 @@ export const actions = {
 
   updateConfiguration(
     configuration: Types.Configuration
-  ): ThunkAction<
-    Promise<Types.Configuration | undefined>,
-    AppState,
-    null,
-    AnyAction
-  > {
+  ): ThunkAction<Promise<string>, AppState, null, AnyAction> {
     return async (dispatch, getState) => {
       const response = await updateConfiguration(configuration);
       if (!response) {
         throw Error("something went wrong while saving the client");
       }
       dispatch(update({ configuration }));
-      return configuration;
+      return response;
     };
   },
 

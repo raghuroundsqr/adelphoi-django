@@ -63,7 +63,10 @@ export class ExistingClientContainer extends React.Component<
         program_completion_response: response
       });
     } catch (error) {
-      this.setState({ isLoading: false, program_completion_response: "error" });
+      this.setState({
+        isLoading: false,
+        program_completion_response: "An error occured. Please try again."
+      });
     }
     // history.push("/new-client/2");
   };
