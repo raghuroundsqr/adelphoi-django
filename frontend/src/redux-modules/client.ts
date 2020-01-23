@@ -17,7 +17,8 @@ import {
 
 const initialState: ClientState = {
   client: Types.emptyClient,
-  clientList: []
+  clientList: [],
+  errors: {}
 };
 
 const { reducer, update } = createReducer<ClientState>(
@@ -116,18 +117,24 @@ export const actions = {
     client: Types.Client
   ): ThunkAction<Promise<Types.Client | undefined>, AppState, null, AnyAction> {
     return async (dispatch, getState) => {
-      const response = await insertClient(client);
-      if (!response) {
-        throw Error("something went wrong while saving the client");
-      }
+      try {
+        const response = await insertClient(client);
+        if (!response) {
+          throw Error("something went wrong while saving the client");
+        }
 
-      const cl = {
-        ...client,
-        program_type: response.program_type || null,
-        Confidence: response.Confidence || null
-      };
-      dispatch(update({ client: cl }));
-      return cl;
+        const cl = {
+          ...client,
+          program_type: response.program_type || null,
+          Confidence: response.Confidence || null
+        };
+        dispatch(update({ client: cl }));
+        return cl;
+      } catch (errors) {
+        debugger;
+        dispatch(update({ client, errors: errors.response.data }));
+        return client;
+      }
     };
   },
 

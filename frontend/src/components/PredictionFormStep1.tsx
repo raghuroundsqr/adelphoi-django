@@ -1,6 +1,13 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
-import { Formik, FormikProps, FieldProps, Field, ErrorMessage } from "formik";
+import {
+  Formik,
+  FormikProps,
+  FormikErrors,
+  FieldProps,
+  Field,
+  ErrorMessage
+} from "formik";
 import Button from "@material-ui/core/Button";
 import DateFnsUtils from "@date-io/date-fns";
 import { format } from "date-fns";
@@ -30,6 +37,7 @@ interface PredictionFormStep1Props {
   isLoading: boolean;
   hasError: boolean;
   error: string;
+  errors: FormikErrors<Types.Client> | undefined;
 }
 
 function getAge(date: Date | null) {
@@ -112,6 +120,7 @@ const PredictionFormStep1: React.FC<PredictionFormStep1Props> = props => {
     <div css={wrap}>
       <div css={mainContent}>
         <Formik
+          initialErrors={props.errors}
           initialValues={props.client}
           enableReinitialize
           validationSchema={Step1ValidationSchema}
@@ -124,13 +133,13 @@ const PredictionFormStep1: React.FC<PredictionFormStep1Props> = props => {
               ? format(new Date(values.episode_start), "yyyy-MM-dd")
               : "";
 
-            const iq =
-              values.borderline_IQ && Number(values.borderline_IQ) >= 70
-                ? "1"
-                : "0";
+            // const iq =
+            //   values.borderline_IQ && Number(values.borderline_IQ) >= 70
+            //     ? "1"
+            //     : "0";
             values.dob = dob;
             values.episode_start = ep;
-            values.borderline_IQ = iq;
+            // values.borderline_IQ = iq;
             console.log(values);
             // add values to client state
             props.onFormSubmit(values);
@@ -228,7 +237,7 @@ const PredictionFormStep1: React.FC<PredictionFormStep1Props> = props => {
                 </div>
                 <div css={twoCol} style={{ width: "42%" }}>
                   <label css={label}>Sex</label>
-                  <div css={fieldBox}>
+                  <div css={fieldBox} style={{ width: "47.8%" }}>
                     <input
                       type="radio"
                       onChange={handleChange}
@@ -239,7 +248,7 @@ const PredictionFormStep1: React.FC<PredictionFormStep1Props> = props => {
                     />{" "}
                     <label htmlFor="female">Female</label>
                   </div>
-                  <div css={fieldBox}>
+                  <div css={fieldBox} style={{ width: "47.8%" }}>
                     <input
                       type="radio"
                       onChange={handleChange}
@@ -266,7 +275,7 @@ const PredictionFormStep1: React.FC<PredictionFormStep1Props> = props => {
                   >
                     <option value="">Select</option>
                     <option value="1">English</option>
-                    <option value="2">Other</option>
+                    <option value="2">Not English</option>
                   </select>
                   <ErrorMessage component="span" name="primary_language" />
                 </div>
@@ -280,64 +289,86 @@ const PredictionFormStep1: React.FC<PredictionFormStep1Props> = props => {
                     onChange={handleChange}
                   >
                     <option value="">Select</option>
+
                     <option value="1">Adams</option>
                     <option value="2">Allegheny</option>
+                    <option value="39">Armstrong</option>
+
                     <option value="3">Beaver</option>
                     <option value="4">Bedford</option>
                     <option value="5">Berks</option>
                     <option value="6">Blair</option>
                     <option value="7">Bucks</option>
                     <option value="8">Butler</option>
+
                     <option value="9">Cambria</option>
+                    <option value="42">Cayahoga OH</option>
                     <option value="10">Centre</option>
                     <option value="11">Chester</option>
+                    <option value="40">Columbia</option>
+                    <option value="41">Crawford</option>
                     <option value="12">Cumberland</option>
+
                     <option value="13">Dauphin</option>
                     <option value="14">Delaware</option>
+
                     <option value="15">Erie</option>
+
                     <option value="16">Fayette</option>
                     <option value="17">Franklin</option>
+                    <option value="43">Franklin OH</option>
+                    <option value="57">Fulton</option>
+
+                    <option value="44">Greene</option>
+
                     <option value="18">Huntingdon</option>
+
+                    <option value="45">Indiana</option>
+
                     <option value="19">Juniata</option>
+
                     <option value="20">Kent</option>
+
                     <option value="21">Lackawanna</option>
                     <option value="22">Lancaster</option>
+                    <option value="46">Lawrence</option>
                     <option value="23">Lebanon</option>
                     <option value="24">Lehigh</option>
                     <option value="25">Lycoming</option>
+
+                    <option value="8">Mckean</option>
+                    <option value="49">Mercer</option>
+                    <option value="7">MH</option>
                     <option value="26">Monroe</option>
                     <option value="27">Montgomery</option>
                     <option value="28">Montour</option>
+
+                    <option value="51">Northampton</option>
                     <option value="29">Northumberland</option>
+
+                    <option value="50">Outside tri-county</option>
+
                     <option value="30">Perry</option>
                     <option value="31">Philadelphia</option>
                     <option value="32">Pike</option>
+                    <option value="52">Pike</option>
+
+                    <option value="53">Schukill</option>
+                    <option value="60">SE PA</option>
                     <option value="34">Snyder</option>
+                    <option value="54">Somerset</option>
+
                     <option value="35">Tioga</option>
+
+                    <option value="55">Union</option>
+
+                    <option value="56">Venango</option>
+
                     <option value="36">Washington</option>
                     <option value="37">Westmoreland</option>
-                    <option value="38">York</option>
-                    <option value="39">Armstrong</option>
-                    <option value="40">Columbia</option>
-                    <option value="41">Crawford</option>
-                    <option value="42">Cayahoga OH</option>
-                    <option value="43">Franklin OH</option>
-                    <option value="44">Greene</option>
-                    <option value="45">Indiana</option>
-                    <option value="46">Lawrence</option>
-                    <option value="7">MH</option>
-                    <option value="8">Mckean</option>
-                    <option value="49">Mercer</option>
-                    <option value="50">outside tri-county</option>
-                    <option value="51">Northampton</option>
-                    <option value="52">Pike</option>
-                    <option value="53">Schukill</option>
-                    <option value="54">Somerset</option>
-                    <option value="55">Union</option>
-                    <option value="56">Venango</option>
-                    <option value="57">Fulton</option>
                     <option value="59">WV</option>
-                    <option value="60">SE PA</option>
+
+                    <option value="38">York</option>
                   </select>
                   <ErrorMessage component="span" name="RefSourceCode" />
                 </div>
@@ -366,18 +397,35 @@ const PredictionFormStep1: React.FC<PredictionFormStep1Props> = props => {
                   <select
                     css={selectField}
                     name="CYF_code"
-                    id="cny_involvement"
                     value={values.CYF_code || ""}
                     onChange={handleChange}
                   >
                     <option value="">Select</option>
-                    <option value="1">Yes</option>
-                    <option value="2">No</option>
+                    <option value="1">CYF</option>
+                    <option value="2">Juvenile Justice</option>
                   </select>
                   <ErrorMessage component="span" name="CYF_code" />
                 </div>
               </div>
-
+              <div css={fieldRow}>
+                <div css={twoCol}>
+                  <label css={label}>Primary Race Code</label>
+                  <select
+                    css={selectField}
+                    name="primaryRaceCode"
+                    id="primaryRaceCode"
+                    value={values.primaryRaceCode || ""}
+                    onChange={handleChange}
+                  >
+                    <option value="">Select</option>
+                    <option value="2">African American</option>
+                    <option value="1">Caucasian</option>
+                    <option value="3">Hispanic</option>
+                    <option value="4">Other</option>
+                  </select>
+                  <ErrorMessage component="span" name="primaryRaceCode" />
+                </div>
+              </div>
               <h1 css={subHeading}>Placement History</h1>
               <div css={fieldRow}>
                 <div css={twoCol}>
@@ -476,8 +524,7 @@ const PredictionFormStep1: React.FC<PredictionFormStep1Props> = props => {
                     <option value="0">None</option>
                     <option value="1">Unknown</option>
                     <option value="2">One</option>
-                    <option value="3">Two</option>
-                    <option value="4">More than two</option>
+                    <option value="3">Two or more</option>
                   </select>
                   <ErrorMessage
                     component="span"
@@ -697,8 +744,8 @@ const PredictionFormStep1: React.FC<PredictionFormStep1Props> = props => {
                       onChange={handleChange}
                       name="psychosis"
                       id="psychosis-no"
-                      value="no"
-                      checked={values.psychosis === "1"}
+                      value="0"
+                      checked={values.psychosis === "0"}
                     />{" "}
                     <label htmlFor="psychosis-no">No</label>
                   </div>
@@ -708,19 +755,19 @@ const PredictionFormStep1: React.FC<PredictionFormStep1Props> = props => {
 
               <div css={fieldRow}>
                 <div css={twoCol}>
-                  <label css={label}>
-                    &nbsp;
-                    <br />
-                    IQ
-                  </label>
-                  <input
-                    css={inputField}
+                  <label css={label}>IQ</label>
+
+                  <select
+                    css={selectField}
                     name="borderline_IQ"
-                    type="text"
-                    placeholder=""
+                    id="borderline_IQ"
                     value={values.borderline_IQ || ""}
                     onChange={handleChange}
-                  />
+                  >
+                    <option value="">Select</option>
+                    <option value="0">70+</option>
+                    <option value="1">&lt;70</option>
+                  </select>
                   <ErrorMessage component="span" name="borderline_IQ" />
                 </div>
                 <div css={twoCol}>
@@ -748,8 +795,11 @@ const PredictionFormStep1: React.FC<PredictionFormStep1Props> = props => {
                     value={values.prior_hospitalizations || ""}
                     onChange={handleChange}
                   />
+                  <ErrorMessage
+                    component="span"
+                    name="prior_hospitalizations"
+                  />
                 </div>
-                <ErrorMessage component="span" name="prior_hospitalizations" />
               </div>
               <div css={fieldRow}>
                 <div css={twoCol}>

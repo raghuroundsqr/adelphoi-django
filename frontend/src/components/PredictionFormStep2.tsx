@@ -1,9 +1,9 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
 import { useHistory } from "react-router-dom";
-import { Formik, ErrorMessage } from "formik";
+import { Formik, ErrorMessage, FormikErrors } from "formik";
 import Button from "@material-ui/core/Button";
-import { Step2ValidationSchema } from "./ValidationSchema";
+// import { Step2ValidationSchema } from "./ValidationSchema";
 import {
   wrap,
   subHeading,
@@ -23,6 +23,7 @@ interface PredictionFormStep2Props {
   isLoading: boolean;
   hasError: boolean;
   error: string;
+  errors: FormikErrors<Types.Client> | undefined;
 }
 
 const PredictionFormStep2: React.FC<PredictionFormStep2Props> = props => {
@@ -33,8 +34,9 @@ const PredictionFormStep2: React.FC<PredictionFormStep2Props> = props => {
       <div css={mainContent}>
         <Formik
           initialValues={props.client}
+          initialErrors={props.errors}
           enableReinitialize
-          validationSchema={Step2ValidationSchema}
+          // validationSchema={Step2ValidationSchema}
           onSubmit={async (values, helpers) => {
             console.log("submtting the form on step2");
             console.log(values);

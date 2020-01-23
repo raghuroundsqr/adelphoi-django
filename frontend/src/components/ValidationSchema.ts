@@ -115,6 +115,7 @@ export const Step1ValidationSchema = Yup.object().shape({
     .nullable()
 });
 
+// unused - all fields on step2 are optional.
 export const Step2ValidationSchema = Yup.object().shape({
   yls_FamCircumstances_Score: Yup.string()
     .required("Required")

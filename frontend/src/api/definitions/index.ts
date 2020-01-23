@@ -206,10 +206,7 @@ export const emptyConfiguration: Configuration = {
   program_type: ""
 };
 
-export const primary_language: ObjectLiteral = {
-  "1": "English",
-  "2": "Other"
-};
+export const primary_language: string[] = ["", "English", "Other"];
 
 export const RefSourceCode: ObjectLiteral = {
   "1": "Adams",
@@ -312,8 +309,7 @@ export const termination_directly_to_AV: ObjectLiteral = {
   "0": "None",
   "1": "Unknown",
   "2": "One",
-  "3": "Two",
-  "4": "More than two"
+  "3": "Two or more"
 };
 
 export const length_of_time_since_living_at_home: ObjectLiteral = {
@@ -327,11 +323,9 @@ export const gender: ObjectLiteral = {
   "2": "Male"
 };
 
-export const radioValues: ObjectLiteral = {
-  "0": "No",
-  "1": "Yes",
-  "9": "N/A"
-};
+export const radioValues = ["No", "Yes", "", "", "", "", "", "", "", "N/A"];
+
+export const borderline_IQ = ["<70", "70+"];
 
 export const episode_number: ObjectLiteral = {
   "0": "No - Episode 1",
@@ -348,4 +342,16 @@ export const severe_mental_health_symptoms: ObjectLiteral = {
   "2": "6 months ago",
   "3": "9 months ago",
   "4": "1 year or more ago"
+};
+
+export const CYF_code: ObjectLiteral = {
+  "1": "CYF",
+  "2": "Juvenile Justice"
+};
+
+export const primaryRaceCode: ObjectLiteral = {
+  "2": "African American",
+  "1": "Caucasian",
+  "3": "Hispanic",
+  "4": "Other"
 };

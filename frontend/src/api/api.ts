@@ -34,7 +34,7 @@ export const insertClient = async (client: Types.Client) => {
     return (r as unknown) as Partial<Types.Client>;
   } catch (error) {
     console.error("api function insertClient error");
-    throwError(error);
+    throw error;
   }
 };
 

@@ -75,9 +75,7 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
               <div css={twoCol}>
                 <label css={txtLabel}>Previously Referred</label>
                 <div css={txtDetail}>
-                  {client.episode_number
-                    ? Types.episode_number[client.episode_number]
-                    : ""}
+                  {Types.episode_number[Number(client.episode_number)]}
                 </div>
               </div>
             </div>
@@ -117,9 +115,7 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
               <div css={twoCol}>
                 <label css={txtLabel}>Primary Language</label>
                 <div css={txtDetail}>
-                  {client.primary_language
-                    ? Types.primary_language[client.primary_language]
-                    : ""}
+                  {Types.primary_language[Number(client.primary_language)]}
                 </div>
               </div>
               <div css={twoCol}>
@@ -143,7 +139,9 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
                 <label css={txtLabel}>C & Y Involvement</label>
 
                 <div css={txtDetail}>
-                  {client.CYF_code ? Types.radioValues[client.CYF_code] : ""}
+                  {client.CYF_code
+                    ? Types.radioValues[Number(client.CYF_code)]
+                    : ""}
                 </div>
               </div>
             </div>
@@ -234,7 +232,9 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
                 </label>
                 <div css={txtDetail}>
                   {client.hist_of_prior_program_SAO
-                    ? Types.radioValues[client.hist_of_prior_program_SAO]
+                    ? Types.radioValues[
+                        Number(client.hist_of_prior_program_SAO)
+                      ]
                     : "NA"}
                 </div>
               </div>
@@ -255,16 +255,14 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
               <div css={twoCol}>
                 <label css={txtLabel}>Autism Dx</label>
                 <div css={txtDetail}>
-                  {client.autism_Diagnosis
-                    ? Types.radioValues[client.autism_Diagnosis]
-                    : ""}
+                  {Types.radioValues[Number(client.autism_Diagnosis)]}
                 </div>
               </div>
               <div css={twoCol}>
                 <label css={txtLabel}>Borderline Personality Disorder</label>
                 <div css={txtDetail}>
                   {client.borderline_Personality
-                    ? Types.radioValues[client.borderline_Personality]
+                    ? Types.radioValues[Number(client.borderline_Personality)]
                     : ""}
                 </div>
               </div>
@@ -273,17 +271,17 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
               <div css={twoCol}>
                 <label css={txtLabel}>RAD</label>
                 <div css={txtDetail}>
-                  {client.reactive_Attachment_Disorder
-                    ? Types.radioValues[client.reactive_Attachment_Disorder]
-                    : ""}
+                  {
+                    Types.radioValues[
+                      Number(client.reactive_Attachment_Disorder)
+                    ]
+                  }
                 </div>
               </div>
               <div css={twoCol}>
                 <label css={txtLabel}>Animal Cruelty</label>
                 <div css={txtDetail}>
-                  {client.animal_cruelty
-                    ? Types.radioValues[client.animal_cruelty]
-                    : ""}
+                  {Types.radioValues[Number(client.animal_cruelty)]}
                 </div>
               </div>
             </div>
@@ -291,28 +289,26 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
               <div css={twoCol}>
                 <label css={txtLabel}>Schizophrenia</label>
                 <div css={txtDetail}>
-                  {client.schizophrenia
-                    ? Types.radioValues[client.schizophrenia]
-                    : ""}
+                  {Types.radioValues[Number(client.schizophrenia)]}
                 </div>
               </div>
               <div css={twoCol}>
                 <label css={txtLabel}>Psychosis</label>
                 <div css={txtDetail}>
-                  {client.psychosis ? Types.radioValues[client.psychosis] : ""}
+                  {Types.radioValues[Number(client.psychosis)]}
                 </div>
               </div>
             </div>
 
             <div css={fieldRow}>
               <div css={twoCol}>
-                <label css={txtLabel}>
-                  &nbsp;
-                  <br />
-                  IQ
-                </label>
-                <div css={txtDetail}>{client.borderline_IQ}</div>
+                <label css={txtLabel}>IQ</label>
+                <div css={txtDetail}>
+                  {Types.borderline_IQ[Number(client.borderline_IQ)]}
+                </div>
               </div>
+            </div>
+            <div css={fieldRow}>
               <div css={twoCol}>
                 <label css={txtLabel}>Significant MH Symptoms Score</label>
                 <div css={txtDetail}>
@@ -324,11 +320,11 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
                   Number of Prior MH Hospitalizations
                 </label>
                 <div css={txtDetail}>
-                  {client.severe_mental_health_symptoms
-                    ? Types.severe_mental_health_symptoms[
-                        client.severe_mental_health_symptoms
-                      ]
-                    : ""}
+                  {
+                    Types.severe_mental_health_symptoms[
+                      Number(client.severe_mental_health_symptoms)
+                    ]
+                  }
                 </div>
               </div>
             </div>
@@ -342,9 +338,7 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
               <div css={twoCol}>
                 <label css={txtLabel}>Medication Compliant</label>
                 <div css={txtDetail}>
-                  {client.compliant_with_meds
-                    ? Types.radioValues[client.compliant_with_meds]
-                    : ""}
+                  {Types.radioValues[Number(client.compliant_with_meds)]}
                 </div>
               </div>
             </div>
@@ -364,17 +358,13 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
               <div css={twoCol}>
                 <label css={txtLabel}>Incarcerated Caregiver</label>
                 <div css={txtDetail}>
-                  {client.incarcerated_caregivers
-                    ? Types.radioValues[client.incarcerated_caregivers]
-                    : ""}
+                  {Types.radioValues[Number(client.incarcerated_caregivers)]}
                 </div>
               </div>
               <div css={twoCol}>
                 <label css={txtLabel}>Deceased Caregiver</label>
                 <div css={txtDetail}>
-                  {client.death_Caregiver
-                    ? Types.radioValues[client.death_Caregiver]
-                    : ""}
+                  {Types.radioValues[Number(client.death_Caregiver)]}
                 </div>
               </div>
             </div>
@@ -382,17 +372,13 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
               <div css={twoCol}>
                 <label css={txtLabel}>Incarcerated Siblings</label>
                 <div css={txtDetail}>
-                  {client.incarcerated_siblings
-                    ? Types.radioValues[client.incarcerated_siblings]
-                    : ""}
+                  {Types.radioValues[Number(client.incarcerated_siblings)]}
                 </div>
               </div>
               <div css={twoCol}>
                 <label css={txtLabel}>Deceased Siblings</label>
                 <div css={txtDetail}>
-                  {client.death_Silblings
-                    ? Types.radioValues[client.death_Silblings]
-                    : ""}
+                  {Types.radioValues[Number(client.death_Silblings)]}
                 </div>
               </div>
             </div>
@@ -400,15 +386,13 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
               <div css={twoCol}>
                 <label css={txtLabel}>Alcohol Use</label>
                 <div css={txtDetail}>
-                  {client.alcohol_Use
-                    ? Types.radioValues[client.alcohol_Use]
-                    : ""}
+                  {Types.radioValues[Number(client.alcohol_Use)]}
                 </div>
               </div>
               <div css={twoCol}>
                 <label css={txtLabel}>Drug Use</label>
                 <div css={txtDetail}>
-                  {client.drug_Use ? Types.radioValues[client.drug_Use] : ""}
+                  {Types.radioValues[Number(client.drug_Use)]}
                 </div>
               </div>
             </div>
@@ -416,9 +400,7 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
               <div css={twoCol}>
                 <label css={txtLabel}>Abuse/Neglect</label>
                 <div css={txtDetail}>
-                  {client.abuse_neglect
-                    ? Types.radioValues[client.abuse_neglect]
-                    : ""}
+                  {Types.radioValues[Number(client.abuse_neglect)]}
                 </div>
               </div>
             </div>

@@ -1,7 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Switch, Route } from "react-router-dom";
-
 import * as Types from "../api/definitions";
 import { AppState } from "../redux-modules/root";
 import { ContainerProps } from "./Container";
@@ -42,7 +41,6 @@ export class NewClientContainer extends React.Component<
 
   saveClientStep1 = (client: Types.Client) => {
     const { history } = this.props;
-    console.log("save client step 1 called");
     this.props.saveClient(client);
     history.push("/new-client/2");
   };
@@ -53,7 +51,6 @@ export class NewClientContainer extends React.Component<
       return false;
     }
     this.setState({ isLoading: true });
-    console.log("getting location suggestions for selected program");
     await this.props.getLocations(
       clientState.client.client_code!,
       selected_program
@@ -87,7 +84,6 @@ export class NewClientContainer extends React.Component<
   };
 
   saveClientStep2 = async (client: Types.Client) => {
-    console.log("save client step 2 called");
     const { history } = this.props;
     try {
       this.setState({ isLoading: true });
@@ -104,7 +100,9 @@ export class NewClientContainer extends React.Component<
   render() {
     const { client: clientState } = this.props;
     let currentClient: Types.Client;
+    // let currentErrors: Partial<Types.Client> | undefined;
     currentClient = clientState ? clientState.client : Types.emptyClient;
+    // currentErrors = clientState ? clientState.errors : undefined;
 
     return (
       <Switch>
@@ -123,6 +121,7 @@ export class NewClientContainer extends React.Component<
             {...this.state}
             client={currentClient}
             onFormSubmit={this.saveClientStep2}
+            errors={(clientState && clientState.errors) || undefined}
           />
         </Route>
         <Route exact path="/new-client">
@@ -130,6 +129,7 @@ export class NewClientContainer extends React.Component<
             {...this.state}
             client={currentClient}
             onFormSubmit={this.saveClientStep1}
+            errors={(clientState && clientState.errors) || undefined}
           />
         </Route>
       </Switch>

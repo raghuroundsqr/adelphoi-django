@@ -69,17 +69,6 @@ const ClientSearch: React.FC<ClientSearchProps> = props => {
                 <div css={twoCol}>
                   <input
                     type="text"
-                    name="client_name"
-                    css={inputField}
-                    placeholder="client Name"
-                    value={values.client_name || ""}
-                    onChange={handleChange}
-                  />
-                  <ErrorMessage component="span" name="client_name" />
-                </div>
-                <div css={twoCol}>
-                  <input
-                    type="text"
                     name="client_code"
                     css={inputField}
                     placeholder="Client Code"
@@ -87,6 +76,17 @@ const ClientSearch: React.FC<ClientSearchProps> = props => {
                     onChange={handleChange}
                   />
                   <ErrorMessage component="span" name="client_code" />
+                </div>
+                <div css={twoCol}>
+                  <input
+                    type="text"
+                    name="client_name"
+                    css={inputField}
+                    placeholder="client Name"
+                    value={values.client_name || ""}
+                    onChange={handleChange}
+                  />
+                  <ErrorMessage component="span" name="client_name" />
                 </div>
                 <Button
                   type="submit"
