@@ -1,4 +1,5 @@
 import * as Yup from "yup";
+import { searchClient } from "../api/api";
 
 export const Step1ValidationSchema = Yup.object().shape({
   episode_start: Yup.string()
@@ -7,8 +8,21 @@ export const Step1ValidationSchema = Yup.object().shape({
   episode_number: Yup.string()
     .required("Required")
     .nullable(),
-  client_code: Yup.string()
+  primaryRaceCode: Yup.string()
     .required("Required")
+    .nullable(),
+  client_code: Yup.number()
+    .required("Required")
+    .positive()
+    .integer()
+    .typeError("Invalid. Enter numeric code.")
+    .test("is-duplicate", "client code already exists", async value => {
+      const response = await searchClient(value);
+      if (response && response.length > 0) {
+        return false;
+      }
+      return true;
+    })
     .nullable(),
   name: Yup.string()
     .required("Required")
@@ -89,35 +103,67 @@ export const Step1ValidationSchema = Yup.object().shape({
   compliant_with_meds: Yup.string()
     .required("Required")
     .nullable(),
-  // Exclusionary_Criteria: Yup.string()
-  //   .required("Required")
-  //   .nullable(),
+  Exclusionary_Criteria: Yup.boolean(),
+
   incarcerated_caregivers: Yup.string()
-    .required("Required")
+    .when("Exclusionary_Criteria", {
+      is: false,
+      then: Yup.string().required("Required"),
+      otherwise: Yup.string()
+    })
     .nullable(),
   death_Caregiver: Yup.string()
-    .required("Required")
+    .when("Exclusionary_Criteria", {
+      is: false,
+      then: Yup.string().required("Required"),
+      otherwise: Yup.string()
+    })
     .nullable(),
+
   incarcerated_siblings: Yup.string()
-    .required("Required")
+    .when("Exclusionary_Criteria", {
+      is: false,
+      then: Yup.string().required("Required"),
+      otherwise: Yup.string()
+    })
     .nullable(),
+
   death_Silblings: Yup.string()
-    .required("Required")
+    .when("Exclusionary_Criteria", {
+      is: false,
+      then: Yup.string().required("Required"),
+      otherwise: Yup.string()
+    })
     .nullable(),
+
   alcohol_Use: Yup.string()
-    .required("Required")
+    .when("Exclusionary_Criteria", {
+      is: false,
+      then: Yup.string().required("Required"),
+      otherwise: Yup.string()
+    })
     .nullable(),
+
   drug_Use: Yup.string()
-    .required("Required")
+    .when("Exclusionary_Criteria", {
+      is: false,
+      then: Yup.string().required("Required"),
+      otherwise: Yup.string()
+    })
     .nullable(),
+
   abuse_neglect: Yup.string()
-    .required("Required")
+    .when("Exclusionary_Criteria", {
+      is: false,
+      then: Yup.string().required("Required"),
+      otherwise: Yup.string()
+    })
     .nullable()
 });
 
 // unused - all fields on step2 are optional.
 export const Step2ValidationSchema = Yup.object().shape({
-  yls_FamCircumstances_Score: Yup.string()
+  /*yls_FamCircumstances_Score: Yup.string()
     .required("Required")
     .nullable(),
   yls_Edu_Employ_Score: Yup.string()
@@ -177,9 +223,9 @@ export const Step2ValidationSchema = Yup.object().shape({
   cans_Trauma_Exp: Yup.string()
     .required("Required")
     .nullable()
-  // referred_program: Yup.string()
-  //   .required("Required")
-  //   .nullable()
+  referred_program: Yup.string()
+    .required("Required")
+    .nullable()*/
 });
 
 export const ConfigurationSchema = Yup.object().shape({

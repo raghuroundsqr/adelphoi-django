@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, Link } from "react-router-dom";
+import { withSnackbar, WithSnackbarProps } from "notistack";
 import * as Types from "../api/definitions";
 import { AppState } from "../redux-modules/root";
 import { ContainerProps } from "./Container";
@@ -15,12 +16,20 @@ export interface NewClientContainerState {
   hasError: boolean;
 }
 
-export interface NewClientContainerProp extends ContainerProps {
-  saveClient: (client: Types.Client) => void;
+export interface NewClientContainerProp
+  extends ContainerProps,
+    WithSnackbarProps {
+  saveClient: (
+    client: Types.Client,
+    page1FormCompleted?: boolean,
+    excludePage2?: boolean
+  ) => void;
   insertClient: (client: Types.Client) => void;
   submitPrediction: (client: Types.Client) => void;
   getLocations: (client_code: string, selected_program: string) => void;
   saveLocationAndProgram: (selected_location: string) => void;
+  clearErrors: () => void;
+  clearClient: () => void;
 }
 
 export class NewClientContainer extends React.Component<
@@ -39,10 +48,27 @@ export class NewClientContainer extends React.Component<
     };
   }
 
-  saveClientStep1 = (client: Types.Client) => {
+  saveClientStep1 = async (client: Types.Client) => {
     const { history } = this.props;
-    this.props.saveClient(client);
-    history.push("/new-client/2");
+    this.props.clearErrors();
+    // check excl criteria
+    if (client.Exclusionary_Criteria) {
+      // return this.saveClientStep2(client);
+      try {
+        this.setState({ isLoading: true });
+        this.props.saveClient(client, true, true);
+        await this.props.insertClient(client);
+        this.setState({ isLoading: false });
+        this.props.enqueueSnackbar("Data saved successfully.");
+        this.props.clearErrors();
+      } catch (error) {
+        console.log(error);
+        this.setState({ isLoading: false });
+      }
+    } else {
+      this.props.saveClient(client, true, false);
+      history.push("/new-client/2");
+    }
   };
 
   getLocations = async (selected_program: string) => {
@@ -80,7 +106,7 @@ export class NewClientContainer extends React.Component<
     this.setState({ isLoading: true });
     await this.props.saveLocationAndProgram(selected_location);
     this.setState({ isLoading: false });
-    // history.push("/program-selection");
+    this.props.enqueueSnackbar("Data saved successfully.");
   };
 
   saveClientStep2 = async (client: Types.Client) => {
@@ -94,6 +120,7 @@ export class NewClientContainer extends React.Component<
     } catch (error) {
       console.log(error);
       this.setState({ isLoading: false });
+      this.props.enqueueSnackbar("An error occurred." + error);
     }
   };
 
@@ -116,14 +143,34 @@ export class NewClientContainer extends React.Component<
             isLoading={this.state.isLoading}
           />
         </Route>
-        <Route exact path="/new-client/2">
-          <PredictionFormStep2
-            {...this.state}
-            client={currentClient}
-            onFormSubmit={this.saveClientStep2}
-            errors={(clientState && clientState.errors) || undefined}
-          />
-        </Route>
+        <Route
+          exact
+          path="/new-client/2"
+          render={routeProps => {
+            console.log("form 1 completed ");
+            const step1 = clientState
+              ? clientState.page1FormCompleted
+              : this.state.isLoading;
+            console.log("form 1 completed ", step1);
+            if (!step1) {
+              return (
+                <h1>
+                  Error. First step of the new client form is incomplete.
+                  <Link to="/new-client">Click here to begin.</Link>
+                </h1>
+              );
+            }
+            return (
+              <PredictionFormStep2
+                {...this.state}
+                {...routeProps}
+                client={currentClient}
+                onFormSubmit={this.saveClientStep2}
+                errors={(clientState && clientState.errors) || undefined}
+              />
+            );
+          }}
+        ></Route>
         <Route exact path="/new-client">
           <PredictionFormStep1
             {...this.state}
@@ -148,7 +195,12 @@ const mapDispatchToProps = {
   insertClient: client.actions.insertClient,
   submitPrediction: client.actions.submitPrediction,
   getLocations: client.actions.getLocations,
-  saveLocationAndProgram: client.actions.saveLocationAndProgram
+  saveLocationAndProgram: client.actions.saveLocationAndProgram,
+  clearErrors: client.actions.clearErrors,
+  clearClient: client.actions.clear
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(NewClientContainer);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withSnackbar(NewClientContainer));

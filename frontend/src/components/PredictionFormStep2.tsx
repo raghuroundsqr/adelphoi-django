@@ -1,19 +1,19 @@
+/* tslint:disable */
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
 import { useHistory } from "react-router-dom";
 import { Formik, ErrorMessage, FormikErrors } from "formik";
 import Button from "@material-ui/core/Button";
-// import { Step2ValidationSchema } from "./ValidationSchema";
+import SnackNotification from "./SnackNotification";
+import { Step2ValidationSchema } from "./ValidationSchema";
 import {
   wrap,
   subHeading,
   fieldRow,
-  flexRow,
   mainContent,
   twoCol,
   inputField,
-  label,
-  fieldBox
+  label
 } from "./styles";
 import * as Types from "../api/definitions";
 
@@ -28,22 +28,28 @@ interface PredictionFormStep2Props {
 
 const PredictionFormStep2: React.FC<PredictionFormStep2Props> = props => {
   const history = useHistory();
+  const renderErrorNotification = () => {
+    const { errors } = props;
 
+    if (!errors) {
+      return null;
+    }
+    return <SnackNotification errors={errors} />;
+  };
   return (
     <div css={wrap}>
+      {renderErrorNotification()}
       <div css={mainContent}>
         <Formik
           initialValues={props.client}
           initialErrors={props.errors}
+          validationSchema={Step2ValidationSchema}
           enableReinitialize
-          // validationSchema={Step2ValidationSchema}
           onSubmit={async (values, helpers) => {
-            console.log("submtting the form on step2");
-            console.log(values);
-            // add values to client state
             await props.onFormSubmit(values);
-            // await this.onFormSubmit(currentQuestion, values);
-            helpers.resetForm();
+            console.log("after submission");
+            console.log(props.errors);
+            // helpers.resetForm();
           }}
         >
           {({ values, handleSubmit, handleChange }) => (
@@ -376,121 +382,6 @@ const PredictionFormStep2: React.FC<PredictionFormStep2Props> = props => {
                     onChange={handleChange}
                   />
                   <ErrorMessage component="span" name="cans_Trauma_Exp" />
-                </div>
-              </div>
-              <h1 css={subHeading}>Referred Program</h1>
-              <div css={flexRow} style={{ flexWrap: "wrap", marginBottom: 16 }}>
-                {/** style={{ flexWrap: "wrap", marginBottom: 16 }} */}
-                <div css={fieldBox}>
-                  <input
-                    type="radio"
-                    onChange={handleChange}
-                    id="ISM"
-                    name="referred_program"
-                    value="ISM"
-                  />
-                  <label htmlFor="ISM">ISM</label>
-                </div>
-                <div css={fieldBox}>
-                  <input
-                    type="radio"
-                    onChange={handleChange}
-                    id="ISF"
-                    name="referred_program"
-                    value="ISF"
-                  />
-                  <label htmlFor="ISF">ISF</label>
-                </div>
-                <div css={fieldBox}>
-                  <input
-                    type="radio"
-                    onChange={handleChange}
-                    id="MHFO"
-                    name="referred_program"
-                    value="MHFO"
-                  />
-                  <label htmlFor="MHFO">MHFO</label>
-                </div>
-                <div css={fieldBox}>
-                  <input
-                    type="radio"
-                    onChange={handleChange}
-                    value="SUBAB"
-                    name="referred_program"
-                  />
-                  <label htmlFor="SUBAB">SUBAB</label>
-                </div>
-                <div css={fieldBox}>
-                  <input
-                    type="radio"
-                    onChange={handleChange}
-                    value="Diagnostic"
-                    name="referred_program"
-                  />
-                  <label htmlFor="Diagnostic">Diagnostic</label>
-                </div>
-                <div css={fieldBox}>
-                  <input
-                    type="radio"
-                    onChange={handleChange}
-                    value="SEXOF-MH"
-                    name="referred_program"
-                  />
-                  <label htmlFor="SEXOF-MH">SEXOF-MH</label>
-                </div>
-                <div css={fieldBox}>
-                  <input
-                    type="radio"
-                    onChange={handleChange}
-                    value="SEXOF-Secure"
-                    name="referred_program"
-                  />
-                  <label htmlFor="SEXOF-Secure">SEXOF-Secure</label>
-                </div>
-                <div css={fieldBox}>
-                  <input
-                    type="radio"
-                    onChange={handleChange}
-                    value="SEXOF"
-                    name="referred_program"
-                  />
-                  <label htmlFor="SEXOF">SEXOF</label>
-                </div>
-                <div css={fieldBox}>
-                  <input
-                    type="radio"
-                    onChange={handleChange}
-                    value="Enhanced"
-                    name="referred_program"
-                  />
-                  <label htmlFor="Enhanced">Enhanced</label>
-                </div>
-                <div css={fieldBox}>
-                  <input
-                    type="radio"
-                    onChange={handleChange}
-                    value="Secure-Male"
-                    name="referred_program"
-                  />
-                  <label htmlFor="Secure-Male">Secure-Male</label>
-                </div>
-                <div css={fieldBox}>
-                  <input
-                    type="radio"
-                    onChange={handleChange}
-                    value="Secure-Female"
-                    name="referred_program"
-                  />
-                  <label htmlFor="Secure-Female">Secure-Female</label>
-                </div>
-                <div css={fieldBox}>
-                  <input
-                    type="radio"
-                    onChange={handleChange}
-                    value="Independent-Living"
-                    name="referred_program"
-                  />
-                  <label htmlFor="Independent-Living">Independent Living</label>
                 </div>
               </div>
               <div css={fieldRow} style={{ justifyContent: "flex-end" }}>

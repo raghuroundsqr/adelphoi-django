@@ -27,28 +27,44 @@ export const updateConfiguration = async (
 export const insertClient = async (client: Types.Client) => {
   try {
     const response = await axios.post(`${baseApiUrl}/list_view/`, client);
+    if (response.data["ERROR"] && response.data["ERROR"].trim() !== "") {
+      throw new Error(response.data["ERROR"]);
+    }
     const r = {
       ...response.data,
       program_type: response.data.program_type[0]
     };
+
     return (r as unknown) as Partial<Types.Client>;
   } catch (error) {
+    const data = error.response.data;
+    let clientErrors: { [x: string]: any } = {};
+    Object.keys(data).map(key => {
+      return (clientErrors[key] = data[key][0]);
+    });
     console.error("api function insertClient error");
-    throw error;
+    console.log(clientErrors);
+    throw clientErrors;
   }
 };
 
 export const insertPrediction = async (client: Types.Client) => {
+  if (!client.client_code) {
+    throw new Error("client code required");
+  }
   try {
-    const response = await axios.get(
-      `${baseApiUrl}/result/${client.client_code}`
+    const response = await axios.put(
+      `${baseApiUrl}/refer/${client.client_code}/`,
+      { referred_program: client.program_type }
     );
-    const data = (response.data as unknown) as PredictionResponse;
     const newCl = {
       ...client,
-      referred_program: data["referred_program"],
-      model_program: data["model_program"]
+      referred_program: client.program_type,
+      model_program: client.program_type
     };
+    if (!newCl.referred_program) {
+      throw new Error("client code required");
+    }
     return newCl;
   } catch (error) {
     console.error("api function insertPrediction error");
@@ -56,13 +72,53 @@ export const insertPrediction = async (client: Types.Client) => {
   }
 };
 
+export const fetchPrograms = async () => {
+  try {
+    const response = await axios.get(`${baseApiUrl}/program_list`);
+    const data = (response.data as unknown) as Types.Program[];
+
+    return data;
+  } catch (error) {
+    console.error("api function fetchPrograms error");
+    throwError(error);
+  }
+};
+
+export const createProgram = async (program: Types.Program) => {
+  try {
+    const response = await axios.post(`${baseApiUrl}/program_save`, {
+      program_name: program.program_name
+    });
+    return response.data;
+  } catch (error) {
+    console.error("api function createProgram error");
+    throwError(error);
+  }
+};
+
+export const updateProgram = async (program: Types.Program) => {
+  try {
+    const response = await axios.put(
+      `${baseApiUrl}/programs/${program.program}/`,
+      {
+        program_name: program.program_name
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("api function updateProgram error");
+    throwError(error);
+  }
+};
+// TODO - new api for this fn.
 export const fetchLocations = async (
   client_code: string,
-  selected_program: string
+  referred_program: string
 ) => {
   try {
+    debugger;
     const response = await axios.get(
-      `${baseApiUrl}/location/${client_code}?client_selected_program=${selected_program}`
+      `${baseApiUrl}/location/${client_code}?referred_program=${referred_program}`
     );
     const data = (response.data as unknown) as LocationsResponse;
 
@@ -115,7 +171,7 @@ export const updateProgramCompletion = async (
 
 export const searchClient = async (
   client_code: string,
-  client_name: string
+  client_name: string = ""
 ) => {
   try {
     const response = await axios.get(

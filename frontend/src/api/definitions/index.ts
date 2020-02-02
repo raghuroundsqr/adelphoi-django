@@ -31,7 +31,7 @@ export interface Client {
   prior_hospitalizations: string | null;
   severe_mental_health_symptoms: string | null;
   compliant_with_meds: string | null;
-  Exclusionary_Criteria: string;
+  Exclusionary_Criteria: boolean;
   incarcerated_caregivers: string | null;
   death_Caregiver: string | null;
   incarcerated_siblings: string | null;
@@ -76,6 +76,11 @@ export interface Client {
   Level_of_care: string | null;
   SuggestedLocations: string[] | null;
   result_final: string | null;
+}
+
+export interface Program {
+  program: number;
+  program_name: string;
 }
 
 export interface Configuration {
@@ -144,7 +149,7 @@ export const emptyClient: Client = {
   prior_hospitalizations: null,
   severe_mental_health_symptoms: null,
   compliant_with_meds: null,
-  Exclusionary_Criteria: "false",
+  Exclusionary_Criteria: false,
   incarcerated_caregivers: null,
   death_Caregiver: null,
   incarcerated_siblings: null,

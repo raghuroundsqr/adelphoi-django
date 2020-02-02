@@ -1,13 +1,6 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
-import {
-  Formik,
-  FormikProps,
-  FormikErrors,
-  FieldProps,
-  Field,
-  ErrorMessage
-} from "formik";
+import { Formik, FormikProps, FormikErrors, FieldProps, Field } from "formik";
 import Button from "@material-ui/core/Button";
 import DateFnsUtils from "@date-io/date-fns";
 import { format } from "date-fns";
@@ -16,6 +9,7 @@ import {
   MuiPickersUtilsProvider
 } from "@material-ui/pickers";
 import { Step1ValidationSchema } from "./ValidationSchema";
+import SnackNotification from "./SnackNotification";
 
 import {
   wrap,
@@ -30,6 +24,7 @@ import {
   datePicker
 } from "./styles";
 import * as Types from "../api/definitions";
+import ErrorMessage from "./ErrorMessage";
 
 interface PredictionFormStep1Props {
   client: Types.Client;
@@ -116,8 +111,18 @@ const DobPicker: React.FC<FormikProps<Types.Client> & FieldProps> = props => {
 };
 
 const PredictionFormStep1: React.FC<PredictionFormStep1Props> = props => {
+  const renderErrorNotification = () => {
+    const { errors } = props;
+
+    if (!errors) {
+      return null;
+    }
+    return <SnackNotification errors={errors} />;
+  };
+
   return (
     <div css={wrap}>
+      {renderErrorNotification()}
       <div css={mainContent}>
         <Formik
           initialErrors={props.errors}
@@ -125,7 +130,6 @@ const PredictionFormStep1: React.FC<PredictionFormStep1Props> = props => {
           enableReinitialize
           validationSchema={Step1ValidationSchema}
           onSubmit={(values, helpers) => {
-            console.log("onsubmit formik called");
             const dob = values.dob
               ? format(new Date(values.dob), "yyyy-MM-dd")
               : "";
@@ -133,21 +137,13 @@ const PredictionFormStep1: React.FC<PredictionFormStep1Props> = props => {
               ? format(new Date(values.episode_start), "yyyy-MM-dd")
               : "";
 
-            // const iq =
-            //   values.borderline_IQ && Number(values.borderline_IQ) >= 70
-            //     ? "1"
-            //     : "0";
             values.dob = dob;
             values.episode_start = ep;
-            // values.borderline_IQ = iq;
-            console.log(values);
-            // add values to client state
             props.onFormSubmit(values);
-            // await this.onFormSubmit(currentQuestion, values);
-            helpers.resetForm();
+            // helpers.resetForm();
           }}
         >
-          {({ values, handleSubmit, handleChange }) => (
+          {({ values, handleSubmit, handleChange, errors }) => (
             <form name="newClientForm" onSubmit={handleSubmit}>
               <h1 css={subHeading}>Demographics</h1>
               <div css={fieldRow}>
@@ -158,14 +154,13 @@ const PredictionFormStep1: React.FC<PredictionFormStep1Props> = props => {
                     name="episode_start"
                     component={EpisodeStartPicker}
                   />
-                  <ErrorMessage component="span" name="episode_start" />
+                  <ErrorMessage name="episode_start" />
                 </div>
                 <div css={twoCol}>
                   <label css={label}>Previously Referred</label>
                   <select
                     css={selectField}
                     name="episode_number"
-                    id="episode_number"
                     value={values.episode_number || ""}
                     onChange={handleChange}
                   >
@@ -580,7 +575,6 @@ const PredictionFormStep1: React.FC<PredictionFormStep1Props> = props => {
                   name="hist_of_prior_program_SAO"
                 />
               </div>
-              <hr />
               <h1 css={subHeading}>Mental Health</h1>
               <div css={fieldRow}>
                 <div css={twoCol}>
@@ -770,6 +764,8 @@ const PredictionFormStep1: React.FC<PredictionFormStep1Props> = props => {
                   </select>
                   <ErrorMessage component="span" name="borderline_IQ" />
                 </div>
+              </div>
+              <div css={fieldRow}>
                 <div css={twoCol}>
                   <label css={label}>Significant MH Symptoms Score</label>
                   <input
@@ -843,208 +839,217 @@ const PredictionFormStep1: React.FC<PredictionFormStep1Props> = props => {
               <div css={fieldRow}>
                 <input
                   name="Exclusionary_Criteria"
+                  id="Exclusionary_Criteria"
                   type="checkbox"
-                  onChange={handleChange}
-                  checked={values.Exclusionary_Criteria === "true"}
+                  onChange={handleChange} //() => onExclusionaryCriteriaChange(handleChange)}
+                  defaultChecked={values.Exclusionary_Criteria === true}
+                  // checked={values.Exclusionary_Criteria === "true"}
                   value="true"
                 />
                 <label css={label} htmlFor="Exclusionary_Criteria">
                   Exclusionary Criteria Exists/Referral Rejected
                 </label>
               </div>
-              <h1 css={subHeading}>Social/Family Hx</h1>
-              <div css={fieldRow}>
-                <div css={twoCol}>
-                  <label css={label}>Incarcerated Caregiver</label>
-                  <div css={fieldBox}>
-                    <input
-                      type="radio"
-                      onChange={handleChange}
-                      name="incarcerated_caregivers"
-                      value="1"
-                      checked={values.incarcerated_caregivers === "1"}
-                    />{" "}
-                    <label htmlFor="incarcerated_caregivers-yes">Yes</label>
+              {!values.Exclusionary_Criteria && (
+                <div>
+                  <h1 css={subHeading}>Social/Family Hx</h1>
+                  <div css={fieldRow}>
+                    <div css={twoCol}>
+                      <label css={label}>Incarcerated Caregiver</label>
+                      <div css={fieldBox}>
+                        <input
+                          type="radio"
+                          onChange={handleChange}
+                          name="incarcerated_caregivers"
+                          value="1"
+                          checked={values.incarcerated_caregivers === "1"}
+                        />{" "}
+                        <label htmlFor="incarcerated_caregivers-yes">Yes</label>
+                      </div>
+                      <div css={fieldBox}>
+                        <input
+                          type="radio"
+                          onChange={handleChange}
+                          name="incarcerated_caregivers"
+                          id="incarcerated_caregivers-no"
+                          value="0"
+                          checked={values.incarcerated_caregivers === "0"}
+                        />{" "}
+                        <label htmlFor="incarcerated_caregivers-no">No</label>
+                      </div>
+                      <ErrorMessage
+                        component="span"
+                        name="incarcerated_caregivers"
+                      />
+                    </div>
+                    <div css={twoCol}>
+                      <label css={label}>Deceased Caregiver</label>
+                      <div css={fieldBox}>
+                        <input
+                          type="radio"
+                          onChange={handleChange}
+                          name="death_Caregiver"
+                          id="death_Caregiver-yes"
+                          value="1"
+                          checked={values.death_Caregiver === "1"}
+                        />{" "}
+                        <label htmlFor="death_Caregiver-yes">Yes</label>
+                      </div>
+                      <div css={fieldBox}>
+                        <input
+                          type="radio"
+                          onChange={handleChange}
+                          name="death_Caregiver"
+                          id="death_Caregiver-no"
+                          value="0"
+                          checked={values.death_Caregiver === "0"}
+                        />{" "}
+                        <label htmlFor="death_Caregiver-no">No</label>
+                      </div>
+                      <ErrorMessage component="span" name="death_Caregiver" />
+                    </div>
                   </div>
-                  <div css={fieldBox}>
-                    <input
-                      type="radio"
-                      onChange={handleChange}
-                      name="incarcerated_caregivers"
-                      id="incarcerated_caregivers-no"
-                      value="0"
-                      checked={values.incarcerated_caregivers === "0"}
-                    />{" "}
-                    <label htmlFor="incarcerated_caregivers-no">No</label>
+                  <div css={fieldRow}>
+                    <div css={twoCol}>
+                      <label css={label}>Incarcerated Siblings</label>
+                      <div css={fieldBox}>
+                        <input
+                          type="radio"
+                          onChange={handleChange}
+                          name="incarcerated_siblings"
+                          id="incarcerated_siblings-yes"
+                          value="1"
+                          checked={values.incarcerated_siblings === "1"}
+                        />{" "}
+                        <label htmlFor="incarcerated_siblings-yes">Yes</label>
+                      </div>
+                      <div css={fieldBox}>
+                        <input
+                          type="radio"
+                          onChange={handleChange}
+                          name="incarcerated_siblings"
+                          id="incarcerated_siblings-no"
+                          value="0"
+                          checked={values.incarcerated_siblings === "0"}
+                        />{" "}
+                        <label htmlFor="incarcerated_siblings-no">No</label>
+                      </div>
+                      <ErrorMessage
+                        component="span"
+                        name="incarcerated_siblings"
+                      />
+                    </div>
+                    <div css={twoCol}>
+                      <label css={label}>Deceased Siblings</label>
+                      <div css={fieldBox}>
+                        <input
+                          type="radio"
+                          onChange={handleChange}
+                          name="death_Silblings"
+                          id="death_Silblings-yes"
+                          value="1"
+                          checked={values.death_Silblings === "1"}
+                        />{" "}
+                        <label htmlFor="death_Silblings-yes">Yes</label>
+                      </div>
+                      <div css={fieldBox}>
+                        <input
+                          type="radio"
+                          onChange={handleChange}
+                          name="death_Silblings"
+                          id="death_Silblings-no"
+                          value="0"
+                          checked={values.death_Silblings === "0"}
+                        />{" "}
+                        <label htmlFor="death_Silblings-no">No</label>
+                      </div>
+                      <ErrorMessage component="span" name="death_Silblings" />
+                    </div>
                   </div>
-                  <ErrorMessage
-                    component="span"
-                    name="incarcerated_caregivers"
-                  />
+                  <div css={fieldRow}>
+                    <div css={twoCol}>
+                      <label css={label}>Alcohol Use</label>
+                      <div css={fieldBox}>
+                        <input
+                          type="radio"
+                          onChange={handleChange}
+                          name="alcohol_Use"
+                          id="alcohol_Use-yes"
+                          value="1"
+                          checked={values.alcohol_Use === "1"}
+                        />{" "}
+                        <label htmlFor="alcohol_Use-yes">Yes</label>
+                      </div>
+                      <div css={fieldBox}>
+                        <input
+                          type="radio"
+                          onChange={handleChange}
+                          name="alcohol_Use"
+                          id="alcohol_Use-no"
+                          value="0"
+                          checked={values.alcohol_Use === "0"}
+                        />{" "}
+                        <label htmlFor="alcohol_Use-no">No</label>
+                      </div>
+                      <ErrorMessage component="span" name="alcohol_Use" />
+                    </div>
+                    <div css={twoCol}>
+                      <label css={label}>Drug Use</label>
+                      <div css={fieldBox}>
+                        <input
+                          type="radio"
+                          onChange={handleChange}
+                          name="drug_Use"
+                          id="drug_Use-yes"
+                          value="1"
+                          checked={values.drug_Use === "1"}
+                        />{" "}
+                        <label htmlFor="drug_Use-yes">Yes</label>
+                      </div>
+                      <div css={fieldBox}>
+                        <input
+                          type="radio"
+                          onChange={handleChange}
+                          name="drug_Use"
+                          id="drug_Use-no"
+                          value="0"
+                          checked={values.drug_Use === "0"}
+                        />{" "}
+                        <label htmlFor="drug_Use-no">No</label>
+                      </div>
+                      <ErrorMessage component="span" name="drug_Use" />
+                    </div>
+                  </div>
+                  <div css={fieldRow}>
+                    <div css={twoCol}>
+                      <label css={label}>Abuse/Neglect</label>
+                      <div css={fieldBox}>
+                        <input
+                          type="radio"
+                          onChange={handleChange}
+                          name="abuse_neglect"
+                          id="abuse_neglect-yes"
+                          value="1"
+                          checked={values.abuse_neglect === "1"}
+                        />{" "}
+                        <label htmlFor="abuse_neglect-yes">Yes</label>
+                      </div>
+                      <div css={fieldBox}>
+                        <input
+                          type="radio"
+                          onChange={handleChange}
+                          name="abuse_neglect"
+                          id="abuse_neglect-no"
+                          value="0"
+                          checked={values.abuse_neglect === "0"}
+                        />{" "}
+                        <label htmlFor="abuse_neglect-no">No</label>
+                      </div>
+                      <ErrorMessage component="span" name="abuse_neglect" />
+                    </div>
+                  </div>
                 </div>
-                <div css={twoCol}>
-                  <label css={label}>Deceased Caregiver</label>
-                  <div css={fieldBox}>
-                    <input
-                      type="radio"
-                      onChange={handleChange}
-                      name="death_Caregiver"
-                      id="death_Caregiver-yes"
-                      value="1"
-                      checked={values.death_Caregiver === "1"}
-                    />{" "}
-                    <label htmlFor="death_Caregiver-yes">Yes</label>
-                  </div>
-                  <div css={fieldBox}>
-                    <input
-                      type="radio"
-                      onChange={handleChange}
-                      name="death_Caregiver"
-                      id="death_Caregiver-no"
-                      value="0"
-                      checked={values.death_Caregiver === "0"}
-                    />{" "}
-                    <label htmlFor="death_Caregiver-no">No</label>
-                  </div>
-                  <ErrorMessage component="span" name="death_Caregiver" />
-                </div>
-              </div>
-              <div css={fieldRow}>
-                <div css={twoCol}>
-                  <label css={label}>Incarcerated Siblings</label>
-                  <div css={fieldBox}>
-                    <input
-                      type="radio"
-                      onChange={handleChange}
-                      name="incarcerated_siblings"
-                      id="incarcerated_siblings-yes"
-                      value="1"
-                      checked={values.incarcerated_siblings === "1"}
-                    />{" "}
-                    <label htmlFor="incarcerated_siblings-yes">Yes</label>
-                  </div>
-                  <div css={fieldBox}>
-                    <input
-                      type="radio"
-                      onChange={handleChange}
-                      name="incarcerated_siblings"
-                      id="incarcerated_siblings-no"
-                      value="0"
-                      checked={values.incarcerated_siblings === "0"}
-                    />{" "}
-                    <label htmlFor="incarcerated_siblings-no">No</label>
-                  </div>
-                  <ErrorMessage component="span" name="incarcerated_siblings" />
-                </div>
-                <div css={twoCol}>
-                  <label css={label}>Deceased Siblings</label>
-                  <div css={fieldBox}>
-                    <input
-                      type="radio"
-                      onChange={handleChange}
-                      name="death_Silblings"
-                      id="death_Silblings-yes"
-                      value="1"
-                      checked={values.death_Silblings === "1"}
-                    />{" "}
-                    <label htmlFor="death_Silblings-yes">Yes</label>
-                  </div>
-                  <div css={fieldBox}>
-                    <input
-                      type="radio"
-                      onChange={handleChange}
-                      name="death_Silblings"
-                      id="death_Silblings-no"
-                      value="0"
-                      checked={values.death_Silblings === "0"}
-                    />{" "}
-                    <label htmlFor="death_Silblings-no">No</label>
-                  </div>
-                  <ErrorMessage component="span" name="death_Silblings" />
-                </div>
-              </div>
-              <div css={fieldRow}>
-                <div css={twoCol}>
-                  <label css={label}>Alcohol Use</label>
-                  <div css={fieldBox}>
-                    <input
-                      type="radio"
-                      onChange={handleChange}
-                      name="alcohol_Use"
-                      id="alcohol_Use-yes"
-                      value="1"
-                      checked={values.alcohol_Use === "1"}
-                    />{" "}
-                    <label htmlFor="alcohol_Use-yes">Yes</label>
-                  </div>
-                  <div css={fieldBox}>
-                    <input
-                      type="radio"
-                      onChange={handleChange}
-                      name="alcohol_Use"
-                      id="alcohol_Use-no"
-                      value="0"
-                      checked={values.alcohol_Use === "0"}
-                    />{" "}
-                    <label htmlFor="alcohol_Use-no">No</label>
-                  </div>
-                  <ErrorMessage component="span" name="alcohol_Use" />
-                </div>
-                <div css={twoCol}>
-                  <label css={label}>Drug Use</label>
-                  <div css={fieldBox}>
-                    <input
-                      type="radio"
-                      onChange={handleChange}
-                      name="drug_Use"
-                      id="drug_Use-yes"
-                      value="1"
-                      checked={values.drug_Use === "1"}
-                    />{" "}
-                    <label htmlFor="drug_Use-yes">Yes</label>
-                  </div>
-                  <div css={fieldBox}>
-                    <input
-                      type="radio"
-                      onChange={handleChange}
-                      name="drug_Use"
-                      id="drug_Use-no"
-                      value="0"
-                      checked={values.drug_Use === "0"}
-                    />{" "}
-                    <label htmlFor="drug_Use-no">No</label>
-                  </div>
-                  <ErrorMessage component="span" name="drug_Use" />
-                </div>
-              </div>
-              <div css={fieldRow}>
-                <div css={twoCol}>
-                  <label css={label}>Abuse/Neglect</label>
-                  <div css={fieldBox}>
-                    <input
-                      type="radio"
-                      onChange={handleChange}
-                      name="abuse_neglect"
-                      id="abuse_neglect-yes"
-                      value="1"
-                      checked={values.abuse_neglect === "1"}
-                    />{" "}
-                    <label htmlFor="abuse_neglect-yes">Yes</label>
-                  </div>
-                  <div css={fieldBox}>
-                    <input
-                      type="radio"
-                      onChange={handleChange}
-                      name="abuse_neglect"
-                      id="abuse_neglect-no"
-                      value="0"
-                      checked={values.abuse_neglect === "0"}
-                    />{" "}
-                    <label htmlFor="abuse_neglect-no">No</label>
-                  </div>
-                  <ErrorMessage component="span" name="abuse_neglect" />
-                </div>
-              </div>
+              )}
               <div css={fieldRow} style={{ justifyContent: "flex-end" }}>
                 <Button
                   type="submit"
@@ -1052,7 +1057,7 @@ const PredictionFormStep1: React.FC<PredictionFormStep1Props> = props => {
                   size="large"
                   style={{ marginRight: 10 }}
                 >
-                  Next
+                  {values.Exclusionary_Criteria ? "Submit" : "Next"}
                 </Button>
               </div>
             </form>

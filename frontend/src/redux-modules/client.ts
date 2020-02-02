@@ -18,8 +18,15 @@ import {
 const initialState: ClientState = {
   client: Types.emptyClient,
   clientList: [],
-  errors: {}
+  errors: {},
+  excludePage2: false,
+  page1FormCompleted: false,
+  page2FormCompleted: false
 };
+// TODO handle negative cases
+// 1. new client creation fails - with and without excl.
+// 2. submit prediction responds with error - no program found.
+// 3. get locations responds with error - no locations found or empty array.
 
 const { reducer, update } = createReducer<ClientState>(
   "Client/UPDATE",
@@ -54,6 +61,7 @@ export const actions = {
     selected_program: string
   ): ThunkAction<Promise<Types.Client | undefined>, AppState, null, AnyAction> {
     return async (dispatch, getState) => {
+      debugger;
       const locations = await fetchLocations(client_code, selected_program);
       if (locations) {
         const cl: Types.Client = {
@@ -71,6 +79,7 @@ export const actions = {
     selected_location: string
   ): ThunkAction<Promise<Types.Client | undefined>, AppState, null, AnyAction> {
     return async (dispatch, getState) => {
+      debugger;
       const client = getState().client!.client;
       const cl: Types.Client = {
         ...client,
@@ -99,8 +108,12 @@ export const actions = {
     client: Types.Client
   ): ThunkAction<Promise<Types.Client | undefined>, AppState, null, AnyAction> {
     return async (dispatch, getState) => {
+      debugger;
+      if (!client.client_code) {
+        throw new Error("client code required");
+      }
       const response = await insertPrediction(client);
-      if (!response) {
+      if (!response || !response.referred_program) {
         throw Error("something went wrong while submitting");
       }
       const cl = {
@@ -109,7 +122,23 @@ export const actions = {
         model_program: response.model_program || null
       };
       dispatch(update({ client: cl }));
-      return cl;
+      if (!cl.client_code || !cl.referred_program) {
+        throw new Error("referred program not found");
+      }
+      const locations = await fetchLocations(
+        cl.client_code,
+        cl.referred_program
+      );
+      if (locations) {
+        const cl2: Types.Client = {
+          ...getState().client!.client,
+          SuggestedLocations: [...locations],
+          client_selected_program: cl.referred_program
+        };
+        dispatch(update({ client: cl2 }));
+        // await dispatch(this.getLocations(cl.client_code, cl.referred_program));
+        return cl;
+      }
     };
   },
 
@@ -131,9 +160,8 @@ export const actions = {
         dispatch(update({ client: cl }));
         return cl;
       } catch (errors) {
-        debugger;
-        dispatch(update({ client, errors: errors.response.data }));
-        return client;
+        dispatch(update({ client, errors: errors }));
+        throw errors;
       }
     };
   },
@@ -151,7 +179,9 @@ export const actions = {
   },
 
   upsertClient: (
-    client: Types.Client
+    client: Types.Client,
+    page1FormCompleted: boolean = false,
+    excludePage2: boolean = false
   ): ThunkAction<void, AppState, void, any> => {
     const newCl = {
       ...client,
@@ -165,13 +195,25 @@ export const actions = {
       FAST_CaregiverAdvocacyScore: "0"
     };
     return (dispatch, getState) => {
-      dispatch(update({ client: newCl }));
+      dispatch(update({ client: newCl, page1FormCompleted, excludePage2 }));
     };
   },
 
   clear(): ThunkAction<Promise<void>, AppState, null, AnyAction> {
     return async dispatch => {
-      dispatch(update({ client: Types.emptyClient }));
+      dispatch(
+        update({
+          client: Types.emptyClient,
+          page1FormCompleted: false,
+          excludePage2: false
+        })
+      );
+    };
+  },
+
+  clearErrors(): ThunkAction<Promise<void>, AppState, null, AnyAction> {
+    return async dispatch => {
+      dispatch(update({ errors: {} }));
     };
   }
 };

@@ -1,5 +1,7 @@
 /** @jsx jsx */
 import React from "react";
+import { SnackbarProvider } from "notistack";
+
 import createHistory from "history/createBrowserHistory";
 import { Provider } from "react-redux";
 //import { PersistGate } from "redux-persist/integration/react";
@@ -43,21 +45,28 @@ const App: React.FC = () => {
         `}
       />
       <Provider store={store}>
-        <Router>
-          <AppShell>
-            <Switch>
-              <Route exact path="/">
-                <Redirect to="/new-client" />
-              </Route>
-              <Route path="/new-client" component={NewClientContainer} />
-              <Route
-                path="/existing-client"
-                component={ExistingClientContainer}
-              />
-              <Route path="/configuration" component={ConfigurationContainer} />
-            </Switch>
-          </AppShell>
-        </Router>
+        <SnackbarProvider
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        >
+          <Router>
+            <AppShell>
+              <Switch>
+                <Route exact path="/">
+                  <Redirect to="/new-client" />
+                </Route>
+                <Route path="/new-client" component={NewClientContainer} />
+                <Route
+                  path="/existing-client"
+                  component={ExistingClientContainer}
+                />
+                <Route
+                  path="/configuration"
+                  component={ConfigurationContainer}
+                />
+              </Switch>
+            </AppShell>
+          </Router>
+        </SnackbarProvider>
       </Provider>
     </React.Fragment>
   );

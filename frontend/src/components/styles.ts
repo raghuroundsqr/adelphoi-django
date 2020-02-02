@@ -6,6 +6,11 @@ export const flexRow = css`
   flex-direction: row;
 `;
 
+export const backdrop = css`
+  z-index: 5 !important;
+  color: #fff;
+`;
+
 export const flexCol = css`
   display: flex;
   flex-direction: column;
@@ -56,10 +61,6 @@ export const twoCol = css`
   & > span {
     color: red;
   }
-`;
-
-export const x = css`
-  margin-right: 10px;
 `;
 
 export const inputField = css`

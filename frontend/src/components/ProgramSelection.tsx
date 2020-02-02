@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import React from "react";
-import { jsx, css } from "@emotion/core";
+import { jsx } from "@emotion/core";
 // import { useHistory } from "react-router-dom";
 import { Formik, ErrorMessage } from "formik";
 import Button from "@material-ui/core/Button";
@@ -16,14 +16,9 @@ import {
   inputField,
   label,
   fieldBox,
-  heading
+  backdrop
 } from "./styles";
 import * as Types from "../api/definitions";
-
-const backdrop = css`
-  z-index: 5 !important;
-  color: #fff;
-`;
 
 interface ProgramSelectionProps {
   client: Types.Client;
@@ -36,10 +31,10 @@ interface ProgramSelectionProps {
 }
 
 const ProgramSelection: React.FC<ProgramSelectionProps> = props => {
-  const changeProgram = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.currentTarget.value;
-    props.onProgramSelect(value);
-  };
+  // const changeProgram = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const value = e.currentTarget.value;
+  //   props.onProgramSelect(value);
+  // };
 
   const onLocationChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.currentTarget.value;
@@ -54,8 +49,7 @@ const ProgramSelection: React.FC<ProgramSelectionProps> = props => {
         <Backdrop css={backdrop} open={props.isLoading}>
           <CircularProgress color="inherit" />
         </Backdrop>
-
-        <h1 css={heading}>Program Selection</h1>
+        <h1 css={subHeading}>FM Prediction</h1>
         <Formik
           initialValues={props.client}
           enableReinitialize
@@ -76,7 +70,6 @@ const ProgramSelection: React.FC<ProgramSelectionProps> = props => {
             errors
           }) => (
             <form name="submitPredictionForm" onSubmit={handleSubmit}>
-              <h1 css={subHeading}>Predictions</h1>
               <div css={fieldRow}>
                 <div css={twoCol}>
                   <label css={label}>Program</label>
@@ -110,22 +103,136 @@ const ProgramSelection: React.FC<ProgramSelectionProps> = props => {
                   <ErrorMessage component="span" name="Confidence" />
                 </div>
               </div>
-              <div css={fieldRow}>
-                <div css={twoCol}>
-                  <label css={label}>Level of care</label>
-                </div>
-                <div css={twoCol}>
+              <h1 css={subHeading}>Program Selection</h1>
+              <div
+                css={fieldRow}
+                style={{ flexWrap: "wrap", marginBottom: 16 }}
+              >
+                <div css={fieldBox}>
                   <input
-                    type="text"
-                    name="Level_of_care"
-                    css={inputField}
-                    placeholder=""
-                    value={values.Level_of_care || ""}
+                    type="radio"
                     onChange={handleChange}
+                    checked={values.program_type === "ISM"}
+                    id="ISM"
+                    name="referred_program"
+                    value="ISM"
                   />
-                  <ErrorMessage component="span" name="Level_of_care" />
+                  <label htmlFor="ISM">ISM</label>
+                </div>
+                <div css={fieldBox}>
+                  <input
+                    type="radio"
+                    checked={values.program_type === "ISF"}
+                    onChange={handleChange}
+                    id="ISF"
+                    name="referred_program"
+                    value="ISF"
+                  />
+                  <label htmlFor="ISF">ISF</label>
+                </div>
+                <div css={fieldBox}>
+                  <input
+                    type="radio"
+                    checked={values.program_type === "MHFO"}
+                    onChange={handleChange}
+                    id="MHFO"
+                    name="referred_program"
+                    value="MHFO"
+                  />
+                  <label htmlFor="MHFO">MHFO</label>
+                </div>
+                <div css={fieldBox}>
+                  <input
+                    type="radio"
+                    checked={values.program_type === "SUBAB"}
+                    onChange={handleChange}
+                    value="SUBAB"
+                    name="referred_program"
+                  />
+                  <label htmlFor="SUBAB">SUBAB</label>
+                </div>
+                <div css={fieldBox}>
+                  <input
+                    type="radio"
+                    checked={values.program_type === "Diagnostic"}
+                    onChange={handleChange}
+                    value="Diagnostic"
+                    name="referred_program"
+                  />
+                  <label htmlFor="Diagnostic">Diagnostic</label>
+                </div>
+                <div css={fieldBox}>
+                  <input
+                    type="radio"
+                    checked={values.program_type === "SEXOF-MH"}
+                    onChange={handleChange}
+                    value="SEXOF-MH"
+                    name="referred_program"
+                  />
+                  <label htmlFor="SEXOF-MH">SEXOF-MH</label>
+                </div>
+                <div css={fieldBox}>
+                  <input
+                    type="radio"
+                    checked={values.program_type === "SEXOF-Secure"}
+                    onChange={handleChange}
+                    value="SEXOF-Secure"
+                    name="referred_program"
+                  />
+                  <label htmlFor="SEXOF-Secure">SEXOF-Secure</label>
+                </div>
+                <div css={fieldBox}>
+                  <input
+                    type="radio"
+                    checked={values.program_type === "SEXOF"}
+                    onChange={handleChange}
+                    value="SEXOF"
+                    name="referred_program"
+                  />
+                  <label htmlFor="SEXOF">SEXOF</label>
+                </div>
+                <div css={fieldBox}>
+                  <input
+                    type="radio"
+                    checked={values.program_type === "Enhanced"}
+                    onChange={handleChange}
+                    value="Enhanced"
+                    name="referred_program"
+                  />
+                  <label htmlFor="Enhanced">Enhanced</label>
+                </div>
+                <div css={fieldBox}>
+                  <input
+                    type="radio"
+                    checked={values.program_type === "Secure-Male"}
+                    onChange={handleChange}
+                    value="Secure-Male"
+                    name="referred_program"
+                  />
+                  <label htmlFor="Secure-Male">Secure-Male</label>
+                </div>
+                <div css={fieldBox}>
+                  <input
+                    type="radio"
+                    checked={values.program_type === "Secure-Female"}
+                    onChange={handleChange}
+                    value="Secure-Female"
+                    name="referred_program"
+                  />
+                  <label htmlFor="Secure-Female">Secure-Female</label>
+                </div>
+                <div css={fieldBox}>
+                  <input
+                    type="radio"
+                    checked={values.program_type === "Independent-Living"}
+                    onChange={handleChange}
+                    value="Independent-Living"
+                    name="referred_program"
+                  />
+                  <label htmlFor="Independent-Living">Independent Living</label>
                 </div>
               </div>
+
               <div css={fieldRow} style={{ justifyContent: "flex-end" }}>
                 <Button
                   type="submit"
@@ -139,35 +246,7 @@ const ProgramSelection: React.FC<ProgramSelectionProps> = props => {
             </form>
           )}
         </Formik>
-        <h1 css={subHeading}>Result</h1>
-        {props.client.model_program && (
-          <div css={fieldRow}>
-            <div css={fieldBox}>
-              <input
-                type="radio"
-                id="referred_program"
-                onChange={changeProgram}
-                name="program_radio"
-                value={props.client.referred_program || ""}
-              />
-              <label htmlFor="referred_program">
-                {props.client.referred_program}
-              </label>
-            </div>
-            <div css={fieldBox}>
-              <input
-                type="radio"
-                id="model_program"
-                onChange={changeProgram}
-                name="program_radio"
-                value={props.client.model_program || ""}
-              />
-              <label htmlFor="model_program">
-                {props.client.model_program}
-              </label>
-            </div>
-          </div>
-        )}
+
         {props.client.SuggestedLocations &&
           props.client.SuggestedLocations.length > 0 && (
             <React.Fragment>

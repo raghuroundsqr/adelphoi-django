@@ -2,6 +2,7 @@
 import React from "react";
 import { jsx, css } from "@emotion/core";
 import { withRouter, Route } from "react-router-dom";
+import Link from "@material-ui/core/Link";
 import Paper from "@material-ui/core/Paper";
 import {
   ConfigIcon,
@@ -118,10 +119,11 @@ const AppShell: React.FC = ({ children }) => {
           path="/new-client"
           // exact={activeOnlyWhenExact}
           children={({ match, history }) => (
-            <a
+            <Link
               onClick={() => {
                 history.push("/new-client");
               }}
+              href="#"
               css={menuButton}
               style={
                 match
@@ -134,7 +136,7 @@ const AppShell: React.FC = ({ children }) => {
                 fillColor={match ? "white" : "#9d9d9d"}
               />
               New Client
-            </a>
+            </Link>
           )}
         />
 
@@ -142,7 +144,7 @@ const AppShell: React.FC = ({ children }) => {
           path="/existing-client"
           // exact={activeOnlyWhenExact}
           children={({ match, history }) => (
-            <a
+            <Link
               onClick={() => {
                 history.push("/existing-client");
               }}
@@ -158,16 +160,16 @@ const AppShell: React.FC = ({ children }) => {
                 fillColor={match ? "white" : "#9d9d9d"}
               />
               Existing Client
-            </a>
+            </Link>
           )}
         />
         <Route
           path="/configuration"
           // exact={activeOnlyWhenExact}
           children={({ match, history }) => (
-            <a
+            <Link
               onClick={() => {
-                history.push("/configuration");
+                history.push("/configuration/programs");
               }}
               css={menuButton}
               style={
@@ -181,7 +183,7 @@ const AppShell: React.FC = ({ children }) => {
                 fillColor={match ? "white" : "#9d9d9d"}
               />
               Configuration
-            </a>
+            </Link>
           )}
         />
       </div>

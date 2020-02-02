@@ -1,11 +1,11 @@
 import { combineReducers } from "redux";
 
 import { clientReducer } from "./client";
-import { configurationReducer } from "./configuration";
+import { programReducer } from "./program";
 
 export const rootReducer = combineReducers({
   client: clientReducer,
-  configuration: configurationReducer
+  program: programReducer
 });
 
 export type AppState = ReturnType<typeof rootReducer>;

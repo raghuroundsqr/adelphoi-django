@@ -107,7 +107,7 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
               <div css={twoCol} style={{ width: "39%" }}>
                 <label css={txtLabel}>Sex</label>
                 <div css={txtDetail}>
-                  {client.gender ? Types.gender[client.gender] : ""}
+                  {client.gender ? Types.gender[Number(client.gender)] : ""}
                 </div>
               </div>
             </div>
@@ -121,9 +121,7 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
               <div css={twoCol}>
                 <label css={txtLabel}>Referral Source</label>
                 <div css={txtDetail}>
-                  {client.RefSourceCode
-                    ? Types.RefSourceCode[client.RefSourceCode]
-                    : ""}
+                  {Types.RefSourceCode[Number(client.RefSourceCode)]}
                 </div>
               </div>
             </div>
@@ -139,9 +137,7 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
                 <label css={txtLabel}>C & Y Involvement</label>
 
                 <div css={txtDetail}>
-                  {client.CYF_code
-                    ? Types.radioValues[Number(client.CYF_code)]
-                    : ""}
+                  {Types.radioValues[Number(client.CYF_code)]}
                 </div>
               </div>
             </div>
@@ -171,7 +167,7 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
               <div css={twoCol}>
                 <label css={txtLabel}>Number of prior foster homes</label>
                 <div css={txtDetail}>
-                  {client.number_of_foster_care_placements
+                  {client.number_of_foster_care_placements !== null
                     ? Types.number_of_foster_care_placements[
                         client.number_of_foster_care_placements
                       ]
@@ -183,7 +179,7 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
               <div css={twoCol}>
                 <label css={txtLabel}>History of AWOLS</label>
                 <div css={txtDetail}>
-                  {client.number_of_prior_AWOLS
+                  {client.number_of_prior_AWOLS !== null
                     ? Types.number_of_prior_AWOLS[client.number_of_prior_AWOLS]
                     : ""}
                 </div>
@@ -191,7 +187,7 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
               <div css={twoCol}>
                 <label css={txtLabel}>Total Prior Placement Terminations</label>
                 <div css={txtDetail}>
-                  {client.number_of_prior_treatment_terminations
+                  {client.number_of_prior_treatment_terminations !== null
                     ? Types.number_of_prior_treatment_terminations[
                         client.number_of_prior_treatment_terminations
                       ]
@@ -205,18 +201,18 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
                   Terminations directly before referred
                 </label>
                 <div css={txtDetail}>
-                  {client.termination_directly_to_AV
+                  {client.termination_directly_to_AV !== null
                     ? Types.termination_directly_to_AV[
                         client.termination_directly_to_AV
                       ]
-                    : ""}
+                    : "NA"}
                 </div>
               </div>
               <div css={twoCol}>
                 <label css={txtLabel}>Time since living at home</label>
                 <div css={txtDetail}>
                   <div css={txtDetail}>
-                    {client.length_of_time_since_living_at_home
+                    {client.length_of_time_since_living_at_home !== null
                       ? Types.length_of_time_since_living_at_home[
                           client.length_of_time_since_living_at_home
                         ]
@@ -231,11 +227,7 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
                   Sexually Acting Out behaviors in Placement
                 </label>
                 <div css={txtDetail}>
-                  {client.hist_of_prior_program_SAO
-                    ? Types.radioValues[
-                        Number(client.hist_of_prior_program_SAO)
-                      ]
-                    : "NA"}
+                  {Types.radioValues[Number(client.hist_of_prior_program_SAO)]}
                 </div>
               </div>
             </div>
@@ -261,9 +253,7 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
               <div css={twoCol}>
                 <label css={txtLabel}>Borderline Personality Disorder</label>
                 <div css={txtDetail}>
-                  {client.borderline_Personality
-                    ? Types.radioValues[Number(client.borderline_Personality)]
-                    : ""}
+                  {Types.radioValues[Number(client.borderline_Personality)]}
                 </div>
               </div>
             </div>
@@ -320,11 +310,11 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
                   Number of Prior MH Hospitalizations
                 </label>
                 <div css={txtDetail}>
-                  {
-                    Types.severe_mental_health_symptoms[
-                      Number(client.severe_mental_health_symptoms)
-                    ]
-                  }
+                  {client.prior_hospitalizations !== null
+                    ? Types.severe_mental_health_symptoms[
+                        client.prior_hospitalizations
+                      ]
+                    : ""}
                 </div>
               </div>
             </div>
@@ -332,7 +322,11 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
               <div css={twoCol}>
                 <label css={txtLabel}>Time since last hospitalization</label>
                 <div css={txtDetail}>
-                  {client.severe_mental_health_symptoms}
+                  {client.severe_mental_health_symptoms !== null
+                    ? Types.severe_mental_health_symptoms[
+                        client.severe_mental_health_symptoms
+                      ]
+                    : ""}
                 </div>
               </div>
               <div css={twoCol}>
