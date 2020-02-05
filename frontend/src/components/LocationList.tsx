@@ -27,34 +27,34 @@ import {
 } from "./styles";
 import * as Types from "../api/definitions";
 
-interface ProgramListProps {
-  programList: Types.Program[];
+interface LocationListProps {
+  locationList: Types.Location[];
   isLoading: boolean;
   hasError: boolean;
   error: string;
-  createProgram: (program: Types.Program) => Promise<void>;
-  updateProgram: (program: Types.Program) => Promise<void>;
+  createLocation: (location: Types.Location) => Promise<void>;
+  updateLocation: (location: Types.Location) => Promise<void>;
 }
 
 interface FormValues {
-  program_name: string;
-  editing_program_name: string;
+  location_names: string;
+  editing_location_names: string;
 }
 
 const initialValues: FormValues = {
-  program_name: "",
-  editing_program_name: ""
+  location_names: "",
+  editing_location_names: ""
 };
 
-const ProgramList: React.FC<ProgramListProps> = props => {
+const LocationList: React.FC<LocationListProps> = props => {
   const { enqueueSnackbar } = useSnackbar();
 
-  const [editingProgram, setEditingProgram] = useState<Types.Program | null>(
+  const [editingLocation, setEditingLocation] = useState<Types.Location | null>(
     null
   );
 
   const renderCell = (
-    program: Types.Program,
+    location: Types.Location,
     values: FormValues,
     handleChange:
       | ((event: React.ChangeEvent<HTMLInputElement>) => void)
@@ -65,20 +65,20 @@ const ProgramList: React.FC<ProgramListProps> = props => {
       shouldValidate?: boolean | undefined
     ) => void
   ) => {
-    if (editingProgram && editingProgram.program === program.program) {
+    if (editingLocation && editingLocation.location === location.location) {
       return (
         <React.Fragment>
           <TableCell>
             <input
               type="text"
-              name="editing_program_name"
+              name="editing_location_names"
               css={inputField}
               style={{ width: "100%" }}
-              placeholder="Add program name"
-              value={values.editing_program_name || ""}
+              placeholder="Add location name"
+              value={values.editing_location_names || ""}
               onChange={handleChange}
             />
-            <ErrorMessage component="span" name="editing_program_name" />
+            <ErrorMessage component="span" name="editing_location_names" />
           </TableCell>
           <TableCell>
             <Button
@@ -94,7 +94,7 @@ const ProgramList: React.FC<ProgramListProps> = props => {
               size="small"
               variant="contained"
               color="default"
-              onClick={() => setEditingProgram(null)}
+              onClick={() => setEditingLocation(null)}
             >
               cancel
             </Button>
@@ -104,14 +104,14 @@ const ProgramList: React.FC<ProgramListProps> = props => {
     }
     return (
       <React.Fragment>
-        <TableCell>{program.program_name}</TableCell>
+        <TableCell>{location.location_names}</TableCell>
         <TableCell>
           <Link
             onClick={() => {
-              setEditingProgram(program);
+              setEditingLocation(location);
               setFieldValue(
-                "editing_program_name",
-                program.program_name,
+                "editing_location_names",
+                location.location_names,
                 false
               );
             }}
@@ -125,7 +125,7 @@ const ProgramList: React.FC<ProgramListProps> = props => {
 
   // const history = useHistory();
   /** */
-  const { programList } = props;
+  const { locationList } = props;
   return (
     <div css={wrap}>
       <div css={mainContent}>
@@ -133,17 +133,17 @@ const ProgramList: React.FC<ProgramListProps> = props => {
           <CircularProgress color="inherit" />
         </Backdrop>
         <div>
-          <h1 css={subHeading}>Programs</h1>
+          <h1 css={subHeading}>Locations</h1>
           <Formik
             initialValues={initialValues}
             enableReinitialize
             validate={values => {
               const errors: FormikErrors<FormValues> = {};
-              if (!editingProgram && !values.program_name) {
-                errors.program_name = "Required";
+              if (!editingLocation && !values.location_names) {
+                errors.location_names = "Required";
               }
-              if (editingProgram && !values.editing_program_name) {
-                errors.program_name = "Required";
+              if (editingLocation && !values.editing_location_names) {
+                errors.location_names = "Required";
               }
               return errors;
             }}
@@ -151,45 +151,45 @@ const ProgramList: React.FC<ProgramListProps> = props => {
               console.log(values);
 
               try {
-                if (editingProgram) {
-                  const program: Types.Program = {
-                    program: editingProgram.program,
-                    program_name: values.editing_program_name
+                if (editingLocation) {
+                  const location: Types.Location = {
+                    location: editingLocation.location,
+                    location_names: values.editing_location_names
                   };
-                  await props.updateProgram(program);
-                  enqueueSnackbar("program updated successfully");
+                  await props.updateLocation(location);
+                  enqueueSnackbar("location updated successfully");
                   helpers.resetForm();
-                  setEditingProgram(null);
+                  setEditingLocation(null);
                 } else {
-                  const program: Types.Program = {
-                    program: 0,
-                    program_name: values.program_name
+                  const location: Types.Location = {
+                    location: 0,
+                    location_names: values.location_names
                   };
-                  await props.createProgram(program);
-                  enqueueSnackbar("program created successfully");
+                  await props.createLocation(location);
+                  enqueueSnackbar("location created successfully");
                   helpers.resetForm();
                 }
               } catch (error) {
-                enqueueSnackbar("Could create/update program");
+                enqueueSnackbar("Could create/update location");
               }
             }}
           >
             {({ values, handleSubmit, handleChange, setFieldValue }) => (
-              <form name="ProgramForm" onSubmit={handleSubmit}>
+              <form name="LocationForm" onSubmit={handleSubmit}>
                 <div css={fieldRow}>
                   <div css={twoCol}>
                     <input
                       type="text"
-                      name="program_name"
+                      name="location_names"
                       css={inputField}
-                      placeholder="Add new program.."
-                      value={values.program_name || ""}
+                      placeholder="Add new location.."
+                      value={values.location_names || ""}
                       onChange={e => {
-                        setEditingProgram(null);
+                        setEditingLocation(null);
                         handleChange(e);
                       }}
                     />
-                    <ErrorMessage component="span" name="program_name" />
+                    <ErrorMessage component="span" name="location_names" />
                   </div>
 
                   <Button
@@ -202,19 +202,19 @@ const ProgramList: React.FC<ProgramListProps> = props => {
                   </Button>
                 </div>
 
-                <Table aria-label="programs table" css={dataTable}>
+                <Table aria-label="locations table" css={dataTable}>
                   <TableHead>
                     <TableRow css={tableHeader}>
                       <TableCell style={{ width: "600px" }}>
-                        Program Name
+                        Location Name
                       </TableCell>
                       <TableCell>Edit</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {programList.length > 0 ? (
-                      programList.map(p => (
-                        <TableRow key={p.program} css={tableRow}>
+                    {locationList.length > 0 ? (
+                      locationList.map(p => (
+                        <TableRow key={p.location} css={tableRow}>
                           {renderCell(p, values, handleChange, setFieldValue)}
                         </TableRow>
                       ))
@@ -237,4 +237,4 @@ const ProgramList: React.FC<ProgramListProps> = props => {
   );
 };
 
-export default ProgramList;
+export default LocationList;

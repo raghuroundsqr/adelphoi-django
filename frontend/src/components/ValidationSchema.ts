@@ -241,21 +241,6 @@ export const ConfigurationSchema = Yup.object().shape({
   facility_type: Yup.string()
     .required("Required")
     .nullable(),
-  location_names: Yup.string()
-    .required("Required")
-    .nullable(),
-  program_name: Yup.string()
-    .required("Required")
-    .nullable(),
-  facility_names: Yup.string()
-    .required("Required")
-    .nullable(),
-  level_names: Yup.string()
-    .required("Required")
-    .nullable(),
-  gender_name: Yup.string()
-    .required("Required")
-    .nullable(),
   program_model_suggested: Yup.string()
     .required("Required")
     .nullable()

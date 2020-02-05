@@ -11,7 +11,11 @@ import { AppState } from "../redux-modules/root";
 import { ContainerProps } from "./Container";
 import * as Types from "../api/definitions";
 import * as program from "../redux-modules/program";
+import * as programLocation from "../redux-modules/location";
 import ProgramList from "../components/ProgramList";
+import LocationList from "../components/LocationList";
+import ConfigurationForm from "../components/ConfigurationForm";
+import { updateConfiguration } from "../api/api";
 
 export interface ConfigurationContainerState {
   isLoading: boolean;
@@ -25,6 +29,9 @@ export interface ConfigurationContainerProp
   getPrograms: () => Promise<void>;
   createProgram: (program: Types.Program) => Promise<void>;
   updateProgram: (program: Types.Program) => Promise<void>;
+  getLocations: () => Promise<void>;
+  createLocation: (program: Types.Location) => Promise<void>;
+  updateLocation: (program: Types.Location) => Promise<void>;
 }
 
 export class ConfigurationContainer extends React.Component<
@@ -44,32 +51,36 @@ export class ConfigurationContainer extends React.Component<
     };
   }
 
+  saveConfiguration = async (config: Types.Configuration) => {
+    console.log(config);
+    try {
+      await updateConfiguration(config);
+      this.props.enqueueSnackbar("Config Data saved successfully.");
+    } catch (error) {
+      this.props.enqueueSnackbar(
+        "An error occurred while saving configuration"
+      );
+    }
+  };
+
   componentDidMount() {
+    this.props.closeSnackbar();
     this.props.getPrograms();
-    // this.props.fetchPrograms();
+    this.props.getLocations();
   }
 
-  // updateConfiguration = async (configuration: Types.Configuration) => {
-  //   try {
-  //     this.setState({ isLoading: true });
-  //     const response = await this.props.updateConfiguration(configuration);
-  //     this.setState({
-  //       isLoading: false,
-  //       config_update_response: response
-  //     });
-  //   } catch (error) {
-  //     this.setState({
-  //       isLoading: false,
-  //       config_update_response: "An error occured. Please try again."
-  //     });
-  //   }
-  // };
-
   render() {
-    const { program: programState, createProgram, updateProgram } = this.props;
+    const {
+      program: programState,
+      createProgram,
+      updateProgram,
+      programLocation: locationState,
+      createLocation,
+      updateLocation
+    } = this.props;
     const programList = (programState && programState.programList) || [];
+    const locationList = (locationState && locationState.locationList) || [];
     const { match, location } = this.props;
-    // const location = useLocation();
 
     return (
       <Switch>
@@ -90,10 +101,10 @@ export class ConfigurationContainer extends React.Component<
                   value={`${match.url}/locations`}
                 />
                 <Tab
-                  label="Linking"
+                  label="Configuration"
                   component={Link}
-                  to={`${match.url}/Linking`}
-                  value={`${match.url}/Linking`}
+                  to={`${match.url}/linking`}
+                  value={`${match.url}/linking`}
                 />
               </Tabs>
             </Paper>
@@ -107,10 +118,20 @@ export class ConfigurationContainer extends React.Component<
                 />
               </Route>
               <Route path={`${match.url}/locations`}>
-                <div>locations</div>
+                <LocationList
+                  locationList={locationList}
+                  {...this.state}
+                  createLocation={createLocation}
+                  updateLocation={updateLocation}
+                />
               </Route>
               <Route path={`${match.url}/linking`}>
-                <div>linking</div>
+                <ConfigurationForm
+                  locations={locationList}
+                  programs={programList}
+                  {...this.state}
+                  onFormSubmit={this.saveConfiguration}
+                />
               </Route>
               <Route path={`${match.url}`}>
                 <div>Programs default page</div>
@@ -125,14 +146,18 @@ export class ConfigurationContainer extends React.Component<
 
 const mapStateToProps = (state: AppState) => {
   return {
-    program: state.program
+    program: state.program,
+    programLocation: state.programLocation
   };
 };
 
 const mapDispatchToProps = {
   getPrograms: program.actions.getPrograms,
   createProgram: program.actions.createProgram,
-  updateProgram: program.actions.updateProgram
+  updateProgram: program.actions.updateProgram,
+  getLocations: programLocation.actions.getLocations,
+  createLocation: programLocation.actions.createLocation,
+  updateLocation: programLocation.actions.updateLocation
 };
 
 export default connect(

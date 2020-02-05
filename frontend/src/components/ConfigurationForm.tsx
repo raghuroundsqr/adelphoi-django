@@ -1,224 +1,217 @@
 /** @jsx jsx */
-import { jsx } from "@emotion/core";
+import { jsx, css } from "@emotion/core";
 // import { useHistory } from "react-router-dom";
 import { Formik, ErrorMessage } from "formik";
 import Button from "@material-ui/core/Button";
+import Select from "@material-ui/core/Select";
+import FormControl from "@material-ui/core/FormControl";
+import InputLabel from "@material-ui/core/InputLabel";
+import MenuItem from "@material-ui/core/MenuItem";
+import Chip from "@material-ui/core/Chip";
+import Input from "@material-ui/core/Input";
 import { ConfigurationSchema } from "./ValidationSchema";
 import {
   wrap,
   subHeading,
+  selectField,
   fieldRow,
   mainContent,
   twoCol,
   inputField,
+  fieldBox,
   label,
   txtDetail
 } from "./styles";
 import * as Types from "../api/definitions";
 
+const chips = css`
+  display: flex;
+  flex-wrap: wrap;
+`;
+
+const chip = css`
+  margin: 2px;
+`;
+
+const formControl = css`
+  min-width: 98% !important;
+`;
+
 interface ConfigurationFormProps {
-  configuration: Types.Configuration;
+  programs: Types.Program[];
+  locations: Types.Location[];
   onFormSubmit: (configuration: Types.Configuration) => void;
   isLoading: boolean;
   hasError: boolean;
   error: string;
-  config_update_response: string | null;
 }
 
 const ConfigurationForm: React.FC<ConfigurationFormProps> = props => {
   // const history = useHistory();
-
+  const { programs, locations, onFormSubmit } = props;
   return (
     <div css={wrap}>
       <div css={mainContent}>
         <Formik
-          initialValues={props.configuration}
+          initialValues={Types.emptyConfiguration}
           enableReinitialize
           validationSchema={ConfigurationSchema}
           onSubmit={async (values, helpers) => {
-            await props.onFormSubmit(values);
+            await onFormSubmit(values);
           }}
         >
           {({ values, handleSubmit, handleChange }) => (
-            <form name="newClientForm2" onSubmit={handleSubmit}>
-              <h1 css={subHeading}>Program</h1>
-              {props.config_update_response && (
-                <div
-                  css={txtDetail}
-                  style={{ marginTop: 10, marginBottom: 10 }}
-                >
-                  {props.config_update_response}
-                </div>
-              )}
+            <form name="configurationForm" onSubmit={handleSubmit}>
               <div css={fieldRow}>
                 <div css={twoCol}>
-                  <label css={label}>Program</label>
-                </div>
-                <div css={twoCol}>
-                  <input
-                    type="text"
+                  <label css={label} style={{ marginTop: 16 }}>
+                    Program
+                  </label>
+
+                  <select
+                    css={selectField}
                     name="program"
-                    css={inputField}
-                    placeholder=""
                     value={values.program || ""}
                     onChange={handleChange}
-                  />
+                  >
+                    <option value="">Select</option>
+                    {programs.map(p => (
+                      <option key={p.program} value={p.program}>
+                        {p.program_name}
+                      </option>
+                    ))}
+                  </select>
                   <ErrorMessage component="span" name="program" />
                 </div>
               </div>
               <div css={fieldRow}>
                 <div css={twoCol}>
-                  <label css={label}>Program Name</label>
-                </div>
-                <div css={twoCol}>
-                  <input
-                    type="text"
-                    name="program_name"
-                    css={inputField}
-                    placeholder=""
-                    value={values.program_name || ""}
-                    onChange={handleChange}
-                  />
-                  <ErrorMessage component="span" name="program_name" />
+                  <label css={label} style={{ marginTop: 16 }}>
+                    Locations
+                  </label>
+
+                  <FormControl css={formControl}>
+                    <InputLabel
+                      style={{ padding: 16 }}
+                      htmlFor="locations-label"
+                    >
+                      Select
+                    </InputLabel>
+                    <Select
+                      labelId="locations-label"
+                      id="locations"
+                      name="location"
+                      multiple
+                      // css={inputField}
+                      style={{
+                        padding: 16
+                      }}
+                      value={values.location}
+                      onChange={e => {
+                        console.log(e);
+                        handleChange(e);
+                      }}
+                      input={<Input id="locations-input" />}
+                      renderValue={selected => (
+                        <div css={chips}>
+                          {(selected as string[]).map(value => (
+                            <Chip
+                              key={value}
+                              label={locations[Number(value)].location_names}
+                              css={chip}
+                            />
+                          ))}
+                        </div>
+                      )}
+                    >
+                      {locations.map(loc => (
+                        <MenuItem key={loc.location} value={loc.location}>
+                          {loc.location_names}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                  <ErrorMessage component="span" name="location" />
                 </div>
               </div>
-              <div css={fieldRow}>
-                <div css={twoCol}>
-                  <label css={label}>Gender</label>
-                </div>
-                <div css={twoCol}>
+
+              <div css={twoCol}>
+                <label css={label}>Sex</label>
+                <div css={fieldBox} style={{ width: "48%" }}>
                   <input
-                    type="text"
+                    type="radio"
+                    onChange={handleChange}
                     name="gender"
-                    css={inputField}
-                    placeholder=""
-                    value={values.gender || ""}
-                    onChange={handleChange}
-                  />
-                  <ErrorMessage component="span" name="gender" />
+                    id="female"
+                    value="1"
+                    checked={
+                      values.gender && values.gender.toString() === "1"
+                        ? true
+                        : false
+                    }
+                  />{" "}
+                  <label htmlFor="female">Female</label>
                 </div>
-              </div>
-              <div css={fieldRow}>
-                <div css={twoCol}>
-                  <label css={label}>Gender name</label>
-                </div>
-                <div css={twoCol}>
+                <div css={fieldBox} style={{ width: "48%" }}>
                   <input
-                    type="text"
-                    name="gender_name"
-                    css={inputField}
-                    placeholder=""
-                    value={values.gender_name || ""}
+                    type="radio"
                     onChange={handleChange}
-                  />
-                  <ErrorMessage component="span" name="gender_name" />
+                    name="gender"
+                    id="male"
+                    value="2"
+                    checked={
+                      values.gender && values.gender.toString() === "2"
+                        ? true
+                        : false
+                    }
+                  />{" "}
+                  <label htmlFor="male">Male</label>
                 </div>
+                <ErrorMessage component="span" name="gender" />
               </div>
+
               <div css={fieldRow}>
                 <div css={twoCol}>
                   <label css={label}>Level of care</label>
-                </div>
-                <div css={twoCol}>
-                  <input
-                    type="text"
+                  <select
+                    css={selectField}
                     name="level_of_care"
-                    css={inputField}
-                    placeholder=""
+                    id="level_of_care"
                     value={values.level_of_care || ""}
                     onChange={handleChange}
-                  />
+                  >
+                    <option value="">Select</option>
+                    <option value="1">Mental health</option>
+                    <option value="1">Intensive</option>
+                    <option value="3">Independent Living</option>
+                  </select>
                   <ErrorMessage component="span" name="level_of_care" />
                 </div>
               </div>
               <div css={fieldRow}>
                 <div css={twoCol}>
-                  <label css={label}>Level names</label>
-                </div>
-                <div css={twoCol}>
-                  <input
-                    type="text"
-                    name="level_names"
-                    css={inputField}
-                    placeholder=""
-                    value={values.level_names || ""}
-                    onChange={handleChange}
-                  />
-                  <ErrorMessage component="span" name="level_names" />
-                </div>
-              </div>
-              <div css={fieldRow}>
-                <div css={twoCol}>
-                  <label css={label}>Locations</label>
-                </div>
-                <div css={twoCol}>
-                  <input
-                    type="text"
-                    name="location"
-                    css={inputField}
-                    placeholder=""
-                    value={values.location || ""}
-                    onChange={handleChange}
-                  />
-                  <ErrorMessage component="span" name="location" />
-                </div>
-              </div>
-              <div css={fieldRow}>
-                <div css={twoCol}>
-                  <label css={label}>Location names</label>
-                </div>
-                <div css={twoCol}>
-                  <input
-                    type="text"
-                    name="location_names"
-                    css={inputField}
-                    placeholder=""
-                    value={values.location_names || ""}
-                    onChange={handleChange}
-                  />
-                  <ErrorMessage component="span" name="location_names" />
-                </div>
-              </div>
-              <div css={fieldRow}>
-                <div css={twoCol}>
-                  <label css={label}>Facility type</label>
-                </div>
-                <div css={twoCol}>
-                  <input
-                    type="text"
+                  <label css={label}>Facility Type</label>
+                  <select
+                    css={selectField}
                     name="facility_type"
-                    css={inputField}
-                    placeholder=""
+                    id="facility_type"
                     value={values.facility_type || ""}
                     onChange={handleChange}
-                  />
+                  >
+                    <option value="">Select</option>
+                    <option value="1">Group Home</option>
+                    <option value="2">Secure</option>
+                  </select>
                   <ErrorMessage component="span" name="facility_type" />
                 </div>
               </div>
               <div css={fieldRow}>
                 <div css={twoCol}>
-                  <label css={label}>Facility name</label>
-                </div>
-                <div css={twoCol}>
+                  <label css={label}>Program Suggested</label>
                   <input
-                    type="text"
-                    name="facility_names"
                     css={inputField}
-                    placeholder=""
-                    value={values.facility_names || ""}
-                    onChange={handleChange}
-                  />
-                  <ErrorMessage component="span" name="facility_names" />
-                </div>
-              </div>
-              <div css={fieldRow}>
-                <div css={twoCol}>
-                  <label css={label}>Program model suggested</label>
-                </div>
-                <div css={twoCol}>
-                  <input
-                    type="text"
                     name="program_model_suggested"
-                    css={inputField}
+                    type="text"
                     placeholder=""
                     value={values.program_model_suggested || ""}
                     onChange={handleChange}
@@ -229,6 +222,7 @@ const ConfigurationForm: React.FC<ConfigurationFormProps> = props => {
                   />
                 </div>
               </div>
+
               <div css={fieldRow} style={{ justifyContent: "flex-end" }}>
                 <Button
                   type="submit"

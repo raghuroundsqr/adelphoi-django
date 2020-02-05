@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Switch, Route } from "react-router-dom";
+import { withSnackbar, WithSnackbarProps } from "notistack";
 import { AppState } from "../redux-modules/root";
 import { ContainerProps } from "./Container";
 import * as client from "../redux-modules/client";
@@ -14,7 +15,9 @@ export interface ExistingClientContainerState {
   program_completion_response: string | null;
 }
 
-export interface ExistingClientContainerProp extends ContainerProps {
+export interface ExistingClientContainerProp
+  extends ContainerProps,
+    WithSnackbarProps {
   searchClient: (client_code: string, client_name: string) => void;
   updateProgramCompletion: (
     client_code: string,
@@ -38,6 +41,10 @@ export class ExistingClientContainer extends React.Component<
       error: "",
       program_completion_response: null
     };
+  }
+
+  componentDidMount() {
+    // this.props.closeSnackbar();
   }
 
   searchClient = async (client_code: string, client_name: string) => {
@@ -111,4 +118,4 @@ const mapDispatchToProps = {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(ExistingClientContainer);
+)(withSnackbar(ExistingClientContainer));

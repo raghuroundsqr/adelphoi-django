@@ -83,17 +83,17 @@ export interface Program {
   program_name: string;
 }
 
-export interface Configuration {
-  gender: string;
-  program: string;
-  level_of_care: string;
-  location: string;
-  facility_type: string;
+export interface Location {
+  location: number;
   location_names: string;
-  program_name: string;
-  facility_names: string;
-  level_names: string;
-  gender_name: string;
+}
+
+export interface Configuration {
+  gender: number | null;
+  program: number | null;
+  level_of_care: number | null;
+  location: number[] | null;
+  facility_type: number | null;
   program_model_suggested: string;
   program_type: string;
 }
@@ -197,16 +197,11 @@ export const emptyClient: Client = {
 };
 
 export const emptyConfiguration: Configuration = {
-  gender: "",
-  program: "",
-  level_of_care: "",
-  location: "",
-  facility_type: "",
-  location_names: "",
-  program_name: "",
-  facility_names: "",
-  level_names: "",
-  gender_name: "",
+  gender: null,
+  program: null,
+  level_of_care: null,
+  location: [],
+  facility_type: null,
   program_model_suggested: "",
   program_type: ""
 };

@@ -20,3 +20,12 @@ export const emptyProgram: Types.Program = {
   program: "",
   program_name: ""
 };
+
+export interface LocationState {
+  locationList: Types.Location[];
+}
+
+export const emptyLocation: Types.Location = {
+  location: "",
+  location_name: ""
+};

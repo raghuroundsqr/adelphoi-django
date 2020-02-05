@@ -48,6 +48,10 @@ export class NewClientContainer extends React.Component<
     };
   }
 
+  componentDidMount() {
+    this.props.closeSnackbar();
+  }
+
   saveClientStep1 = async (client: Types.Client) => {
     const { history } = this.props;
     this.props.clearErrors();

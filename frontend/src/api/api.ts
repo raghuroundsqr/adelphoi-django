@@ -16,7 +16,7 @@ export const updateConfiguration = async (
   configuration: Types.Configuration
 ) => {
   try {
-    const response = await axios.post(`${baseApiUrl}/save`, configuration);
+    const response = await axios.post(`${baseApiUrl}/dataSave`, configuration);
     return response.data.data;
   } catch (error) {
     console.error("api function updateConfiguration error");
@@ -110,6 +110,46 @@ export const updateProgram = async (program: Types.Program) => {
     throwError(error);
   }
 };
+
+export const fetchLocationsList = async () => {
+  try {
+    const response = await axios.get(`${baseApiUrl}/location_list`);
+    const data = (response.data as unknown) as Types.Location[];
+
+    return data;
+  } catch (error) {
+    console.error("api function fetchLocationsList error");
+    throwError(error);
+  }
+};
+
+export const createLocation = async (location: Types.Location) => {
+  try {
+    const response = await axios.post(`${baseApiUrl}/location_save`, {
+      location_name: location.location_names
+    });
+    return response.data;
+  } catch (error) {
+    console.error("api function createLocation error");
+    throwError(error);
+  }
+};
+
+export const updateLocation = async (location: Types.Location) => {
+  try {
+    const response = await axios.put(
+      `${baseApiUrl}/locations/${location.location}/`,
+      {
+        location_names: location.location_names
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("api function updateLocation error");
+    throwError(error);
+  }
+};
+
 // TODO - new api for this fn.
 export const fetchLocations = async (
   client_code: string,

@@ -38,9 +38,13 @@ export const actions = {
       if (!response) {
         throw Error("something went wrong while creating the program");
       }
+      const newProgram: Types.Program = {
+        program: response.program_id,
+        program_name: program.program_name
+      };
       const programState = getState().program;
       const existingList = programState ? programState.programList : [];
-      const programList = [program, ...existingList];
+      const programList = [newProgram, ...existingList];
       dispatch(update({ programList }));
     };
   },
