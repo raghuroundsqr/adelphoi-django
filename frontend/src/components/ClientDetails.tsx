@@ -21,6 +21,7 @@ import {
   fieldBox
 } from "./styles";
 import * as Types from "../api/definitions";
+import { baseApiUrl } from "../api/api";
 
 interface ClientDetailsProps {
   clientList: Types.Client[];
@@ -51,13 +52,23 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
     return <h1 css={subHeading}>No client found</h1>;
   }
   const client = props.clientList[Number(index)];
-  if (!client) {
+  if (!client || !client.client_code) {
     return <h1 css={subHeading}>No client found</h1>;
   }
 
   return (
     <div css={wrap}>
       <div css={mainContent}>
+        <div style={{ textAlign: "right" }}>
+          <a
+            rel="noopener noreferrer"
+            target="_blank"
+            css={txtDetail}
+            href={`${baseApiUrl}/index/${client.client_code}`}
+          >
+            Download PDF Report
+          </a>
+        </div>
         <ExpansionPanel expanded>
           <ExpansionPanelSummary
             css={panelHeader}

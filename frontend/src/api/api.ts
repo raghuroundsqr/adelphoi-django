@@ -1,7 +1,7 @@
 import axios from "axios";
 import * as Types from "./definitions";
 
-const baseApiUrl = "http://13.232.1.126:8000/first_match";
+export const baseApiUrl = "http://13.232.1.126:8000/first_match";
 
 interface PredictionResponse {
   referred_program: string;
