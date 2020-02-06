@@ -61,7 +61,6 @@ export const actions = {
     selected_program: string
   ): ThunkAction<Promise<Types.Client | undefined>, AppState, null, AnyAction> {
     return async (dispatch, getState) => {
-      debugger;
       const locations = await fetchLocations(client_code, selected_program);
       if (locations) {
         const cl: Types.Client = {
@@ -79,7 +78,6 @@ export const actions = {
     selected_location: string
   ): ThunkAction<Promise<Types.Client | undefined>, AppState, null, AnyAction> {
     return async (dispatch, getState) => {
-      debugger;
       const client = getState().client!.client;
       const cl: Types.Client = {
         ...client,
@@ -108,7 +106,6 @@ export const actions = {
     client: Types.Client
   ): ThunkAction<Promise<Types.Client | undefined>, AppState, null, AnyAction> {
     return async (dispatch, getState) => {
-      debugger;
       if (!client.client_code) {
         throw new Error("client code required");
       }

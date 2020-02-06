@@ -92,7 +92,6 @@ export class NewClientContainer extends React.Component<
   };
 
   submitProgram = async (client: Types.Client) => {
-    debugger;
     const { client: clientState } = this.props;
     if (!clientState || !clientState.client) {
       return false;

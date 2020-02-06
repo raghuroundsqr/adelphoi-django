@@ -156,7 +156,6 @@ export const fetchLocations = async (
   referred_program: string
 ) => {
   try {
-    debugger;
     const response = await axios.get(
       `${baseApiUrl}/location/${client_code}?referred_program=${referred_program}`
     );

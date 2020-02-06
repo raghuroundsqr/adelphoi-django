@@ -41,8 +41,6 @@ const ProgramSelection: React.FC<ProgramSelectionProps> = props => {
     props.onLocationSelect(value);
   };
 
-  // const history = useHistory();
-  /** */
   return (
     <div css={wrap}>
       <div css={mainContent}>
@@ -103,7 +101,7 @@ const ProgramSelection: React.FC<ProgramSelectionProps> = props => {
                   <ErrorMessage component="span" name="Confidence" />
                 </div>
               </div>
-              <h1 css={subHeading}>Program Selection</h1>
+              <h1 css={subHeading}>Available Programs</h1>
               <div
                 css={fieldRow}
                 style={{ flexWrap: "wrap", marginBottom: 16 }}
@@ -114,7 +112,7 @@ const ProgramSelection: React.FC<ProgramSelectionProps> = props => {
                     onChange={handleChange}
                     checked={values.program_type === "ISM"}
                     id="ISM"
-                    name="referred_program"
+                    name="program_type"
                     value="ISM"
                   />
                   <label htmlFor="ISM">ISM</label>
@@ -125,7 +123,7 @@ const ProgramSelection: React.FC<ProgramSelectionProps> = props => {
                     checked={values.program_type === "ISF"}
                     onChange={handleChange}
                     id="ISF"
-                    name="referred_program"
+                    name="program_type"
                     value="ISF"
                   />
                   <label htmlFor="ISF">ISF</label>
@@ -136,7 +134,7 @@ const ProgramSelection: React.FC<ProgramSelectionProps> = props => {
                     checked={values.program_type === "MHFO"}
                     onChange={handleChange}
                     id="MHFO"
-                    name="referred_program"
+                    name="program_type"
                     value="MHFO"
                   />
                   <label htmlFor="MHFO">MHFO</label>
@@ -147,7 +145,7 @@ const ProgramSelection: React.FC<ProgramSelectionProps> = props => {
                     checked={values.program_type === "SUBAB"}
                     onChange={handleChange}
                     value="SUBAB"
-                    name="referred_program"
+                    name="program_type"
                   />
                   <label htmlFor="SUBAB">SUBAB</label>
                 </div>
@@ -157,7 +155,7 @@ const ProgramSelection: React.FC<ProgramSelectionProps> = props => {
                     checked={values.program_type === "Diagnostic"}
                     onChange={handleChange}
                     value="Diagnostic"
-                    name="referred_program"
+                    name="program_type"
                   />
                   <label htmlFor="Diagnostic">Diagnostic</label>
                 </div>
@@ -167,7 +165,7 @@ const ProgramSelection: React.FC<ProgramSelectionProps> = props => {
                     checked={values.program_type === "SEXOF-MH"}
                     onChange={handleChange}
                     value="SEXOF-MH"
-                    name="referred_program"
+                    name="program_type"
                   />
                   <label htmlFor="SEXOF-MH">SEXOF-MH</label>
                 </div>
@@ -177,7 +175,7 @@ const ProgramSelection: React.FC<ProgramSelectionProps> = props => {
                     checked={values.program_type === "SEXOF-Secure"}
                     onChange={handleChange}
                     value="SEXOF-Secure"
-                    name="referred_program"
+                    name="program_type"
                   />
                   <label htmlFor="SEXOF-Secure">SEXOF-Secure</label>
                 </div>
@@ -187,7 +185,7 @@ const ProgramSelection: React.FC<ProgramSelectionProps> = props => {
                     checked={values.program_type === "SEXOF"}
                     onChange={handleChange}
                     value="SEXOF"
-                    name="referred_program"
+                    name="program_type"
                   />
                   <label htmlFor="SEXOF">SEXOF</label>
                 </div>
@@ -197,7 +195,7 @@ const ProgramSelection: React.FC<ProgramSelectionProps> = props => {
                     checked={values.program_type === "Enhanced"}
                     onChange={handleChange}
                     value="Enhanced"
-                    name="referred_program"
+                    name="program_type"
                   />
                   <label htmlFor="Enhanced">Enhanced</label>
                 </div>
@@ -207,7 +205,7 @@ const ProgramSelection: React.FC<ProgramSelectionProps> = props => {
                     checked={values.program_type === "Secure-Male"}
                     onChange={handleChange}
                     value="Secure-Male"
-                    name="referred_program"
+                    name="program_type"
                   />
                   <label htmlFor="Secure-Male">Secure-Male</label>
                 </div>
@@ -217,7 +215,7 @@ const ProgramSelection: React.FC<ProgramSelectionProps> = props => {
                     checked={values.program_type === "Secure-Female"}
                     onChange={handleChange}
                     value="Secure-Female"
-                    name="referred_program"
+                    name="program_type"
                   />
                   <label htmlFor="Secure-Female">Secure-Female</label>
                 </div>
@@ -227,7 +225,7 @@ const ProgramSelection: React.FC<ProgramSelectionProps> = props => {
                     checked={values.program_type === "Independent-Living"}
                     onChange={handleChange}
                     value="Independent-Living"
-                    name="referred_program"
+                    name="program_type"
                   />
                   <label htmlFor="Independent-Living">Independent Living</label>
                 </div>

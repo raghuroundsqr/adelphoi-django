@@ -33,7 +33,6 @@ export const actions = {
     program: Types.Program
   ): ThunkAction<Promise<void>, AppState, null, AnyAction> {
     return async (dispatch, getState) => {
-      debugger;
       const response = await createProgram(program);
       if (!response) {
         throw Error("something went wrong while creating the program");

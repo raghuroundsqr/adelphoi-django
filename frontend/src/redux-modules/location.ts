@@ -33,7 +33,6 @@ export const actions = {
     location: Types.Location
   ): ThunkAction<Promise<void>, AppState, null, AnyAction> {
     return async (dispatch, getState) => {
-      debugger;
       const response = await createLocation(location);
       if (!response) {
         throw Error("something went wrong while creating the location");
