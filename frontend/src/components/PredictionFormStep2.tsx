@@ -6,6 +6,9 @@ import { Formik, ErrorMessage, FormikErrors } from "formik";
 import Button from "@material-ui/core/Button";
 import SnackNotification from "./SnackNotification";
 import { Step2ValidationSchema } from "./ValidationSchema";
+import Backdrop from "@material-ui/core/Backdrop";
+import CircularProgress from "@material-ui/core/CircularProgress";
+
 import {
   wrap,
   subHeading,
@@ -13,7 +16,8 @@ import {
   mainContent,
   twoCol,
   inputField,
-  label
+  label,
+  backdrop
 } from "./styles";
 import * as Types from "../api/definitions";
 
@@ -40,6 +44,9 @@ const PredictionFormStep2: React.FC<PredictionFormStep2Props> = props => {
     <div css={wrap}>
       {renderErrorNotification()}
       <div css={mainContent}>
+        <Backdrop css={backdrop} open={props.isLoading}>
+          <CircularProgress color="inherit" />
+        </Backdrop>
         <Formik
           initialValues={props.client}
           initialErrors={props.errors}
@@ -47,8 +54,6 @@ const PredictionFormStep2: React.FC<PredictionFormStep2Props> = props => {
           enableReinitialize
           onSubmit={async (values, helpers) => {
             await props.onFormSubmit(values);
-            console.log("after submission");
-            console.log(props.errors);
             // helpers.resetForm();
           }}
         >

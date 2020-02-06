@@ -52,10 +52,9 @@ export class ConfigurationContainer extends React.Component<
   }
 
   saveConfiguration = async (config: Types.Configuration) => {
-    console.log(config);
     try {
       await updateConfiguration(config);
-      this.props.enqueueSnackbar("Config Data saved successfully.");
+      this.props.enqueueSnackbar("Configuration Data saved successfully.");
     } catch (error) {
       this.props.enqueueSnackbar(
         "An error occurred while saving configuration"

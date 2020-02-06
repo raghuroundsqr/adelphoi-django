@@ -268,9 +268,9 @@ const ProgramSelection: React.FC<ProgramSelectionProps> = props => {
               </div>
             </React.Fragment>
           )}
-        {props.client.result_final && (
+        {/*props.client.result_final && (
           <h1 css={subHeading}>{props.client.result_final}</h1>
-        )}
+        )*/}
       </div>
       {/* MAIN CONTENT */}
     </div>

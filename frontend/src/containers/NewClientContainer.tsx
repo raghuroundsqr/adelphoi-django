@@ -70,8 +70,10 @@ export class NewClientContainer extends React.Component<
         this.setState({ isLoading: false });
       }
     } else {
+      this.setState({ isLoading: true });
       this.props.saveClient(client, true, false);
       history.push("/new-client/2");
+      this.setState({ isLoading: false });
     }
   };
 
@@ -90,11 +92,17 @@ export class NewClientContainer extends React.Component<
   };
 
   submitProgram = async (client: Types.Client) => {
+    debugger;
     const { client: clientState } = this.props;
     if (!clientState || !clientState.client) {
       return false;
     }
-    console.log("submit Prediction called");
+    if (!clientState.client.client_code) {
+      this.props.enqueueSnackbar(
+        "Error. Client information is required to process this form."
+      );
+      return false;
+    }
     this.setState({ isLoading: true });
     await this.props.submitPrediction(client);
     this.setState({ isLoading: false });
@@ -151,19 +159,17 @@ export class NewClientContainer extends React.Component<
           exact
           path="/new-client/2"
           render={routeProps => {
-            console.log("form 1 completed ");
-            const step1 = clientState
-              ? clientState.page1FormCompleted
-              : this.state.isLoading;
-            console.log("form 1 completed ", step1);
-            if (!step1) {
-              return (
-                <h1>
-                  Error. First step of the new client form is incomplete.
-                  <Link to="/new-client">Click here to begin.</Link>
-                </h1>
-              );
-            }
+            // const step1 = clientState
+            //   ? clientState.page1FormCompleted
+            //   : this.state.isLoading;
+            // if (!step1) {
+            //   return (
+            //     <h1>
+            //       Error. First step of the new client form is incomplete.
+            //       <Link to="/new-client">Click here to begin.</Link>
+            //     </h1>
+            //   );
+            // }
             return (
               <PredictionFormStep2
                 {...this.state}
