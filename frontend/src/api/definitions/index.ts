@@ -96,6 +96,7 @@ export interface Configuration {
   facility_type: number | null;
   program_model_suggested: string;
   program_type: string;
+  inclusionary_criteria: string;
 }
 
 export interface Prediction {
@@ -203,7 +204,8 @@ export const emptyConfiguration: Configuration = {
   location: [],
   facility_type: null,
   program_model_suggested: "",
-  program_type: ""
+  program_type: "",
+  inclusionary_criteria: ""
 };
 
 export const primary_language: string[] = ["", "English", "Other"];

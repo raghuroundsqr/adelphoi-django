@@ -222,8 +222,36 @@ const ConfigurationForm: React.FC<ConfigurationFormProps> = props => {
                   />
                 </div>
               </div>
+              <div css={fieldRow}>
+                <div css={twoCol}>
+                  <label css={label}>Program Type</label>
+                  <input
+                    css={inputField}
+                    name="program_type"
+                    type="text"
+                    placeholder=""
+                    value={values.program_type || ""}
+                    onChange={handleChange}
+                  />
+                  <ErrorMessage component="span" name="program_type" />
+                </div>
+              </div>
+              <div css={fieldRow}>
+                <div css={twoCol}>
+                  <label css={label}>Inclusionary Criteria</label>
+                  <input
+                    css={inputField}
+                    name="inclusionary_criteria"
+                    type="text"
+                    placeholder=""
+                    value={values.inclusionary_criteria || ""}
+                    onChange={handleChange}
+                  />
+                  <ErrorMessage component="span" name="inclusionary_criteria" />
+                </div>
+              </div>
 
-              <div css={fieldRow} style={{ justifyContent: "flex-end" }}>
+              <div css={fieldRow} style={{ justifyContent: "flex-start" }}>
                 <Button
                   type="submit"
                   size="large"
