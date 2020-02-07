@@ -14,6 +14,7 @@ export interface ConfigurationState {
 }
 export interface ProgramState {
   programList: Types.Program[];
+  availableProgramList: Types.Program[];
 }
 
 export const emptyProgram: Types.Program = {

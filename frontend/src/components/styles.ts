@@ -115,6 +115,19 @@ export const fieldBox = css`
   width: 135px;
 `;
 
+export const radioBox = css`
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  border-bottom: 1px solid #8284e5;
+  background-color: #f5f5f5;
+  margin-right: 5px;
+  width: 135px;
+  & label {
+    margin-left: 5px;
+  }
+`;
+
 export const chkBox = css`
   padding: 16px;
   border-bottom: 1px solid #8284e5;

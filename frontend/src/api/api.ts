@@ -32,7 +32,9 @@ export const insertClient = async (client: Types.Client) => {
     }
     const r = {
       ...response.data,
-      program_type: response.data.program_type[0]
+      program_type: response.data.program_type[0],
+      referred_program: response.data.program_type[0],
+      model_program: response.data.program_type[0]
     };
 
     return (r as unknown) as Partial<Types.Client>;
@@ -57,15 +59,7 @@ export const insertPrediction = async (client: Types.Client) => {
       `${baseApiUrl}/refer/${client.client_code}/`,
       { referred_program: client.program_type }
     );
-    const newCl = {
-      ...client,
-      referred_program: client.program_type,
-      model_program: client.program_type
-    };
-    if (!newCl.referred_program) {
-      throw new Error("client code required");
-    }
-    return newCl;
+    return response;
   } catch (error) {
     console.error("api function insertPrediction error");
     throwError(error);
@@ -80,6 +74,18 @@ export const fetchPrograms = async () => {
     return data;
   } catch (error) {
     console.error("api function fetchPrograms error");
+    throwError(error);
+  }
+};
+
+export const fetchAvailablePrograms = async () => {
+  try {
+    const response = await axios.get(`${baseApiUrl}/available_programs`);
+    const data = (response.data as unknown) as Types.Program[];
+
+    return data;
+  } catch (error) {
+    console.error("api function fetchAvailablePrograms error");
     throwError(error);
   }
 };

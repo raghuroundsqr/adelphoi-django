@@ -109,31 +109,24 @@ export const actions = {
       if (!client.client_code) {
         throw new Error("client code required");
       }
-      const response = await insertPrediction(client);
-      if (!response || !response.referred_program) {
-        throw Error("something went wrong while submitting");
+      dispatch(update({ client }));
+      try {
+        const response = await insertPrediction(client);
+      } catch (error) {
+        throw error;
       }
-      const cl = {
-        ...client,
-        referred_program: response.referred_program || null,
-        model_program: response.model_program || null
-      };
-      dispatch(update({ client: cl }));
-      if (!cl.client_code || !cl.referred_program) {
-        throw new Error("referred program not found");
-      }
+
       const locations = await fetchLocations(
-        cl.client_code,
-        cl.referred_program
+        client.client_code,
+        client.program_type!
       );
       if (locations) {
-        const cl2: Types.Client = {
-          ...getState().client!.client,
+        const cl: Types.Client = {
+          ...client,
           SuggestedLocations: [...locations],
-          client_selected_program: cl.referred_program
+          client_selected_program: client.program_type
         };
-        dispatch(update({ client: cl2 }));
-        // await dispatch(this.getLocations(cl.client_code, cl.referred_program));
+        dispatch(update({ client: cl }));
         return cl;
       }
     };
@@ -152,7 +145,9 @@ export const actions = {
         const cl = {
           ...client,
           program_type: response.program_type || null,
-          Confidence: response.Confidence || null
+          Confidence: response.Confidence || null,
+          referred_program: response.referred_program || null,
+          model_program: response.model_program || null
         };
         dispatch(update({ client: cl }));
         return cl;

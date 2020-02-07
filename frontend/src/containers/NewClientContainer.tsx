@@ -6,6 +6,7 @@ import * as Types from "../api/definitions";
 import { AppState } from "../redux-modules/root";
 import { ContainerProps } from "./Container";
 import * as client from "../redux-modules/client";
+import * as program from "../redux-modules/program";
 import PredictionFormStep1 from "../components/PredictionFormStep1";
 import PredictionFormStep2 from "../components/PredictionFormStep2";
 import ProgramSelection from "../components/ProgramSelection";
@@ -30,6 +31,7 @@ export interface NewClientContainerProp
   saveLocationAndProgram: (selected_location: string) => void;
   clearErrors: () => void;
   clearClient: () => void;
+  getAvailablePrograms: () => Promise<void>;
 }
 
 export class NewClientContainer extends React.Component<
@@ -49,6 +51,7 @@ export class NewClientContainer extends React.Component<
   }
 
   componentDidMount() {
+    this.props.getAvailablePrograms();
     this.props.closeSnackbar();
   }
 
@@ -92,18 +95,26 @@ export class NewClientContainer extends React.Component<
   };
 
   submitProgram = async (client: Types.Client) => {
-    const { client: clientState } = this.props;
-    if (!clientState || !clientState.client) {
-      return false;
-    }
-    if (!clientState.client.client_code) {
+    // const { client: clientState } = this.props;
+    // if (!clientState || !clientState.client) {
+    //   return false;
+    // }
+    if (!client.client_code) {
       this.props.enqueueSnackbar(
         "Error. Client information is required to process this form."
       );
       return false;
     }
-    this.setState({ isLoading: true });
-    await this.props.submitPrediction(client);
+    try {
+      this.setState({ isLoading: true });
+      await this.props.submitPrediction(client);
+    } catch (error) {
+      console.log(error);
+      const errorMessage = error["referred_program"]
+        ? error["referred_program"][0]
+        : "An error occurred while saving.";
+      this.props.enqueueSnackbar(errorMessage);
+    }
     this.setState({ isLoading: false });
     // history.push("/program-selection");
   };
@@ -136,11 +147,13 @@ export class NewClientContainer extends React.Component<
   };
 
   render() {
-    const { client: clientState } = this.props;
+    const { client: clientState, program: programState } = this.props;
     let currentClient: Types.Client;
     // let currentErrors: Partial<Types.Client> | undefined;
     currentClient = clientState ? clientState.client : Types.emptyClient;
     // currentErrors = clientState ? clientState.errors : undefined;
+    const availableProgramList =
+      (programState && programState.availableProgramList) || [];
 
     return (
       <Switch>
@@ -152,6 +165,7 @@ export class NewClientContainer extends React.Component<
             onLocationSelect={this.saveProgramAndLocation}
             submitPrediction={this.submitProgram}
             isLoading={this.state.isLoading}
+            programList={availableProgramList}
           />
         </Route>
         <Route
@@ -195,7 +209,8 @@ export class NewClientContainer extends React.Component<
 
 const mapStateToProps = (state: AppState) => {
   return {
-    client: state.client
+    client: state.client,
+    program: state.program
   };
 };
 
@@ -206,7 +221,8 @@ const mapDispatchToProps = {
   getLocations: client.actions.getLocations,
   saveLocationAndProgram: client.actions.saveLocationAndProgram,
   clearErrors: client.actions.clearErrors,
-  clearClient: client.actions.clear
+  clearClient: client.actions.clear,
+  getAvailablePrograms: program.actions.getAvailablePrograms
 };
 
 export default connect(

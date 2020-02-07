@@ -4,10 +4,16 @@ import createReducer from "./createReducer";
 import { ProgramState } from "./definitions/State";
 import { AppState } from "../redux-modules/root";
 import * as Types from "../api/definitions";
-import { fetchPrograms, createProgram, updateProgram } from "../api/api";
+import {
+  fetchPrograms,
+  createProgram,
+  updateProgram,
+  fetchAvailablePrograms
+} from "../api/api";
 
 const initialState: ProgramState = {
-  programList: []
+  programList: [],
+  availableProgramList: []
 };
 
 const { reducer, update } = createReducer<ProgramState>(
@@ -26,6 +32,21 @@ export const actions = {
         throw Error("something went wrong getting list of programs");
       }
       dispatch(update({ programList: response }));
+    };
+  },
+
+  getAvailablePrograms(): ThunkAction<
+    Promise<void>,
+    AppState,
+    null,
+    AnyAction
+  > {
+    return async (dispatch, getState) => {
+      const response = await fetchAvailablePrograms();
+      if (!response) {
+        throw Error("something went wrong getting list of available programs");
+      }
+      dispatch(update({ availableProgramList: response }));
     };
   },
 

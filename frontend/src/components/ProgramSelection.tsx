@@ -16,12 +16,14 @@ import {
   inputField,
   label,
   fieldBox,
-  backdrop
+  backdrop,
+  radioBox
 } from "./styles";
 import * as Types from "../api/definitions";
 
 interface ProgramSelectionProps {
   client: Types.Client;
+  programList: Types.Program[];
   onProgramSelect: (selected_program: string) => void;
   onLocationSelect: (selected_location: string) => void;
   submitPrediction: (client: Types.Client) => void;
@@ -39,6 +41,13 @@ const ProgramSelection: React.FC<ProgramSelectionProps> = props => {
   const onLocationChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.currentTarget.value;
     props.onLocationSelect(value);
+  };
+
+  const isChecked = (p: string, values: Types.Client) => {
+    if (!values.program_type) {
+      return false;
+    }
+    return p.toLowerCase() === values.program_type.toLowerCase();
   };
 
   return (
@@ -76,9 +85,10 @@ const ProgramSelection: React.FC<ProgramSelectionProps> = props => {
                   <input
                     type="text"
                     name="Program"
+                    readOnly
                     css={inputField}
                     placeholder=""
-                    value={values.program_type || ""}
+                    value={values.model_program || ""}
                     onChange={handleChange}
                   />
                   <ErrorMessage component="span" name="Program" />
@@ -106,21 +116,46 @@ const ProgramSelection: React.FC<ProgramSelectionProps> = props => {
                 css={fieldRow}
                 style={{ flexWrap: "wrap", marginBottom: 16 }}
               >
-                <div css={fieldBox}>
+                {/*props.programList.length > 0 &&
+                  props.programList.map(p => {
+                    console.log(values.program_type);
+                    console.log(p.program_name.toLowerCase());
+                    return (
+                      <div css={radioBox} key={p.program}>
+                        <input
+                          type="radio"
+                          id={`id${p.program}`}
+                          onChange={handleChange}
+                          checked={
+                            values.program_type
+                              ? values.program_type.toLowerCase() ===
+                                p.program_name.toLowerCase()
+                              : false
+                          }
+                          name="program_type"
+                          value={p.program_name}
+                        />
+                        <label htmlFor={`id${p.program}`}>
+                          {p.program_name}
+                        </label>
+                      </div>
+                    );
+                  })*/}
+                <div css={radioBox}>
                   <input
                     type="radio"
                     onChange={handleChange}
-                    checked={values.program_type === "ISM"}
+                    checked={isChecked("ISM", values)}
                     id="ISM"
                     name="program_type"
                     value="ISM"
                   />
                   <label htmlFor="ISM">ISM</label>
                 </div>
-                <div css={fieldBox}>
+                <div css={radioBox}>
                   <input
                     type="radio"
-                    checked={values.program_type === "ISF"}
+                    checked={isChecked("ISF", values)}
                     onChange={handleChange}
                     id="ISF"
                     name="program_type"
@@ -128,10 +163,10 @@ const ProgramSelection: React.FC<ProgramSelectionProps> = props => {
                   />
                   <label htmlFor="ISF">ISF</label>
                 </div>
-                <div css={fieldBox}>
+                <div css={radioBox}>
                   <input
                     type="radio"
-                    checked={values.program_type === "MHFO"}
+                    checked={isChecked("MHFO", values)}
                     onChange={handleChange}
                     id="MHFO"
                     name="program_type"
@@ -139,95 +174,95 @@ const ProgramSelection: React.FC<ProgramSelectionProps> = props => {
                   />
                   <label htmlFor="MHFO">MHFO</label>
                 </div>
-                <div css={fieldBox}>
+                <div css={radioBox}>
                   <input
                     type="radio"
-                    checked={values.program_type === "SUBAB"}
+                    checked={isChecked("SUBAB", values)}
                     onChange={handleChange}
                     value="SUBAB"
                     name="program_type"
                   />
                   <label htmlFor="SUBAB">SUBAB</label>
                 </div>
-                <div css={fieldBox}>
+                <div css={radioBox}>
                   <input
                     type="radio"
-                    checked={values.program_type === "Diagnostic"}
+                    checked={isChecked("DIAGNOSTIC", values)}
                     onChange={handleChange}
-                    value="Diagnostic"
+                    value="DIAGNOSTIC"
                     name="program_type"
                   />
-                  <label htmlFor="Diagnostic">Diagnostic</label>
+                  <label htmlFor="DIAGNOSTIC">DIAGNOSTIC</label>
                 </div>
-                <div css={fieldBox}>
+                <div css={radioBox}>
                   <input
                     type="radio"
-                    checked={values.program_type === "SEXOF-MH"}
+                    checked={isChecked("SEXOF-MH", values)}
                     onChange={handleChange}
                     value="SEXOF-MH"
                     name="program_type"
                   />
                   <label htmlFor="SEXOF-MH">SEXOF-MH</label>
                 </div>
-                <div css={fieldBox}>
+                <div css={radioBox}>
                   <input
                     type="radio"
-                    checked={values.program_type === "SEXOF-Secure"}
+                    checked={isChecked("SEXOF-SECURE", values)}
                     onChange={handleChange}
-                    value="SEXOF-Secure"
+                    value="SEXOF-SECURE"
                     name="program_type"
                   />
-                  <label htmlFor="SEXOF-Secure">SEXOF-Secure</label>
+                  <label htmlFor="SEXOF-SECURE">SEXOF-SECURE</label>
                 </div>
-                <div css={fieldBox}>
+                <div css={radioBox}>
                   <input
                     type="radio"
-                    checked={values.program_type === "SEXOF"}
+                    checked={isChecked("SEXOF", values)}
                     onChange={handleChange}
                     value="SEXOF"
                     name="program_type"
                   />
                   <label htmlFor="SEXOF">SEXOF</label>
                 </div>
-                <div css={fieldBox}>
+                <div css={radioBox}>
                   <input
                     type="radio"
-                    checked={values.program_type === "Enhanced"}
+                    checked={isChecked("ENHANCED", values)}
                     onChange={handleChange}
-                    value="Enhanced"
+                    value="ENHANCED"
                     name="program_type"
                   />
-                  <label htmlFor="Enhanced">Enhanced</label>
+                  <label htmlFor="ENHANCED">ENHANCED</label>
                 </div>
-                <div css={fieldBox}>
+                <div css={radioBox}>
                   <input
                     type="radio"
-                    checked={values.program_type === "Secure-Male"}
+                    checked={isChecked("SECURE-MALE", values)}
                     onChange={handleChange}
-                    value="Secure-Male"
+                    value="SECURE-MALE"
                     name="program_type"
                   />
-                  <label htmlFor="Secure-Male">Secure-Male</label>
+                  <label htmlFor="SECURE-MALE">SECURE-MALE</label>
                 </div>
-                <div css={fieldBox}>
+                <div css={radioBox}>
                   <input
                     type="radio"
-                    checked={values.program_type === "Secure-Female"}
+                    checked={isChecked("SECURE-FEMALE", values)}
                     onChange={handleChange}
-                    value="Secure-Female"
+                    value="SECURE-FEMALE"
                     name="program_type"
                   />
-                  <label htmlFor="Secure-Female">Secure-Female</label>
+                  <label htmlFor="SECURE-FEMALE">SECURE-FEMALE</label>
                 </div>
-                <div css={fieldBox}>
+                <div css={radioBox}>
                   <input
                     type="radio"
-                    checked={values.program_type === "Independent-Living"}
+                    checked={isChecked("INDEPENDENT-LIVING", values)}
                     onChange={handleChange}
-                    value="Independent-Living"
+                    value="INDEPENDENT-LIVING"
                     name="program_type"
                   />
-                  <label htmlFor="Independent-Living">Independent Living</label>
+                  <label htmlFor="INDEPENDENT-LIVING">Independent Living</label>
                 </div>
               </div>
 

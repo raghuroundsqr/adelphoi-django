@@ -232,7 +232,10 @@ const PredictionFormStep1: React.FC<PredictionFormStep1Props> = props => {
                 </div>
                 <div css={twoCol} style={{ width: "42%" }}>
                   <label css={label}>Sex</label>
-                  <div css={fieldBox} style={{ width: "47.8%" }}>
+                  <div
+                    css={fieldBox}
+                    style={{ width: "47.8%", display: "inline-block" }}
+                  >
                     <input
                       type="radio"
                       onChange={handleChange}
@@ -243,7 +246,10 @@ const PredictionFormStep1: React.FC<PredictionFormStep1Props> = props => {
                     />{" "}
                     <label htmlFor="female">Female</label>
                   </div>
-                  <div css={fieldBox} style={{ width: "47.8%" }}>
+                  <div
+                    css={fieldBox}
+                    style={{ width: "47.8%", display: "inline-block" }}
+                  >
                     <input
                       type="radio"
                       onChange={handleChange}
