@@ -389,6 +389,25 @@ const PredictionFormStep2: React.FC<PredictionFormStep2Props> = props => {
                   <ErrorMessage component="span" name="cans_Trauma_Exp" />
                 </div>
               </div>
+              <div css={fieldRow}>
+                <div css={twoCol}>
+                  <label css={label} htmlFor="inclusionary_criteria">
+                    Inclusionary Criteria
+                  </label>
+                </div>
+                <div css={twoCol}>
+                  <input
+                    type="checkbox"
+                    name="inclusionary_criteria"
+                    id="inclusionary_criteria"
+                    // css={inputField}
+                    checked={values.inclusionary_criteria}
+                    value="true"
+                    onChange={handleChange}
+                  />
+                  <ErrorMessage component="span" name="inclusionary_criteria" />
+                </div>
+              </div>
               <div css={fieldRow} style={{ justifyContent: "flex-end" }}>
                 <Button
                   type="button"

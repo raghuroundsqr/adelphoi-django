@@ -76,6 +76,7 @@ export interface Client {
   Level_of_care: string | null;
   SuggestedLocations: string[] | null;
   result_final: string | null;
+  inclusionary_criteria: boolean;
 }
 
 export interface Program {
@@ -96,7 +97,6 @@ export interface Configuration {
   facility_type: number | null;
   program_model_suggested: string;
   program_type: string;
-  inclusionary_criteria: string;
 }
 
 export interface Prediction {
@@ -194,7 +194,8 @@ export const emptyClient: Client = {
   Level_of_care: null,
   SuggestedLocations: null,
   model_program: null,
-  result_final: null
+  result_final: null,
+  inclusionary_criteria: false
 };
 
 export const emptyConfiguration: Configuration = {
@@ -204,8 +205,7 @@ export const emptyConfiguration: Configuration = {
   location: [],
   facility_type: null,
   program_model_suggested: "",
-  program_type: "",
-  inclusionary_criteria: ""
+  program_type: ""
 };
 
 export const primary_language: string[] = ["", "English", "Other"];
