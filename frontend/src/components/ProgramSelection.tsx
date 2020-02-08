@@ -273,7 +273,7 @@ const ProgramSelection: React.FC<ProgramSelectionProps> = props => {
                   variant="contained"
                   color="primary"
                 >
-                  Submit
+                  Get Locations
                 </Button>
               </div>
             </form>

@@ -1,6 +1,8 @@
 import * as Yup from "yup";
 import { searchClient } from "../api/api";
 
+let clientCodeResponse: { [key: number]: boolean } = {};
+
 export const Step1ValidationSchema = Yup.object().shape({
   episode_start: Yup.string()
     .required("Required")
@@ -17,10 +19,19 @@ export const Step1ValidationSchema = Yup.object().shape({
     .integer()
     .typeError("Invalid. Enter numeric code.")
     .test("is-duplicate", "client code already exists", async value => {
-      const response = await searchClient(value);
-      if (response && response.length > 0) {
+      if (!value) {
         return false;
       }
+      // console.log(clientCodeResponse);
+      if (value in clientCodeResponse) {
+        return clientCodeResponse[value];
+      }
+      const response = await searchClient(value);
+      if (response && response.length > 0) {
+        clientCodeResponse[value] = false;
+        return false;
+      }
+      clientCodeResponse[value] = true;
       return true;
     })
     .nullable(),
@@ -89,12 +100,12 @@ export const Step1ValidationSchema = Yup.object().shape({
     .nullable(),
   significant_mental_health_symptoms: Yup.number()
     .required("Required")
-    .positive()
+    .min(0)
     .integer()
     .nullable(),
   prior_hospitalizations: Yup.number()
     .required("Required")
-    .positive()
+    .min(0)
     .integer()
     .nullable(),
   severe_mental_health_symptoms: Yup.string()

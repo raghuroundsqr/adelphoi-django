@@ -322,9 +322,7 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
                 </label>
                 <div css={txtDetail}>
                   {client.prior_hospitalizations !== null
-                    ? Types.severe_mental_health_symptoms[
-                        client.prior_hospitalizations
-                      ]
+                    ? client.prior_hospitalizations
                     : ""}
                 </div>
               </div>

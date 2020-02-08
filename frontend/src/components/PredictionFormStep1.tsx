@@ -419,8 +419,8 @@ const PredictionFormStep1: React.FC<PredictionFormStep1Props> = props => {
                     onChange={handleChange}
                   >
                     <option value="">Select</option>
-                    <option value="2">African American</option>
                     <option value="1">Caucasian</option>
+                    <option value="2">African American</option>
                     <option value="3">Hispanic</option>
                     <option value="4">Other</option>
                   </select>

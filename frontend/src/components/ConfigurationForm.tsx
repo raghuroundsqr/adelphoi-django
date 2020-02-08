@@ -207,7 +207,7 @@ const ConfigurationForm: React.FC<ConfigurationFormProps> = props => {
               </div>
               <div css={fieldRow}>
                 <div css={twoCol}>
-                  <label css={label}>Program Suggested</label>
+                  <label css={label}>Program Name</label>
                   <input
                     css={inputField}
                     name="program_model_suggested"
@@ -224,7 +224,7 @@ const ConfigurationForm: React.FC<ConfigurationFormProps> = props => {
               </div>
               <div css={fieldRow}>
                 <div css={twoCol}>
-                  <label css={label}>Program Type</label>
+                  <label css={label}>Program Type (Abbreviation)</label>
                   <input
                     css={inputField}
                     name="program_type"

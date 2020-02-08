@@ -392,7 +392,8 @@ const PredictionFormStep2: React.FC<PredictionFormStep2Props> = props => {
               <div css={fieldRow}>
                 <div css={twoCol}>
                   <label css={label} htmlFor="inclusionary_criteria">
-                    Inclusionary Criteria
+                    Does this client meet inclusionary criteria for a sexual
+                    offense program?
                   </label>
                 </div>
                 <div css={twoCol}>
