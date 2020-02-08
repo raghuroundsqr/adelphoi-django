@@ -116,10 +116,10 @@ const ProgramSelection: React.FC<ProgramSelectionProps> = props => {
                 css={fieldRow}
                 style={{ flexWrap: "wrap", marginBottom: 16 }}
               >
-                {/*props.programList.length > 0 &&
+                {props.programList.length > 0 &&
                   props.programList.map(p => {
-                    console.log(values.program_type);
-                    console.log(p.program_name.toLowerCase());
+                    // console.log(values.program_type);
+                    // console.log(p.program_name.toLowerCase());
                     return (
                       <div css={radioBox} key={p.program}>
                         <input
@@ -140,7 +140,8 @@ const ProgramSelection: React.FC<ProgramSelectionProps> = props => {
                         </label>
                       </div>
                     );
-                  })*/}
+                  })}
+                {/*
                 <div css={radioBox}>
                   <input
                     type="radio"
@@ -263,7 +264,7 @@ const ProgramSelection: React.FC<ProgramSelectionProps> = props => {
                     name="program_type"
                   />
                   <label htmlFor="INDEPENDENT-LIVING">Independent Living</label>
-                </div>
+                </div>*/}
               </div>
 
               <div css={fieldRow} style={{ justifyContent: "flex-end" }}>

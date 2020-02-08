@@ -9,6 +9,7 @@ interface PredictionResponse {
 }
 
 interface LocationsResponse {
+  result?: string;
   "Suggested Locations": string[];
 }
 
@@ -156,7 +157,6 @@ export const updateLocation = async (location: Types.Location) => {
   }
 };
 
-// TODO - new api for this fn.
 export const fetchLocations = async (
   client_code: string,
   referred_program: string
@@ -166,10 +166,10 @@ export const fetchLocations = async (
       `${baseApiUrl}/location/${client_code}?referred_program=${referred_program}`
     );
     const data = (response.data as unknown) as LocationsResponse;
-
-    return data["Suggested Locations"];
+    return data;
+    // return data["Suggested Locations"];
   } catch (error) {
-    console.error("api function getLocations error");
+    console.error("api function fetchLocations error");
     throwError(error);
   }
 };
@@ -189,7 +189,7 @@ export const saveLocationAndProgram = async (
     );
     return response.data;
   } catch (error) {
-    console.error("api function getLocations error");
+    console.error("api function saveLocationAndProgram error");
     throwError(error);
   }
 };
@@ -209,7 +209,7 @@ export const updateProgramCompletion = async (
     );
     return response.data.data;
   } catch (error) {
-    console.error("api function getLocations error");
+    console.error("api function updateProgramCompletion error");
     throwError(error);
   }
 };

@@ -66,7 +66,7 @@ export class NewClientContainer extends React.Component<
         this.props.saveClient(client, true, true);
         await this.props.insertClient(client);
         this.setState({ isLoading: false });
-        this.props.enqueueSnackbar("Data saved successfully.");
+        this.props.enqueueSnackbar("Thanks for registering with ADELPHOI");
         this.props.clearErrors();
       } catch (error) {
         console.log(error);
@@ -109,10 +109,12 @@ export class NewClientContainer extends React.Component<
       this.setState({ isLoading: true });
       await this.props.submitPrediction(client);
     } catch (error) {
-      console.log(error);
-      const errorMessage = error["referred_program"]
-        ? error["referred_program"][0]
-        : "An error occurred while saving.";
+      let errorMessage: string = "An error occurred while saving.";
+      if (error["referred_program"]) {
+        errorMessage = error["referred_program"][0];
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
       this.props.enqueueSnackbar(errorMessage);
     }
     this.setState({ isLoading: false });

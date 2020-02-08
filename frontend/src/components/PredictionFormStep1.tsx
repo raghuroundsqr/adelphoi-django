@@ -849,7 +849,6 @@ const PredictionFormStep1: React.FC<PredictionFormStep1Props> = props => {
                   type="checkbox"
                   onChange={handleChange} //() => onExclusionaryCriteriaChange(handleChange)}
                   defaultChecked={values.Exclusionary_Criteria === true}
-                  // checked={values.Exclusionary_Criteria === "true"}
                   value="true"
                 />
                 <label css={label} htmlFor="Exclusionary_Criteria">
