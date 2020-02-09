@@ -196,8 +196,8 @@ export const saveLocationAndProgram = async (
 
 export const updateProgramCompletion = async (
   client_code: string,
-  Program_Completion: string,
-  Returned_to_Care: string
+  Program_Completion: number,
+  Returned_to_Care: number
 ) => {
   try {
     const response = await axios.put(

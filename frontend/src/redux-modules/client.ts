@@ -39,8 +39,8 @@ export const actions = {
 
   updateProgramCompletion(
     client_code: string,
-    Program_Completion: string,
-    Returned_to_Care: string
+    Program_Completion: number,
+    Returned_to_Care: number
   ): ThunkAction<Promise<string>, AppState, null, AnyAction> {
     return async (dispatch, getState) => {
       const response = await updateProgramCompletion(
@@ -51,8 +51,23 @@ export const actions = {
       if (!response) {
         throw Error("something went wrong while submitting");
       }
-      return (response as unknown) as string;
+      // return (response as unknown) as string;
+      const clientState = getState().client;
+      const clientList = clientState ? clientState.clientList : [];
+      if (clientList.length > 0) {
+        const cl = clientList.find(c => c.client_code === client_code);
+        if (!cl) {
+          return (response as unknown) as string;
+        }
+        const updatedCl = {
+          ...cl,
+          Program_Completion,
+          Returned_to_Care
+        };
+        dispatch(update({ clientList: [updatedCl, ...clientList] }));
+      }
       // dispatch(update({ client: clresult }));
+      return (response as unknown) as string;
     };
   },
 

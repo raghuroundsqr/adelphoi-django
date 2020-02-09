@@ -22,13 +22,15 @@ import {
 } from "./styles";
 import * as Types from "../api/definitions";
 import { baseApiUrl } from "../api/api";
+import ProgramList from "./ProgramList";
 
 interface ClientDetailsProps {
   clientList: Types.Client[];
+  programList: Types.Program[];
   onFormSubmit: (
     client_code: string,
-    program_completion: string,
-    returned_to_care: string
+    program_completion: number,
+    returned_to_care: number
   ) => void;
   isLoading: boolean;
   hasError: boolean;
@@ -37,14 +39,9 @@ interface ClientDetailsProps {
 }
 
 interface FormValues {
-  Program_Completion: string;
-  Returned_to_Care: string;
+  Program_Completion: number | null;
+  Returned_to_Care: number | null;
 }
-
-const initialValues: FormValues = {
-  Program_Completion: "",
-  Returned_to_Care: ""
-};
 
 const ClientDetails: React.FC<ClientDetailsProps> = props => {
   let { index } = useParams();
@@ -56,6 +53,16 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
     return <h1 css={subHeading}>No client found</h1>;
   }
 
+  const initialValues: FormValues = {
+    Program_Completion: client.Program_Completion,
+    Returned_to_Care: client.Returned_to_Care
+  };
+  let referred_program: Types.Program | undefined = undefined;
+  if (client.referred_program) {
+    referred_program = props.programList.find(
+      c => client.referred_program === c.program.toString()
+    );
+  }
   return (
     <div css={wrap}>
       <div css={mainContent}>
@@ -548,7 +555,9 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
 
         <div css={fieldRow}>
           <div css={twoCol}>
-            <div css={txtDetail}>{client.referred_program}</div>
+            <div css={txtDetail}>
+              {referred_program ? referred_program.program_name : ""}
+            </div>
           </div>
         </div>
 
@@ -567,13 +576,17 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
           }}
           onSubmit={async (values, helpers) => {
             console.log(values);
-            if (!client.client_code) {
+            if (
+              !client.client_code ||
+              !values.Program_Completion ||
+              !values.Returned_to_Care
+            ) {
               return false;
             }
             await props.onFormSubmit(
               client.client_code,
-              values.Program_Completion,
-              values.Returned_to_Care
+              Number(values.Program_Completion),
+              Number(values.Returned_to_Care)
             );
             // helpers.resetForm();
           }}
@@ -590,7 +603,7 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
                       name="Program_Completion"
                       id="Program_Completion-yes"
                       value="1"
-                      checked={values.Program_Completion === "1"}
+                      checked={Number(values.Program_Completion) === 1}
                     />{" "}
                     <label htmlFor="Program_Completion-yes">Yes</label>
                   </div>
@@ -601,7 +614,7 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
                       name="Program_Completion"
                       id="Program_Completion-no"
                       value="0"
-                      checked={values.Program_Completion === "0"}
+                      checked={Number(values.Program_Completion) === 0}
                     />{" "}
                     <label htmlFor="Program_Completion-no">No</label>
                   </div>
@@ -618,7 +631,7 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
                       name="Returned_to_Care"
                       id="Returned_to_Care-yes"
                       value="1"
-                      checked={values.Returned_to_Care === "1"}
+                      checked={Number(values.Returned_to_Care) === 1}
                     />{" "}
                     <label htmlFor="Returned_to_Care-yes">Yes</label>
                   </div>
@@ -629,7 +642,7 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
                       name="Returned_to_Care"
                       id="Returned_to_Care-no"
                       value="0"
-                      checked={values.Returned_to_Care === "0"}
+                      checked={Number(values.Returned_to_Care) === 0}
                     />{" "}
                     <label htmlFor="Returned_to_Care-no">No</label>
                   </div>

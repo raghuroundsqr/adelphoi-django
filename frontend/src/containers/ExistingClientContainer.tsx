@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { Switch, Route } from "react-router-dom";
 import { withSnackbar, WithSnackbarProps } from "notistack";
 import { AppState } from "../redux-modules/root";
+import * as program from "../redux-modules/program";
 import { ContainerProps } from "./Container";
 import * as client from "../redux-modules/client";
 import ClientSearch from "../components/ClientSearch";
@@ -21,9 +22,10 @@ export interface ExistingClientContainerProp
   searchClient: (client_code: string, client_name: string) => void;
   updateProgramCompletion: (
     client_code: string,
-    program_completion: string,
-    returned_to_care: string
+    program_completion: number,
+    returned_to_care: number
   ) => Promise<string>;
+  getAvailablePrograms: () => Promise<void>;
 }
 
 export class ExistingClientContainer extends React.Component<
@@ -44,19 +46,18 @@ export class ExistingClientContainer extends React.Component<
   }
 
   componentDidMount() {
-    // this.props.closeSnackbar();
+    this.props.closeSnackbar();
+    this.props.getAvailablePrograms();
   }
 
   searchClient = async (client_code: string, client_name: string) => {
-    // const { history } = this.props;
     await this.props.searchClient(client_code, client_name);
-    // history.push("/new-client/2");
   };
 
   updateProgramCompletion = async (
     client_code: string,
-    program_completion: string,
-    returned_to_care: string
+    program_completion: number,
+    returned_to_care: number
   ) => {
     this.setState({ isLoading: true });
     try {
@@ -79,9 +80,12 @@ export class ExistingClientContainer extends React.Component<
   };
 
   render() {
-    const { client: clientState } = this.props;
+    const { client: clientState, program: programState } = this.props;
 
     const clientList = (clientState && clientState.clientList) || [];
+    const availableProgramList =
+      (programState && programState.availableProgramList) || [];
+
     return (
       <Switch>
         <Route exact path="/existing-client">
@@ -97,6 +101,7 @@ export class ExistingClientContainer extends React.Component<
             {...this.state}
             onFormSubmit={this.updateProgramCompletion}
             program_completion_response={this.state.program_completion_response}
+            programList={availableProgramList}
           />
         </Route>
       </Switch>
@@ -106,13 +111,15 @@ export class ExistingClientContainer extends React.Component<
 
 const mapStateToProps = (state: AppState) => {
   return {
-    client: state.client
+    client: state.client,
+    program: state.program
   };
 };
 
 const mapDispatchToProps = {
   searchClient: client.actions.searchClient,
-  updateProgramCompletion: client.actions.updateProgramCompletion
+  updateProgramCompletion: client.actions.updateProgramCompletion,
+  getAvailablePrograms: program.actions.getAvailablePrograms
 };
 
 export default connect(

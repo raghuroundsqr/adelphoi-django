@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Switch, Route, Link } from "react-router-dom";
+import { Switch, Route } from "react-router-dom";
 import { withSnackbar, WithSnackbarProps } from "notistack";
 import * as Types from "../api/definitions";
 import { AppState } from "../redux-modules/root";
@@ -51,8 +51,8 @@ export class NewClientContainer extends React.Component<
   }
 
   componentDidMount() {
-    this.props.getAvailablePrograms();
     this.props.closeSnackbar();
+    this.props.getAvailablePrograms();
   }
 
   saveClientStep1 = async (client: Types.Client) => {

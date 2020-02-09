@@ -77,6 +77,8 @@ export interface Client {
   SuggestedLocations: string[] | null;
   result_final: string | null;
   inclusionary_criteria: boolean;
+  Program_Completion: number | null;
+  Returned_to_Care: number | null;
 }
 
 export interface Program {
@@ -195,7 +197,9 @@ export const emptyClient: Client = {
   SuggestedLocations: null,
   model_program: null,
   result_final: null,
-  inclusionary_criteria: false
+  inclusionary_criteria: false,
+  Program_Completion: null,
+  Returned_to_Care: null
 };
 
 export const emptyConfiguration: Configuration = {
