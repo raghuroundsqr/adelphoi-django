@@ -46,7 +46,7 @@ const menuButton = css`
   @media all and (max-width: 520px) {
     width: 110px;
     height: 80px;
-    font-size: 12px;
+    font-size: 12px !important;
   }
   @media all and (max-width: 768px) {
     font-size: 16px;

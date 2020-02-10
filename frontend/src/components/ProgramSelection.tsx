@@ -116,7 +116,7 @@ const ProgramSelection: React.FC<ProgramSelectionProps> = props => {
                 css={fieldRow}
                 style={{ flexWrap: "wrap", marginBottom: 16 }}
               >
-                {props.programList.length > 0 &&
+                {/* props.programList.length > 0 &&
                   props.programList.map(p => {
                     // console.log(values.program_type);
                     // console.log(p.program_name.toLowerCase());
@@ -140,8 +140,8 @@ const ProgramSelection: React.FC<ProgramSelectionProps> = props => {
                         </label>
                       </div>
                     );
-                  })}
-                {/*
+                  })*/}
+
                 <div css={radioBox}>
                   <input
                     type="radio"
@@ -258,13 +258,13 @@ const ProgramSelection: React.FC<ProgramSelectionProps> = props => {
                 <div css={radioBox}>
                   <input
                     type="radio"
-                    checked={isChecked("INDEPENDENT-LIVING", values)}
+                    checked={isChecked("INDEPENDENT LIVING", values)}
                     onChange={handleChange}
-                    value="INDEPENDENT-LIVING"
+                    value="INDEPENDENT LIVING"
                     name="program_type"
                   />
                   <label htmlFor="INDEPENDENT-LIVING">Independent Living</label>
-                </div>*/}
+                </div>
               </div>
 
               <div css={fieldRow} style={{ justifyContent: "flex-end" }}>

@@ -122,7 +122,8 @@ export const radioBox = css`
   border-bottom: 1px solid #8284e5;
   background-color: #f5f5f5;
   margin-right: 5px;
-  width: 135px;
+  margin-bottom: 5px;
+  width: 150px;
   & label {
     margin-left: 5px;
   }
