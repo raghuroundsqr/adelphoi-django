@@ -58,7 +58,6 @@ const ClientSearch: React.FC<ClientSearchProps> = props => {
             return errors;
           }}
           onSubmit={async (values, helpers) => {
-            console.log(values);
             await props.onFormSubmit(values.client_code, values.client_name);
             // helpers.resetForm();
           }}
@@ -113,12 +112,14 @@ const ClientSearch: React.FC<ClientSearchProps> = props => {
             </TableHead>
             <TableBody>
               {clientList.length > 0 ? (
-                clientList.map((cl, index) => (
+                clientList.map(cl => (
                   <TableRow
                     hover
                     key={cl.client_code || undefined}
                     onClick={() =>
-                      history.push(`existing-client/client-details/${index}`)
+                      history.push(
+                        `existing-client/client-details/${cl.client_code}`
+                      )
                     }
                     css={tableRow}
                   >

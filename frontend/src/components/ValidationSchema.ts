@@ -22,7 +22,6 @@ export const Step1ValidationSchema = Yup.object().shape({
       if (!value) {
         return false;
       }
-      // console.log(clientCodeResponse);
       if (value in clientCodeResponse) {
         return clientCodeResponse[value];
       }

@@ -2,7 +2,9 @@ import * as Types from "../../api/definitions"; // CRA does not support abs path
 import { FormikErrors } from "formik";
 export interface ClientState {
   client: Types.Client;
-  clientList: Types.Client[];
+  clientList: {
+    [key: string]: Types.Client;
+  };
   errors: FormikErrors<Types.Client>;
   excludePage2: boolean;
   page1FormCompleted: boolean;

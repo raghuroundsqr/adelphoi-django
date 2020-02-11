@@ -148,8 +148,6 @@ const LocationList: React.FC<LocationListProps> = props => {
               return errors;
             }}
             onSubmit={async (values, helpers) => {
-              console.log(values);
-
               try {
                 if (editingLocation) {
                   const location: Types.Location = {

@@ -64,12 +64,8 @@ const EpisodeStartPicker: React.FC<FormikProps<Types.Client> &
         value={field.value}
         css={inputField}
         onChange={date => {
-          console.log(date);
           form.setFieldValue(field.name, date, false);
-          // const age = getAge(date) || "";
-          // form.setFieldValue("age", age, false);
         }}
-        // error={(currentError && currentTouched) || false}
         placeholder="dd/mm/yyyy"
         views={["year", "month", "date"]}
         openTo="year"
@@ -94,12 +90,10 @@ const DobPicker: React.FC<FormikProps<Types.Client> & FieldProps> = props => {
         value={field.value}
         css={inputField}
         onChange={date => {
-          console.log(date);
           form.setFieldValue(field.name, date, false);
           const age = getAge(date) || "";
           form.setFieldValue("age", age, false);
         }}
-        // error={(currentError && currentTouched) || false}
         placeholder="dd/mm/yyyy"
         views={["year", "month", "date"]}
         openTo="year"
@@ -848,7 +842,7 @@ const PredictionFormStep1: React.FC<PredictionFormStep1Props> = props => {
                   id="Exclusionary_Criteria"
                   type="checkbox"
                   onChange={handleChange} //() => onExclusionaryCriteriaChange(handleChange)}
-                  defaultChecked={values.Exclusionary_Criteria === true}
+                  checked={values.Exclusionary_Criteria === true}
                   value="true"
                 />
                 <label css={label} htmlFor="Exclusionary_Criteria">

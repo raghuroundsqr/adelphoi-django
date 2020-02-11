@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, RouteComponentProps } from "react-router-dom";
 import { withSnackbar, WithSnackbarProps } from "notistack";
 import { AppState } from "../redux-modules/root";
 import * as program from "../redux-modules/program";
@@ -8,6 +8,12 @@ import { ContainerProps } from "./Container";
 import * as client from "../redux-modules/client";
 import ClientSearch from "../components/ClientSearch";
 import ClientDetails from "../components/ClientDetails";
+
+interface MatchParams {
+  index: string;
+}
+
+interface MatchProps extends RouteComponentProps<MatchParams> {}
 
 export interface ExistingClientContainerState {
   isLoading: boolean;
@@ -67,22 +73,23 @@ export class ExistingClientContainer extends React.Component<
         returned_to_care
       );
       this.setState({
-        isLoading: false,
-        program_completion_response: response
+        isLoading: false
+        // program_completion_response: response
       });
+      this.props.enqueueSnackbar("Data saved successfully.");
     } catch (error) {
       this.setState({
-        isLoading: false,
-        program_completion_response: "An error occured. Please try again."
+        isLoading: false
+        // program_completion_response: "An error occured. Please try again."
       });
+      this.props.enqueueSnackbar("An error occured. Please try again.");
     }
-    // history.push("/new-client/2");
   };
 
   render() {
     const { client: clientState, program: programState } = this.props;
 
-    const clientList = (clientState && clientState.clientList) || [];
+    const clientList = (clientState && clientState.clientList) || {};
     const availableProgramList =
       (programState && programState.availableProgramList) || [];
 
@@ -90,20 +97,29 @@ export class ExistingClientContainer extends React.Component<
       <Switch>
         <Route exact path="/existing-client">
           <ClientSearch
-            clientList={clientList}
+            clientList={Object.values(clientList)}
             {...this.state}
             onFormSubmit={this.searchClient}
           />
         </Route>
-        <Route exact path="/existing-client/client-details/:index">
-          <ClientDetails
-            clientList={clientList}
-            {...this.state}
-            onFormSubmit={this.updateProgramCompletion}
-            program_completion_response={this.state.program_completion_response}
-            programList={availableProgramList}
-          />
-        </Route>
+        <Route
+          exact
+          path="/existing-client/client-details/:index"
+          render={({ match }: MatchProps) => {
+            const { index } = match.params;
+            return (
+              <ClientDetails
+                client={clientList[index]}
+                {...this.state}
+                onFormSubmit={this.updateProgramCompletion}
+                program_completion_response={
+                  this.state.program_completion_response
+                }
+                programList={availableProgramList}
+              />
+            );
+          }}
+        ></Route>
       </Switch>
     );
   }

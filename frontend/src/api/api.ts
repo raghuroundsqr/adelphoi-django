@@ -31,6 +31,9 @@ export const insertClient = async (client: Types.Client) => {
     if (response.data["ERROR"] && response.data["ERROR"].trim() !== "") {
       throw new Error(response.data["ERROR"]);
     }
+    if (response.data["Result"] && response.data["Result"].trim() !== "") {
+      return response.data;
+    }
     const r = {
       ...response.data,
       program_type: response.data.program_type[0],

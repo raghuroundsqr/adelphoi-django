@@ -108,7 +108,6 @@ const ConfigurationForm: React.FC<ConfigurationFormProps> = props => {
                       }}
                       value={values.location}
                       onChange={e => {
-                        console.log(e);
                         handleChange(e);
                       }}
                       input={<Input id="locations-input" />}

@@ -17,7 +17,7 @@ import {
 
 const initialState: ClientState = {
   client: Types.emptyClient,
-  clientList: [],
+  clientList: {},
   errors: {},
   excludePage2: false,
   page1FormCompleted: false,
@@ -53,9 +53,9 @@ export const actions = {
       }
       // return (response as unknown) as string;
       const clientState = getState().client;
-      const clientList = clientState ? clientState.clientList : [];
-      if (clientList.length > 0) {
-        const cl = clientList.find(c => c.client_code === client_code);
+      const clientList = clientState ? clientState.clientList : {};
+      if (Object.keys(clientList).length > 0) {
+        const cl = clientList[client_code];
         if (!cl) {
           return (response as unknown) as string;
         }
@@ -64,7 +64,14 @@ export const actions = {
           Program_Completion,
           Returned_to_Care
         };
-        dispatch(update({ clientList: [updatedCl, ...clientList] }));
+        if (!updatedCl.client_code) {
+          return (response as unknown) as string;
+        }
+        const updatedClList = {
+          ...clientList,
+          [updatedCl.client_code]: updatedCl
+        };
+        dispatch(update({ clientList: updatedClList }));
       }
       // dispatch(update({ client: clresult }));
       return (response as unknown) as string;
@@ -169,6 +176,10 @@ export const actions = {
           throw Error("something went wrong while saving the client");
         }
 
+        if (response["Result"] && response["Result"].trim() !== "") {
+          return client;
+        }
+
         const cl = {
           ...client,
           program_type: response.program_type || null,
@@ -191,9 +202,13 @@ export const actions = {
   ): ThunkAction<Promise<void>, AppState, null, AnyAction> {
     return async (dispatch, getState) => {
       const response = await searchClient(client_code, client_name);
-      // if (response && response.length > 0) {
-      dispatch(update({ clientList: response }));
-      // }
+      let clientList: { [key: string]: Types.Client } = {};
+      response.map((c: Types.Client) => {
+        if (c.client_code) {
+          return (clientList[c.client_code] = c);
+        }
+      });
+      dispatch(update({ clientList }));
     };
   },
 

@@ -25,7 +25,7 @@ import { baseApiUrl } from "../api/api";
 import ProgramList from "./ProgramList";
 
 interface ClientDetailsProps {
-  clientList: Types.Client[];
+  client: Types.Client;
   programList: Types.Program[];
   onFormSubmit: (
     client_code: string,
@@ -48,7 +48,7 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
   if (!index) {
     return <h1 css={subHeading}>No client found</h1>;
   }
-  const client = props.clientList[Number(index)];
+  const { client } = props;
   if (!client || !client.client_code) {
     return <h1 css={subHeading}>No client found</h1>;
   }
@@ -57,12 +57,12 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
     Program_Completion: client.Program_Completion,
     Returned_to_Care: client.Returned_to_Care
   };
-  let referred_program: Types.Program | undefined = undefined;
-  if (client.referred_program) {
-    referred_program = props.programList.find(
-      c => client.referred_program === c.program.toString()
-    );
-  }
+  // let referred_program: Types.Program | undefined = undefined;
+  // if (client.referred_program) {
+  //   referred_program = props.programList.find(
+  //     c => client.referred_program === c.program.toString()
+  //   );
+  // }
   return (
     <div css={wrap}>
       <div css={mainContent}>
@@ -155,7 +155,9 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
                 <label css={txtLabel}>C & Y Involvement</label>
 
                 <div css={txtDetail}>
-                  {Types.radioValues[Number(client.CYF_code)]}
+                  {client.CYF_code !== null
+                    ? Types.CYF_code[client.CYF_code]
+                    : "NA"}
                 </div>
               </div>
             </div>
@@ -555,9 +557,7 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
 
         <div css={fieldRow}>
           <div css={twoCol}>
-            <div css={txtDetail}>
-              {referred_program ? referred_program.program_name : ""}
-            </div>
+            <div css={txtDetail}>{client.client_selected_program}</div>
           </div>
         </div>
 
@@ -566,16 +566,15 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
           enableReinitialize
           validate={values => {
             const errors: FormikErrors<FormValues> = {};
-            if (!values.Program_Completion) {
+            if (values.Program_Completion === null) {
               errors.Program_Completion = "Required";
             }
-            if (!values.Returned_to_Care) {
+            if (values.Returned_to_Care === null) {
               errors.Returned_to_Care = "Required";
             }
             return errors;
           }}
           onSubmit={async (values, helpers) => {
-            console.log(values);
             if (
               !client.client_code ||
               !values.Program_Completion ||

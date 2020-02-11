@@ -62,7 +62,6 @@ const ProgramSelection: React.FC<ProgramSelectionProps> = props => {
           enableReinitialize
           // validationSchema={Step2ValidationSchema}
           onSubmit={async (values, helpers) => {
-            console.log(values);
             // add values to client state
             await props.submitPrediction(values);
             // helpers.resetForm();

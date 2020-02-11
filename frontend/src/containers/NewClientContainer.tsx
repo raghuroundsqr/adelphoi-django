@@ -60,7 +60,6 @@ export class NewClientContainer extends React.Component<
     this.props.clearErrors();
     // check excl criteria
     if (client.Exclusionary_Criteria) {
-      // return this.saveClientStep2(client);
       try {
         this.setState({ isLoading: true });
         this.props.saveClient(client, true, true);
@@ -68,6 +67,7 @@ export class NewClientContainer extends React.Component<
         this.setState({ isLoading: false });
         this.props.enqueueSnackbar("Thanks for registering with ADELPHOI");
         this.props.clearErrors();
+        this.props.clearClient();
       } catch (error) {
         console.log(error);
         this.setState({ isLoading: false });
@@ -118,7 +118,6 @@ export class NewClientContainer extends React.Component<
       this.props.enqueueSnackbar(errorMessage);
     }
     this.setState({ isLoading: false });
-    // history.push("/program-selection");
   };
 
   saveProgramAndLocation = async (selected_location: string) => {
@@ -126,10 +125,10 @@ export class NewClientContainer extends React.Component<
     if (!clientState || !clientState.client) {
       return false;
     }
-    console.log("saveProgramAndLocation called");
     this.setState({ isLoading: true });
     await this.props.saveLocationAndProgram(selected_location);
     this.setState({ isLoading: false });
+    this.props.clearClient();
     this.props.enqueueSnackbar("Data saved successfully.");
   };
 
@@ -151,9 +150,8 @@ export class NewClientContainer extends React.Component<
   render() {
     const { client: clientState, program: programState } = this.props;
     let currentClient: Types.Client;
-    // let currentErrors: Partial<Types.Client> | undefined;
     currentClient = clientState ? clientState.client : Types.emptyClient;
-    // currentErrors = clientState ? clientState.errors : undefined;
+
     const availableProgramList =
       (programState && programState.availableProgramList) || [];
 
