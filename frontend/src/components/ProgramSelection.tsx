@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import React from "react";
+import React, { useState } from "react";
 import { jsx } from "@emotion/core";
 // import { useHistory } from "react-router-dom";
 import { Formik, ErrorMessage } from "formik";
@@ -37,10 +37,19 @@ const ProgramSelection: React.FC<ProgramSelectionProps> = props => {
   //   const value = e.currentTarget.value;
   //   props.onProgramSelect(value);
   // };
+  const [selectedProgramLocation, setSelectedProgramLocation] = useState<
+    string | null
+  >(null);
 
   const onLocationChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.currentTarget.value;
-    props.onLocationSelect(value);
+    setSelectedProgramLocation(value);
+  };
+
+  const onLocationSubmit = () => {
+    if (selectedProgramLocation) {
+      props.onLocationSelect(selectedProgramLocation);
+    }
   };
 
   const isChecked = (p: string, values: Types.Client) => {
@@ -96,7 +105,7 @@ const ProgramSelection: React.FC<ProgramSelectionProps> = props => {
 
               <div css={fieldRow}>
                 <div css={twoCol}>
-                  <label css={label}>% Match</label>
+                  <label css={label}>PCR likelihood</label>
                 </div>
                 <div css={twoCol}>
                   <input
@@ -288,7 +297,7 @@ const ProgramSelection: React.FC<ProgramSelectionProps> = props => {
                 <select
                   css={selectField}
                   name="client_selected_location"
-                  value={props.client.client_selected_locations || ""}
+                  value={selectedProgramLocation || ""}
                   onChange={onLocationChange}
                 >
                   <option value="">Select</option>
@@ -298,6 +307,17 @@ const ProgramSelection: React.FC<ProgramSelectionProps> = props => {
                     </option>
                   ))}
                 </select>
+              </div>
+              <div css={fieldRow} style={{ justifyContent: "flex-end" }}>
+                <Button
+                  type="button"
+                  size="large"
+                  variant="contained"
+                  color="primary"
+                  onClick={onLocationSubmit}
+                >
+                  Submit
+                </Button>
               </div>
             </React.Fragment>
           )}

@@ -331,15 +331,15 @@ export const gender: ObjectLiteral = {
 
 export const radioValues = ["No", "Yes", "", "", "", "", "", "", "", "N/A"];
 
-export const borderline_IQ = ["<70", "70+"];
+export const borderline_IQ = ["70+", "<70"];
 
 export const episode_number: ObjectLiteral = {
-  "0": "No - Episode 1",
-  "1": "Yes - Episode 2",
-  "2": "Yes - Episode 3",
-  "3": "Yes - Episode 4",
-  "4": "Yes - Episode 5",
-  "5": "Yes - More than 5 episodes"
+  "1": "No - Episode 1",
+  "2": "Yes - Episode 2",
+  "3": "Yes - Episode 3",
+  "4": "Yes - Episode 4",
+  "5": "Yes - Episode 5",
+  "6": "Yes - More than 5 episodes"
 };
 
 export const severe_mental_health_symptoms: ObjectLiteral = {

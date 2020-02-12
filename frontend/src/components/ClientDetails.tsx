@@ -1,6 +1,7 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
 import { useParams } from "react-router-dom";
+import { format } from "date-fns";
 import { Formik, ErrorMessage, FormikErrors } from "formik";
 import Button from "@material-ui/core/Button";
 import ExpansionPanel from "@material-ui/core/ExpansionPanel";
@@ -88,7 +89,11 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
             <div css={fieldRow}>
               <div css={twoCol}>
                 <label css={txtLabel}>Date of Referral</label>
-                <div css={txtDetail}>{client.episode_start}</div>
+                <div css={txtDetail}>
+                  {client.episode_start
+                    ? format(new Date(client.episode_start), "MM-dd-yyyy")
+                    : ""}
+                </div>
               </div>
               <div css={twoCol}>
                 <label css={txtLabel}>Previously Referred</label>
@@ -116,7 +121,9 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
             <div css={fieldRow}>
               <div css={twoCol}>
                 <label css={txtLabel}>DOB</label>
-                <div css={txtDetail}>{client.dob}</div>
+                <div css={txtDetail}>
+                  {client.dob ? format(new Date(client.dob), "MM-dd-yyyy") : ""}
+                </div>
               </div>
               <div css={twoCol} style={{ width: 60 }}>
                 <label css={txtLabel}>Age</label>

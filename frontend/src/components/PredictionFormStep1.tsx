@@ -66,10 +66,10 @@ const EpisodeStartPicker: React.FC<FormikProps<Types.Client> &
         onChange={date => {
           form.setFieldValue(field.name, date, false);
         }}
-        placeholder="dd/mm/yyyy"
+        placeholder="mm/dd/yyyy"
         views={["year", "month", "date"]}
         openTo="year"
-        format="dd/MM/yyyy"
+        format="MM/dd/yyyy"
         {...other}
       />
     </MuiPickersUtilsProvider>
@@ -94,10 +94,10 @@ const DobPicker: React.FC<FormikProps<Types.Client> & FieldProps> = props => {
           const age = getAge(date) || "";
           form.setFieldValue("age", age, false);
         }}
-        placeholder="dd/mm/yyyy"
+        placeholder="mm/dd/yyyy"
         views={["year", "month", "date"]}
         openTo="year"
-        format="dd/MM/yyyy"
+        format="MM/dd/yyyy"
         {...other}
       />
     </MuiPickersUtilsProvider>
@@ -159,12 +159,12 @@ const PredictionFormStep1: React.FC<PredictionFormStep1Props> = props => {
                     onChange={handleChange}
                   >
                     <option value="">Select</option>
-                    <option value="0">No - Episode 1</option>
-                    <option value="1">Yes - Episode 2</option>
-                    <option value="2">Yes - Episode 3</option>
-                    <option value="3">Yes - Episode 4</option>
-                    <option value="4">Yes - Episode 5</option>
-                    <option value="5">Yes - More than 5 episodes</option>
+                    <option value="1">No - Episode 1</option>
+                    <option value="2">Yes - Episode 2</option>
+                    <option value="3">Yes - Episode 3</option>
+                    <option value="4">Yes - Episode 4</option>
+                    <option value="5">Yes - Episode 5</option>
+                    <option value="6">Yes - More than 5 episodes</option>
                   </select>
                   <ErrorMessage component="span" name="episode_number" />
                 </div>
