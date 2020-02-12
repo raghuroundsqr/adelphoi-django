@@ -116,7 +116,9 @@ const ConfigurationForm: React.FC<ConfigurationFormProps> = props => {
                           {(selected as string[]).map(value => (
                             <Chip
                               key={value}
-                              label={locations[Number(value)].location_names}
+                              label={
+                                locations[Number(value) - 1].location_names
+                              }
                               css={chip}
                             />
                           ))}

@@ -602,7 +602,11 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
                       name="Program_Completion"
                       id="Program_Completion-yes"
                       value="1"
-                      checked={Number(values.Program_Completion) === 1}
+                      checked={
+                        values.Program_Completion !== null
+                          ? Number(values.Program_Completion) === 1
+                          : false
+                      }
                     />{" "}
                     <label htmlFor="Program_Completion-yes">Yes</label>
                   </div>
@@ -613,7 +617,11 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
                       name="Program_Completion"
                       id="Program_Completion-no"
                       value="0"
-                      checked={Number(values.Program_Completion) === 0}
+                      checked={
+                        values.Program_Completion !== null
+                          ? Number(values.Program_Completion) === 0
+                          : false
+                      }
                     />{" "}
                     <label htmlFor="Program_Completion-no">No</label>
                   </div>
@@ -630,7 +638,11 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
                       name="Returned_to_Care"
                       id="Returned_to_Care-yes"
                       value="1"
-                      checked={Number(values.Returned_to_Care) === 1}
+                      checked={
+                        values.Returned_to_Care !== null
+                          ? Number(values.Returned_to_Care) === 1
+                          : false
+                      }
                     />{" "}
                     <label htmlFor="Returned_to_Care-yes">Yes</label>
                   </div>
@@ -641,7 +653,11 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
                       name="Returned_to_Care"
                       id="Returned_to_Care-no"
                       value="0"
-                      checked={Number(values.Returned_to_Care) === 0}
+                      checked={
+                        values.Returned_to_Care !== null
+                          ? Number(values.Returned_to_Care) === 0
+                          : false
+                      }
                     />{" "}
                     <label htmlFor="Returned_to_Care-no">No</label>
                   </div>
