@@ -22,8 +22,8 @@ import {
   fieldBox
 } from "./styles";
 import * as Types from "../api/definitions";
-import { baseApiUrl } from "../api/api";
-import ProgramList from "./ProgramList";
+// import { baseApiUrl } from "../api/api";
+// import ProgramList from "./ProgramList";
 
 interface ClientDetailsProps {
   client: Types.Client;
@@ -42,6 +42,7 @@ interface ClientDetailsProps {
 interface FormValues {
   Program_Completion: number | null;
   Returned_to_Care: number | null;
+  program_significantly_modified: number | null;
 }
 
 const ClientDetails: React.FC<ClientDetailsProps> = props => {
@@ -56,7 +57,8 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
 
   const initialValues: FormValues = {
     Program_Completion: client.Program_Completion,
-    Returned_to_Care: client.Returned_to_Care
+    Returned_to_Care: client.Returned_to_Care,
+    program_significantly_modified: client.program_significantly_modified
   };
   // let referred_program: Types.Program | undefined = undefined;
   // if (client.referred_program) {
@@ -67,7 +69,7 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
   return (
     <div css={wrap}>
       <div css={mainContent}>
-        <div style={{ textAlign: "right" }}>
+        {/* <div style={{ textAlign: "right" }}>
           <a
             rel="noopener noreferrer"
             target="_blank"
@@ -76,7 +78,7 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
           >
             Download PDF Report
           </a>
-        </div>
+        </div> */}
         <ExpansionPanel expanded>
           <ExpansionPanelSummary
             css={panelHeader}
@@ -671,6 +673,52 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
                   <ErrorMessage component="span" name="Returned_to_Care" />
                 </div>
               </div>
+              <div css={fieldRow}>
+                <div css={twoCol}>
+                  <label css={txtLabel}>
+                    Was the program significantly modified to treat this client?
+                  </label>
+                  <div css={fieldBox}>
+                    <input
+                      type="radio"
+                      onChange={handleChange}
+                      name="program_significantly_modified"
+                      id="program_significantly_modified-yes"
+                      value="1"
+                      checked={
+                        values.program_significantly_modified !== null
+                          ? Number(values.program_significantly_modified) === 1
+                          : false
+                      }
+                    />{" "}
+                    <label htmlFor="program_significantly_modified-yes">
+                      Yes
+                    </label>
+                  </div>
+                  <div css={fieldBox}>
+                    <input
+                      type="radio"
+                      onChange={handleChange}
+                      name="program_significantly_modified"
+                      id="program_significantly_modified-no"
+                      value="0"
+                      checked={
+                        values.program_significantly_modified !== null
+                          ? Number(values.program_significantly_modified) === 0
+                          : false
+                      }
+                    />{" "}
+                    <label htmlFor="program_significantly_modified-no">
+                      No
+                    </label>
+                  </div>
+                  <ErrorMessage
+                    component="span"
+                    name="program_significantly_modified"
+                  />
+                </div>
+              </div>
+
               <div css={fieldRow} style={{ justifyContent: "flex-end" }}>
                 <Button
                   type="submit"

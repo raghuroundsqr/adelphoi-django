@@ -92,7 +92,8 @@ const DobPicker: React.FC<FormikProps<Types.Client> & FieldProps> = props => {
         onChange={date => {
           form.setFieldValue(field.name, date, false);
           const age = getAge(date) || "";
-          form.setFieldValue("age", age, false);
+          // values.ageAtEpisodeStart = age;
+          form.setFieldValue("ageAtEpisodeStart", age, false);
         }}
         placeholder="mm/dd/yyyy"
         views={["year", "month", "date"]}
@@ -402,7 +403,7 @@ const PredictionFormStep1: React.FC<PredictionFormStep1Props> = props => {
                   <ErrorMessage component="span" name="CYF_code" />
                 </div>
               </div>
-              <div css={fieldRow}>
+              {/* <div css={fieldRow}>
                 <div css={twoCol}>
                   <label css={label}>Primary Race Code</label>
                   <select
@@ -420,7 +421,7 @@ const PredictionFormStep1: React.FC<PredictionFormStep1Props> = props => {
                   </select>
                   <ErrorMessage component="span" name="primaryRaceCode" />
                 </div>
-              </div>
+              </div> */}
               <h1 css={subHeading}>Placement History</h1>
               <div css={fieldRow}>
                 <div css={twoCol}>

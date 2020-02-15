@@ -11,7 +11,7 @@ export const Step1ValidationSchema = Yup.object().shape({
     .required("Required")
     .nullable(),
   primaryRaceCode: Yup.string()
-    .required("Required")
+    // .required("Required")
     .nullable(),
   client_code: Yup.number()
     .required("Required")

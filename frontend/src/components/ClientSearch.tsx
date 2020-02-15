@@ -127,7 +127,7 @@ const ClientSearch: React.FC<ClientSearchProps> = props => {
                     <TableCell>{cl.client_code}</TableCell>
                     <TableCell>{cl.age}</TableCell>
                     <TableCell>
-                      {cl.gender === "1" ? "Male" : "Female"}
+                      {cl.gender === "1" ? "Female" : "Male"}
                     </TableCell>
                   </TableRow>
                 ))

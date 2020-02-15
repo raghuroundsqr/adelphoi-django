@@ -79,6 +79,7 @@ export interface Client {
   inclusionary_criteria: boolean;
   Program_Completion: number | null;
   Returned_to_Care: number | null;
+  program_significantly_modified: number | null;
 }
 
 export interface Program {
@@ -199,7 +200,8 @@ export const emptyClient: Client = {
   result_final: null,
   inclusionary_criteria: false,
   Program_Completion: null,
-  Returned_to_Care: null
+  Returned_to_Care: null,
+  program_significantly_modified: null
 };
 
 export const emptyConfiguration: Configuration = {

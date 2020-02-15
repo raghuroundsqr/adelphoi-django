@@ -121,7 +121,7 @@ export class NewClientContainer extends React.Component<
   };
 
   saveProgramAndLocation = async (selected_location: string) => {
-    const { history } = this.props;
+    // const { history } = this.props;
     const { client: clientState } = this.props;
     if (!clientState || !clientState.client) {
       return false;
@@ -131,7 +131,7 @@ export class NewClientContainer extends React.Component<
     this.setState({ isLoading: false });
     this.props.clearClient();
     this.props.enqueueSnackbar("Data saved successfully.");
-    history.push("/new-client");
+    // history.push("/new-client");
   };
 
   saveClientStep2 = async (client: Types.Client) => {
