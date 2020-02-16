@@ -43,14 +43,23 @@ const ProgramSelection: React.FC<ProgramSelectionProps> = props => {
     string | null
   >(null);
 
+  const [locationError, setLocationError] = useState<string | null>(null);
+  const [clientCode, setClientCode] = useState<string | null>(null);
+
   const onLocationChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.currentTarget.value;
+    if (value) {
+      setLocationError(null);
+    }
     setSelectedProgramLocation(value);
   };
 
   const onLocationSubmit = () => {
     if (selectedProgramLocation) {
+      setClientCode(props.client.client_code);
       props.onLocationSelect(selectedProgramLocation);
+    } else {
+      setLocationError("Required");
     }
   };
 
@@ -71,9 +80,7 @@ const ProgramSelection: React.FC<ProgramSelectionProps> = props => {
         <Formik
           initialValues={props.client}
           enableReinitialize
-          // validationSchema={Step2ValidationSchema}
           onSubmit={async (values, helpers) => {
-            // add values to client state
             await props.submitPrediction(values);
             // helpers.resetForm();
           }}
@@ -330,6 +337,9 @@ const ProgramSelection: React.FC<ProgramSelectionProps> = props => {
                   ))}
                 </select>
               </div>
+              {locationError && (
+                <div style={{ color: "red" }}>{locationError}</div>
+              )}
               <div css={fieldRow} style={{ justifyContent: "flex-end" }}>
                 <Button
                   type="button"
@@ -344,13 +354,13 @@ const ProgramSelection: React.FC<ProgramSelectionProps> = props => {
               </div>
             </React.Fragment>
           )}
-        {props.client.result_final && (
+        {clientCode && (
           <div>
             <a
               css={[fieldRow, txtDetail]}
               rel="noopener noreferrer"
               target="_blank"
-              href={`${baseApiUrl}/index/${props.client.client_code}`}
+              href={`${baseApiUrl}/index/${clientCode}`}
             >
               <PictureAsPdfIcon /> Download Report
             </a>

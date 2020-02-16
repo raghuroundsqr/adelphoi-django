@@ -8,7 +8,10 @@ import ExpansionPanel from "@material-ui/core/ExpansionPanel";
 import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import Backdrop from "@material-ui/core/Backdrop";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import {
+  backdrop,
   wrap,
   subHeading,
   fieldRow,
@@ -31,7 +34,8 @@ interface ClientDetailsProps {
   onFormSubmit: (
     client_code: string,
     program_completion: number,
-    returned_to_care: number
+    returned_to_care: number,
+    program_significantly_modified: number
   ) => void;
   isLoading: boolean;
   hasError: boolean;
@@ -69,6 +73,9 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
   return (
     <div css={wrap}>
       <div css={mainContent}>
+        <Backdrop css={backdrop} open={props.isLoading}>
+          <CircularProgress color="inherit" />
+        </Backdrop>
         {/* <div style={{ textAlign: "right" }}>
           <a
             rel="noopener noreferrer"
@@ -79,7 +86,7 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
             Download PDF Report
           </a>
         </div> */}
-        <ExpansionPanel expanded>
+        <ExpansionPanel defaultExpanded>
           <ExpansionPanelSummary
             css={panelHeader}
             expandIcon={<ExpandMoreIcon />}
@@ -581,20 +588,25 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
             if (values.Returned_to_Care === null) {
               errors.Returned_to_Care = "Required";
             }
+            if (values.program_significantly_modified === null) {
+              errors.program_significantly_modified = "Required";
+            }
             return errors;
           }}
           onSubmit={async (values, helpers) => {
             if (
               !client.client_code ||
-              !values.Program_Completion ||
-              !values.Returned_to_Care
+              values.Program_Completion === null ||
+              values.Returned_to_Care === null ||
+              values.program_significantly_modified === null
             ) {
               return false;
             }
             await props.onFormSubmit(
               client.client_code,
               Number(values.Program_Completion),
-              Number(values.Returned_to_Care)
+              Number(values.Returned_to_Care),
+              Number(values.program_significantly_modified)
             );
             // helpers.resetForm();
           }}

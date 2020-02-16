@@ -40,13 +40,15 @@ export const actions = {
   updateProgramCompletion(
     client_code: string,
     Program_Completion: number,
-    Returned_to_Care: number
+    Returned_to_Care: number,
+    program_significantly_modified: number
   ): ThunkAction<Promise<string>, AppState, null, AnyAction> {
     return async (dispatch, getState) => {
       const response = await updateProgramCompletion(
         client_code,
         Program_Completion,
-        Returned_to_Care
+        Returned_to_Care,
+        program_significantly_modified
       );
       if (!response) {
         throw Error("something went wrong while submitting");
@@ -62,7 +64,8 @@ export const actions = {
         const updatedCl = {
           ...cl,
           Program_Completion,
-          Returned_to_Care
+          Returned_to_Care,
+          program_significantly_modified
         };
         if (!updatedCl.client_code) {
           return (response as unknown) as string;
@@ -219,8 +222,8 @@ export const actions = {
   ): ThunkAction<void, AppState, void, any> => {
     const newCl = {
       ...client,
+      // TODO as per raghu these are hardcoded for now
       primaryRaceCode: "1",
-      ageAtEpisodeStart: "1",
       ageAtEnrollStart: "1",
       english_second_lang: "1",
       enrollStart_date: null,

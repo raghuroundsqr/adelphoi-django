@@ -35,11 +35,17 @@ interface PredictionFormStep1Props {
   errors: FormikErrors<Types.Client> | undefined;
 }
 
-function getAge(date: Date | null) {
+function getAge(date: Date | null, fromDate: Date | null = null) {
   if (!date) {
     return "";
   }
-  var today = new Date();
+  let today: Date;
+  if (!fromDate) {
+    today = new Date();
+  } else {
+    today = new Date(fromDate);
+  }
+
   var birthDate = date;
   var age = today.getFullYear() - birthDate.getFullYear();
   var m = today.getMonth() - birthDate.getMonth();
@@ -92,8 +98,7 @@ const DobPicker: React.FC<FormikProps<Types.Client> & FieldProps> = props => {
         onChange={date => {
           form.setFieldValue(field.name, date, false);
           const age = getAge(date) || "";
-          // values.ageAtEpisodeStart = age;
-          form.setFieldValue("ageAtEpisodeStart", age, false);
+          form.setFieldValue("age", age, false);
         }}
         placeholder="mm/dd/yyyy"
         views={["year", "month", "date"]}
@@ -134,6 +139,11 @@ const PredictionFormStep1: React.FC<PredictionFormStep1Props> = props => {
 
             values.dob = dob;
             values.episode_start = ep;
+            const ageAtEp = getAge(
+              new Date(values.dob),
+              new Date(values.episode_start)
+            );
+            values.ageAtEpisodeStart = ageAtEp.toString() || "";
             props.onFormSubmit(values);
             // helpers.resetForm();
           }}

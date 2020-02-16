@@ -10,6 +10,9 @@ export const Step1ValidationSchema = Yup.object().shape({
   episode_number: Yup.string()
     .required("Required")
     .nullable(),
+  CYF_code: Yup.string()
+    .required("Required")
+    .nullable(),
   primaryRaceCode: Yup.string()
     // .required("Required")
     .nullable(),

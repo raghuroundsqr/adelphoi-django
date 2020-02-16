@@ -29,7 +29,8 @@ export interface ExistingClientContainerProp
   updateProgramCompletion: (
     client_code: string,
     program_completion: number,
-    returned_to_care: number
+    returned_to_care: number,
+    program_significantly_modified: number
   ) => Promise<string>;
   getAvailablePrograms: () => Promise<void>;
 }
@@ -63,14 +64,16 @@ export class ExistingClientContainer extends React.Component<
   updateProgramCompletion = async (
     client_code: string,
     program_completion: number,
-    returned_to_care: number
+    returned_to_care: number,
+    program_significantly_modified: number
   ) => {
-    this.setState({ isLoading: true });
     try {
+      this.setState({ isLoading: true });
       const response = await this.props.updateProgramCompletion(
         client_code,
         program_completion,
-        returned_to_care
+        returned_to_care,
+        program_significantly_modified
       );
       this.setState({
         isLoading: false

@@ -84,57 +84,6 @@ const ConfigurationForm: React.FC<ConfigurationFormProps> = props => {
                   <ErrorMessage component="span" name="program" />
                 </div>
               </div>
-              <div css={fieldRow}>
-                <div css={twoCol}>
-                  <label css={label} style={{ marginTop: 16 }}>
-                    Locations
-                  </label>
-
-                  <FormControl css={formControl}>
-                    <InputLabel
-                      style={{ padding: 16 }}
-                      htmlFor="locations-label"
-                    >
-                      Select
-                    </InputLabel>
-                    <Select
-                      labelId="locations-label"
-                      id="locations"
-                      name="location"
-                      multiple
-                      // css={inputField}
-                      style={{
-                        padding: 16
-                      }}
-                      value={values.location}
-                      onChange={e => {
-                        handleChange(e);
-                      }}
-                      input={<Input id="locations-input" />}
-                      renderValue={selected => (
-                        <div css={chips}>
-                          {(selected as string[]).map(value => (
-                            <Chip
-                              key={value}
-                              label={
-                                locations[Number(value) - 1].location_names
-                              }
-                              css={chip}
-                            />
-                          ))}
-                        </div>
-                      )}
-                    >
-                      {locations.map(loc => (
-                        <MenuItem key={loc.location} value={loc.location}>
-                          {loc.location_names}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                  <ErrorMessage component="span" name="location" />
-                </div>
-              </div>
 
               <div css={twoCol}>
                 <label css={label}>Sex</label>
@@ -235,6 +184,57 @@ const ConfigurationForm: React.FC<ConfigurationFormProps> = props => {
                     onChange={handleChange}
                   />
                   <ErrorMessage component="span" name="program_type" />
+                </div>
+              </div>
+              <div css={fieldRow}>
+                <div css={twoCol}>
+                  <label css={label} style={{ marginTop: 16 }}>
+                    Locations
+                  </label>
+
+                  <FormControl css={formControl}>
+                    <InputLabel
+                      style={{ padding: 16 }}
+                      htmlFor="locations-label"
+                    >
+                      Select
+                    </InputLabel>
+                    <Select
+                      labelId="locations-label"
+                      id="locations"
+                      name="location"
+                      multiple
+                      // css={inputField}
+                      style={{
+                        padding: 16
+                      }}
+                      value={values.location}
+                      onChange={e => {
+                        handleChange(e);
+                      }}
+                      input={<Input id="locations-input" />}
+                      renderValue={selected => (
+                        <div css={chips}>
+                          {(selected as string[]).map(value => (
+                            <Chip
+                              key={value}
+                              label={
+                                locations[Number(value) - 1].location_names
+                              }
+                              css={chip}
+                            />
+                          ))}
+                        </div>
+                      )}
+                    >
+                      {locations.map(loc => (
+                        <MenuItem key={loc.location} value={loc.location}>
+                          {loc.location_names}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                  <ErrorMessage component="span" name="location" />
                 </div>
               </div>
 

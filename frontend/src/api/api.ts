@@ -200,14 +200,16 @@ export const saveLocationAndProgram = async (
 export const updateProgramCompletion = async (
   client_code: string,
   Program_Completion: number,
-  Returned_to_Care: number
+  Returned_to_Care: number,
+  program_significantly_modified: number
 ) => {
   try {
     const response = await axios.put(
       `${baseApiUrl}/program_complete/${client_code}/`,
       {
         Program_Completion,
-        Returned_to_Care
+        Returned_to_Care,
+        program_significantly_modified
       }
     );
     return response.data.data;
