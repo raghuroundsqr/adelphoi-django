@@ -12,7 +12,9 @@ import {
   fetchLocations,
   saveLocationAndProgram,
   searchClient,
-  updateProgramCompletion
+  updateProgramCompletion,
+  fetchPcr,
+  fetchProgramsForClient
 } from "../api/api";
 
 const initialState: ClientState = {
@@ -41,9 +43,19 @@ export const actions = {
     client_code: string,
     Program_Completion: number,
     Returned_to_Care: number,
-    program_significantly_modified: number
+    program_significantly_modified: number,
+    program: string | null,
+    location: string | null
   ): ThunkAction<Promise<string>, AppState, null, AnyAction> {
     return async (dispatch, getState) => {
+      debugger;
+      if (program && location) {
+        const responseProgram = await saveLocationAndProgram(
+          client_code,
+          program,
+          location
+        );
+      }
       const response = await updateProgramCompletion(
         client_code,
         Program_Completion,
@@ -65,7 +77,8 @@ export const actions = {
           ...cl,
           Program_Completion,
           Returned_to_Care,
-          program_significantly_modified
+          program_significantly_modified,
+          selected_location: location || cl.selected_location
         };
         if (!updatedCl.client_code) {
           return (response as unknown) as string;
@@ -84,8 +97,9 @@ export const actions = {
   getLocations(
     client_code: string,
     selected_program: string
-  ): ThunkAction<Promise<Types.Client | undefined>, AppState, null, AnyAction> {
+  ): ThunkAction<Promise<void>, AppState, null, AnyAction> {
     return async (dispatch, getState) => {
+      debugger;
       const response = await fetchLocations(client_code, selected_program);
       const locations = response ? response["Suggested Locations"] : [];
       if (locations.length > 0) {
@@ -95,25 +109,106 @@ export const actions = {
           client_selected_program: selected_program
         };
         dispatch(update({ client: cl }));
-        return cl;
+
+        const clientList = getState().client?.clientList;
+        if (clientList && clientList[Number(client_code)]) {
+          const client = clientList[client_code];
+          const cl: Types.Client = {
+            ...client,
+            SuggestedLocations: [...locations],
+            Program_Completion: 0,
+            selected_program,
+            selected_location: null
+          };
+          clientList[client_code] = cl;
+          dispatch(update({ clientList }));
+        }
+      }
+    };
+  },
+
+  getPcr(
+    client_code: string,
+    selected_program: string
+  ): ThunkAction<Promise<void>, AppState, null, AnyAction> {
+    return async (dispatch, getState) => {
+      debugger;
+      const response = await fetchPcr(client_code, selected_program);
+      const pcr = response ? response.pcr : null;
+      if (pcr) {
+        const cl: Types.Client = {
+          ...getState().client!.client,
+          Confidence: pcr,
+          confidence: pcr
+        };
+        dispatch(update({ client: cl }));
+        const clientList = getState().client?.clientList;
+        if (clientList && clientList[Number(client_code)]) {
+          const client = clientList[client_code];
+          const cl: Types.Client = {
+            ...client,
+            Confidence: pcr,
+            confidence: pcr,
+            Program_Completion: 0,
+            selected_program
+          };
+          clientList[client_code] = cl;
+          dispatch(update({ clientList }));
+        }
+      }
+    };
+  },
+
+  getProgramsForClient(
+    client_code: string
+  ): ThunkAction<Promise<void>, AppState, null, AnyAction> {
+    return async (dispatch, getState) => {
+      const response = await fetchProgramsForClient(client_code);
+      const clientList = getState().client?.clientList;
+      if (!clientList || !clientList[Number(client_code)]) {
+        throw new Error("client not found");
+      }
+      const client = clientList[client_code];
+
+      if (response) {
+        const cl: Types.Client = {
+          ...client,
+          SuggestedPrograms: response.program_model_suggested || null,
+          SuggestedLocations: client.client_selected_locations
+            ? [client.client_selected_locations]
+            : [],
+          selected_program: response.selected_program,
+          selected_location: response.selected_location || null
+        };
+        clientList[client_code] = cl;
+        dispatch(update({ clientList }));
       }
     };
   },
 
   saveLocationAndProgram(
-    selected_location: string
-  ): ThunkAction<Promise<Types.Client | undefined>, AppState, null, AnyAction> {
+    selected_location: string,
+    selected_program?: string
+  ): ThunkAction<Promise<void>, AppState, null, AnyAction> {
     return async (dispatch, getState) => {
+      debugger;
       const client = getState().client!.client;
       const cl: Types.Client = {
         ...client,
         client_selected_locations: selected_location
       };
       dispatch(update({ client: cl }));
-
+      let programParam: string;
+      if (!selected_program && client.client_selected_program) {
+        programParam = client.client_selected_program;
+      } else if (selected_program) {
+        programParam = selected_program;
+      } else {
+        throw Error("something went wrong while submitting");
+      }
       const response = await saveLocationAndProgram(
         client.client_code!,
-        client.client_selected_program!,
+        programParam,
         selected_location
       );
       if (!response) {
@@ -124,16 +219,14 @@ export const actions = {
         result_final: response.result
       };
       dispatch(update({ client: clresult }));
-      return clresult;
+      // return clresult;
     };
   },
 
   submitPrediction(
     client: Types.Client
-  ): ThunkAction<Promise<Types.Client | undefined>, AppState, null, AnyAction> {
+  ): ThunkAction<Promise<void>, AppState, null, AnyAction> {
     return async (dispatch, getState) => {
-      let locations: string[] = [];
-
       if (!client.client_code) {
         throw new Error("client code required");
       }
@@ -143,10 +236,49 @@ export const actions = {
       } catch (error) {
         throw error;
       }
+      // return client;
+    };
+  },
+
+  insertClient(
+    client: Types.Client
+  ): ThunkAction<Promise<void>, AppState, null, AnyAction> {
+    return async (dispatch, getState) => {
+      debugger;
+      let locations: string[] = [];
+      let updatedClient: Types.Client;
       try {
+        const response = await insertClient(client);
+        if (!response) {
+          throw Error("something went wrong while saving the client");
+        }
+
+        if (response["Result"] && response["Result"].trim() !== "") {
+          return;
+        }
+
+        const cl = {
+          ...client,
+          program_type: response.program_type || null,
+          Confidence: response.Confidence || null,
+          referred_program: response.program_type || null,
+          model_program: response.model_program || null,
+          SuggestedPrograms: response.list_program_types || null
+        };
+        dispatch(update({ client: cl }));
+        updatedClient = cl;
+        // return cl;
+      } catch (errors) {
+        dispatch(update({ client, errors: errors }));
+        throw errors;
+      }
+      try {
+        if (!updatedClient.client_code || !updatedClient.program_type) {
+          throw new Error("ERROR OCCURRED WHILE FETCHING PROGRAM LOCATIONS");
+        }
         const response = await fetchLocations(
-          client.client_code,
-          client.program_type!
+          updatedClient.client_code,
+          updatedClient.program_type
         );
         if (response && response["result"] && response["result"] !== "") {
           throw new Error(response["result"]);
@@ -156,45 +288,15 @@ export const actions = {
         }
         if (locations.length > 0) {
           const cl: Types.Client = {
-            ...client,
+            ...updatedClient,
             SuggestedLocations: [...locations],
-            client_selected_program: client.program_type
+            client_selected_program: updatedClient.program_type
           };
           dispatch(update({ client: cl }));
-          return cl;
+          // return cl;
         }
       } catch (error) {
         throw error;
-      }
-    };
-  },
-
-  insertClient(
-    client: Types.Client
-  ): ThunkAction<Promise<Types.Client | undefined>, AppState, null, AnyAction> {
-    return async (dispatch, getState) => {
-      try {
-        const response = await insertClient(client);
-        if (!response) {
-          throw Error("something went wrong while saving the client");
-        }
-
-        if (response["Result"] && response["Result"].trim() !== "") {
-          return client;
-        }
-
-        const cl = {
-          ...client,
-          program_type: response.program_type || null,
-          Confidence: response.Confidence || null,
-          referred_program: response.referred_program || null,
-          model_program: response.model_program || null
-        };
-        dispatch(update({ client: cl }));
-        return cl;
-      } catch (errors) {
-        dispatch(update({ client, errors: errors }));
-        throw errors;
       }
     };
   },

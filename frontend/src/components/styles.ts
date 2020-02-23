@@ -47,14 +47,18 @@ export const fullWidth = css`
 export const fieldRow = css`
   @media all and (min-width: 520px) {
     ${flexRow}
+    justify-content: space-between;
     margin-bottom: 16px;
   }
 `;
 
 export const twoCol = css`
   @media all and (min-width: 520px) {
-    width: 49%;
     margin-right: 8px;
+    width: 100%;
+    :last-child {
+      margin-right: 0;
+    }
   }
   flex-direction: column;
   margin-bottom: 8px;
@@ -73,7 +77,7 @@ export const inputField = css`
   border-left: none;
   border-right: none;
   border-bottom: 1px solid #8284e5;
-  width: 98%;
+  width: 100%;
   height: 44px;
   -webkit-appearance: none;
   font-family: inherit !important;
@@ -82,6 +86,9 @@ export const inputField = css`
   color: inherit;
   margin: 0px;
   padding: 8px;
+  :disabled {
+    color: #999999;
+  }
 }
 `;
 

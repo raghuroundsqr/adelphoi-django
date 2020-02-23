@@ -25,10 +25,14 @@ export interface NewClientContainerProp
     page1FormCompleted?: boolean,
     excludePage2?: boolean
   ) => void;
-  insertClient: (client: Types.Client) => void;
-  submitPrediction: (client: Types.Client) => void;
-  getLocations: (client_code: string, selected_program: string) => void;
-  saveLocationAndProgram: (selected_location: string) => void;
+  insertClient: (client: Types.Client) => Promise<void>;
+  submitPrediction: (client: Types.Client) => Promise<void>;
+  getLocations: (
+    client_code: string,
+    selected_program: string
+  ) => Promise<void>;
+  getPcr: (client_code: string, selected_program: string) => Promise<void>;
+  saveLocationAndProgram: (selected_location: string) => Promise<void>;
   clearErrors: () => void;
   clearClient: () => void;
   getAvailablePrograms: () => Promise<void>;
@@ -80,18 +84,19 @@ export class NewClientContainer extends React.Component<
     }
   };
 
-  getLocations = async (selected_program: string) => {
+  getLocationsAndPcr = async (selected_program: string) => {
+    debugger;
     const { client: clientState } = this.props;
     if (!clientState || !clientState.client) {
       return false;
     }
     this.setState({ isLoading: true });
+    await this.props.getPcr(clientState.client.client_code!, selected_program);
     await this.props.getLocations(
       clientState.client.client_code!,
       selected_program
     );
     this.setState({ isLoading: false });
-    // history.push("/program-selection");
   };
 
   submitProgram = async (client: Types.Client) => {
@@ -124,14 +129,14 @@ export class NewClientContainer extends React.Component<
     // const { history } = this.props;
     const { client: clientState } = this.props;
     if (!clientState || !clientState.client) {
-      return false;
+      this.props.enqueueSnackbar("Error. Client info not available.");
+      return;
     }
     this.setState({ isLoading: true });
     await this.props.saveLocationAndProgram(selected_location);
     this.setState({ isLoading: false });
     this.props.clearClient();
     this.props.enqueueSnackbar("Data saved successfully.");
-    // history.push("/new-client");
   };
 
   saveClientStep2 = async (client: Types.Client) => {
@@ -163,7 +168,7 @@ export class NewClientContainer extends React.Component<
           <ProgramSelection
             client={currentClient}
             {...this.state}
-            onProgramSelect={this.getLocations}
+            onProgramSelect={this.getLocationsAndPcr}
             onLocationSelect={this.saveProgramAndLocation}
             submitPrediction={this.submitProgram}
             isLoading={this.state.isLoading}
@@ -221,6 +226,7 @@ const mapDispatchToProps = {
   insertClient: client.actions.insertClient,
   submitPrediction: client.actions.submitPrediction,
   getLocations: client.actions.getLocations,
+  getPcr: client.actions.getPcr,
   saveLocationAndProgram: client.actions.saveLocationAndProgram,
   clearErrors: client.actions.clearErrors,
   clearClient: client.actions.clear,

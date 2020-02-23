@@ -218,12 +218,12 @@ const PredictionFormStep1: React.FC<PredictionFormStep1Props> = props => {
                   <ErrorMessage component="span" name="last_name" />
                 </div>
               </div>
-              <div css={fieldRow}>
+              <div css={fieldRow} style={{ flex: "2 1 auto" }}>
                 <div css={twoCol}>
                   <label css={label}>DOB</label>
                   <Field css={datePicker} name="dob" component={DobPicker} />
                 </div>
-                <div css={twoCol} style={{ width: 60 }}>
+                <div css={twoCol}>
                   <label css={label}>Age</label>
                   <input
                     css={inputField}
@@ -235,7 +235,7 @@ const PredictionFormStep1: React.FC<PredictionFormStep1Props> = props => {
                   />
                   <ErrorMessage component="span" name="age" />
                 </div>
-                <div css={twoCol} style={{ width: "42%" }}>
+                <div css={twoCol}>
                   <label css={label}>Sex</label>
                   <div
                     css={fieldBox}
@@ -758,12 +758,13 @@ const PredictionFormStep1: React.FC<PredictionFormStep1Props> = props => {
                 </div>
               </div>
 
-              <div css={fieldRow}>
+              <div css={fieldRow} style={{ justifyContent: "flex-start" }}>
                 <div css={twoCol}>
                   <label css={label}>IQ</label>
 
                   <select
                     css={selectField}
+                    style={{ width: "49%" }}
                     name="borderline_IQ"
                     id="borderline_IQ"
                     value={values.borderline_IQ || ""}
@@ -847,12 +848,12 @@ const PredictionFormStep1: React.FC<PredictionFormStep1Props> = props => {
                   <ErrorMessage component="span" name="compliant_with_meds" />
                 </div>
               </div>
-              <div css={fieldRow}>
+              <div css={fieldRow} style={{ justifyContent: "flex-start" }}>
                 <input
                   name="Exclusionary_Criteria"
                   id="Exclusionary_Criteria"
                   type="checkbox"
-                  onChange={handleChange} //() => onExclusionaryCriteriaChange(handleChange)}
+                  onChange={handleChange}
                   checked={values.Exclusionary_Criteria === true}
                   value="true"
                 />

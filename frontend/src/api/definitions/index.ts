@@ -67,13 +67,18 @@ export interface Client {
   type_of_drugs: string | null;
   FAST_FamilyTogetherScore: string | null;
   FAST_CaregiverAdvocacyScore: string | null;
+  Confidence: number | null;
+  confidence: number | null;
+  Level_of_care: string | null;
+  program_type: string | null;
   referred_program: string | null;
   model_program: string | null;
   client_selected_program: string | null;
   client_selected_locations: string | null;
-  program_type: string | null;
-  Confidence: number | null;
-  Level_of_care: string | null;
+  SuggestedPrograms: string[] | null;
+  program_model_suggested: string[] | null;
+  selected_program: string | null;
+  selected_location: string | null;
   SuggestedLocations: string[] | null;
   result_final: string | null;
   inclusionary_criteria: boolean;
@@ -194,14 +199,19 @@ export const emptyClient: Client = {
   client_selected_locations: null,
   program_type: null,
   Confidence: null,
+  confidence: null,
   Level_of_care: null,
   SuggestedLocations: null,
+  SuggestedPrograms: null,
   model_program: null,
+  selected_program: null,
+  selected_location: null,
   result_final: null,
   inclusionary_criteria: false,
   Program_Completion: null,
   Returned_to_Care: null,
-  program_significantly_modified: null
+  program_significantly_modified: null,
+  program_model_suggested: null
 };
 
 export const emptyConfiguration: Configuration = {

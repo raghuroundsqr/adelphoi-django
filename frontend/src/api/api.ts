@@ -177,6 +177,23 @@ export const fetchLocations = async (
   }
 };
 
+export const fetchPcr = async (
+  client_code: string,
+  referred_program: string
+) => {
+  try {
+    const response = await axios.put(
+      `${baseApiUrl}/program_pcr/${client_code}/`,
+      { client_selected_program: referred_program }
+    );
+    const data = (response.data as unknown) as any;
+    return data;
+  } catch (error) {
+    console.error("api function fetch program_pcr error");
+    throwError(error);
+  }
+};
+
 export const saveLocationAndProgram = async (
   client_code: string,
   selected_program: string,
@@ -230,6 +247,22 @@ export const searchClient = async (
     return response.data;
   } catch (error) {
     console.error("api function searchClient error");
+    throwError(error);
+  }
+};
+
+// EXISTING CLIENT PAGE APIs
+// list of programs for existing client
+// http://13.232.1.126:8000/first_match/program/100/
+// Program completion likelihood
+
+export const fetchProgramsForClient = async (client_code: string) => {
+  try {
+    const response = await axios.get(`${baseApiUrl}/program/${client_code}/`);
+    const data = (response.data as unknown) as any;
+    return data;
+  } catch (error) {
+    console.error("api function fetch fetchProgramForClient error");
     throwError(error);
   }
 };

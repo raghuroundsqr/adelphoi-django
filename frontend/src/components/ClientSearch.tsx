@@ -89,9 +89,10 @@ const ClientSearch: React.FC<ClientSearchProps> = props => {
                 </div>
                 <Button
                   type="submit"
-                  size="large"
+                  size="small"
                   variant="contained"
                   color="primary"
+                  style={{ maxHeight: 44 }}
                 >
                   <SearchIcon />
                 </Button>
@@ -127,7 +128,9 @@ const ClientSearch: React.FC<ClientSearchProps> = props => {
                     <TableCell>{cl.client_code}</TableCell>
                     <TableCell>{cl.age}</TableCell>
                     <TableCell>
-                      {cl.gender === "1" ? "Female" : "Male"}
+                      {cl.gender && cl.gender.toString() === "1"
+                        ? "Female"
+                        : "Male"}
                     </TableCell>
                   </TableRow>
                 ))

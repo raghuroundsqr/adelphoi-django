@@ -12,7 +12,7 @@ import Input from "@material-ui/core/Input";
 import { ConfigurationSchema } from "./ValidationSchema";
 import {
   wrap,
-  subHeading,
+  // subHeading,
   selectField,
   fieldRow,
   mainContent,

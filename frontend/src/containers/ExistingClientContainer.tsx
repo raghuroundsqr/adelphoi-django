@@ -7,7 +7,7 @@ import * as program from "../redux-modules/program";
 import { ContainerProps } from "./Container";
 import * as client from "../redux-modules/client";
 import ClientSearch from "../components/ClientSearch";
-import ClientDetails from "../components/ClientDetails";
+import ClientDetailsContainer from "./ClientDetailsContainer";
 
 interface MatchParams {
   index: string;
@@ -26,12 +26,6 @@ export interface ExistingClientContainerProp
   extends ContainerProps,
     WithSnackbarProps {
   searchClient: (client_code: string, client_name: string) => void;
-  updateProgramCompletion: (
-    client_code: string,
-    program_completion: number,
-    returned_to_care: number,
-    program_significantly_modified: number
-  ) => Promise<string>;
   getAvailablePrograms: () => Promise<void>;
 }
 
@@ -61,40 +55,12 @@ export class ExistingClientContainer extends React.Component<
     await this.props.searchClient(client_code, client_name);
   };
 
-  updateProgramCompletion = async (
-    client_code: string,
-    program_completion: number,
-    returned_to_care: number,
-    program_significantly_modified: number
-  ) => {
-    try {
-      this.setState({ isLoading: true });
-      const response = await this.props.updateProgramCompletion(
-        client_code,
-        program_completion,
-        returned_to_care,
-        program_significantly_modified
-      );
-      this.setState({
-        isLoading: false
-        // program_completion_response: response
-      });
-      this.props.enqueueSnackbar("Data saved successfully.");
-    } catch (error) {
-      this.setState({
-        isLoading: false
-        // program_completion_response: "An error occured. Please try again."
-      });
-      this.props.enqueueSnackbar("An error occured. Please try again.");
-    }
-  };
-
   render() {
     const { client: clientState, program: programState } = this.props;
 
     const clientList = (clientState && clientState.clientList) || {};
-    const availableProgramList =
-      (programState && programState.availableProgramList) || [];
+    // const availableProgramList =
+    // (programState && programState.availableProgramList) || [];
 
     return (
       <Switch>
@@ -108,20 +74,7 @@ export class ExistingClientContainer extends React.Component<
         <Route
           exact
           path="/existing-client/client-details/:index"
-          render={({ match }: MatchProps) => {
-            const { index } = match.params;
-            return (
-              <ClientDetails
-                client={clientList[index]}
-                {...this.state}
-                onFormSubmit={this.updateProgramCompletion}
-                program_completion_response={
-                  this.state.program_completion_response
-                }
-                programList={availableProgramList}
-              />
-            );
-          }}
+          component={ClientDetailsContainer}
         ></Route>
       </Switch>
     );
@@ -137,7 +90,6 @@ const mapStateToProps = (state: AppState) => {
 
 const mapDispatchToProps = {
   searchClient: client.actions.searchClient,
-  updateProgramCompletion: client.actions.updateProgramCompletion,
   getAvailablePrograms: program.actions.getAvailablePrograms
 };
 
