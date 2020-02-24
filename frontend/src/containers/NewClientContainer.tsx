@@ -85,7 +85,6 @@ export class NewClientContainer extends React.Component<
   };
 
   getLocationsAndPcr = async (selected_program: string) => {
-    debugger;
     const { client: clientState } = this.props;
     if (!clientState || !clientState.client) {
       return false;

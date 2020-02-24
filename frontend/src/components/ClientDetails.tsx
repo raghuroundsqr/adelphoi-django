@@ -185,14 +185,16 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
                 {client.dob ? format(new Date(client.dob), "MM-dd-yyyy") : ""}
               </div>
             </div>
-            <div css={twoCol} style={{ width: 60 }}>
-              <label css={txtLabel}>Age</label>
-              <div css={txtDetail}>{client.age}</div>
-            </div>
-            <div css={twoCol} style={{ width: "39%" }}>
-              <label css={txtLabel}>Sex</label>
-              <div css={txtDetail}>
-                {client.gender ? Types.gender[Number(client.gender)] : ""}
+            <div style={{ display: "flex", width: "100%" }}>
+              <div css={twoCol}>
+                <label css={txtLabel}>Age</label>
+                <div css={txtDetail}>{client.age}</div>
+              </div>
+              <div css={twoCol}>
+                <label css={txtLabel}>Sex</label>
+                <div css={txtDetail}>
+                  {client.gender ? Types.gender[Number(client.gender)] : ""}
+                </div>
               </div>
             </div>
           </div>

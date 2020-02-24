@@ -157,7 +157,7 @@ const ProgramSelection: React.FC<ProgramSelectionProps> = props => {
                 css={fieldRow}
                 style={{ justifyContent: "flex-end", alignItems: "center" }}
               >
-                {true && (
+                {clientCode && (
                   <a
                     css={[txtDetail]}
                     style={{ display: "flex", marginRight: 15 }}
@@ -181,19 +181,6 @@ const ProgramSelection: React.FC<ProgramSelectionProps> = props => {
             </form>
           )}
         </Formik>
-
-        {clientCode && (
-          <div>
-            <a
-              css={[fieldRow, txtDetail]}
-              rel="noopener noreferrer"
-              target="_blank"
-              href={`${baseApiUrl}/index/${clientCode}`}
-            >
-              <PictureAsPdfIcon /> Download Report
-            </a>
-          </div>
-        )}
       </div>
       {/* MAIN CONTENT */}
     </div>

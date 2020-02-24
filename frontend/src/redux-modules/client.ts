@@ -48,7 +48,6 @@ export const actions = {
     location: string | null
   ): ThunkAction<Promise<string>, AppState, null, AnyAction> {
     return async (dispatch, getState) => {
-      debugger;
       if (program && location) {
         const responseProgram = await saveLocationAndProgram(
           client_code,
@@ -99,7 +98,6 @@ export const actions = {
     selected_program: string
   ): ThunkAction<Promise<void>, AppState, null, AnyAction> {
     return async (dispatch, getState) => {
-      debugger;
       const response = await fetchLocations(client_code, selected_program);
       const locations = response ? response["Suggested Locations"] : [];
       if (locations.length > 0) {
@@ -132,7 +130,6 @@ export const actions = {
     selected_program: string
   ): ThunkAction<Promise<void>, AppState, null, AnyAction> {
     return async (dispatch, getState) => {
-      debugger;
       const response = await fetchPcr(client_code, selected_program);
       const pcr = response ? response.pcr : null;
       if (pcr) {
@@ -191,7 +188,6 @@ export const actions = {
     selected_program?: string
   ): ThunkAction<Promise<void>, AppState, null, AnyAction> {
     return async (dispatch, getState) => {
-      debugger;
       const client = getState().client!.client;
       const cl: Types.Client = {
         ...client,
@@ -244,7 +240,6 @@ export const actions = {
     client: Types.Client
   ): ThunkAction<Promise<void>, AppState, null, AnyAction> {
     return async (dispatch, getState) => {
-      debugger;
       let locations: string[] = [];
       let updatedClient: Types.Client;
       try {

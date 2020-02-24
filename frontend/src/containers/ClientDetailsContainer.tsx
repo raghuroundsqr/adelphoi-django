@@ -98,7 +98,6 @@ export class ClientDetailsContainer extends React.Component<
   ) => {
     try {
       this.setState({ isLoading: true });
-      debugger;
 
       const response = await this.props.updateProgramCompletion(
         client_code,
