@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { jsx } from "@emotion/core";
 import { useHistory } from "react-router-dom";
-import { Formik, ErrorMessage } from "formik";
+import { Formik, ErrorMessage, FormikErrors } from "formik";
 import Button from "@material-ui/core/Button";
 import Backdrop from "@material-ui/core/Backdrop";
 import CircularProgress from "@material-ui/core/CircularProgress";
@@ -83,21 +83,21 @@ const ProgramSelection: React.FC<ProgramSelectionProps> = props => {
         <h1 css={subHeading}>FM Prediction</h1>
         <Formik
           initialValues={getInitialValues()}
+          validate={values => {
+            const errors: FormikErrors<FormValues> = {};
+            if (!values.client_selected_location) {
+              errors.client_selected_location = "Required";
+            }
+            return errors;
+          }}
           enableReinitialize
-          onSubmit={async (values, helpers) => {
+          onSubmit={async values => {
             const clientCode = props.client.client_code;
             await props.onLocationSelect(values.client_selected_location);
             setClientCode(clientCode);
           }}
         >
-          {({
-            values,
-            handleSubmit,
-            handleChange,
-            handleBlur,
-            touched,
-            errors
-          }) => (
+          {({ values, handleSubmit, handleChange }) => (
             <form name="submitPredictionForm" onSubmit={handleSubmit}>
               <div css={fieldRow}>
                 <div css={twoCol}>
@@ -151,6 +151,10 @@ const ProgramSelection: React.FC<ProgramSelectionProps> = props => {
                         </option>
                       ))}
                   </select>
+                  <ErrorMessage
+                    component="span"
+                    name="client_selected_location"
+                  />
                 </div>
               </div>
               <div

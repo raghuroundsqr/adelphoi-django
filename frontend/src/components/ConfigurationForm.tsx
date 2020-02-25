@@ -19,8 +19,7 @@ import {
   twoCol,
   inputField,
   fieldBox,
-  label,
-  txtDetail
+  label
 } from "./styles";
 import * as Types from "../api/definitions";
 

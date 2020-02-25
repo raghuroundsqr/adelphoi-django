@@ -34,11 +34,15 @@ import { baseApiUrl } from "../api/api";
 
 interface ClientDetailsProps {
   client: Types.Client;
-  onProgramSelect: (client_code: string, selected_program: string) => void;
+  onProgramSelect: (
+    client_code: string,
+    selected_program: string,
+    values: any
+  ) => Promise<void>;
   onFormSubmit: (
     client_code: string,
-    program_completion: number,
-    returned_to_care: number,
+    program_completion: number | null,
+    returned_to_care: number | null,
     program_significantly_modified: number,
     Program: string | null,
     Location: string | null
@@ -50,8 +54,8 @@ interface ClientDetailsProps {
 }
 
 interface FormValues {
-  Program_Completion: number | null;
-  Returned_to_Care: number | null;
+  Program_Completion: string | number | null;
+  Returned_to_Care: string | number | null;
   program_significantly_modified: number | string | null;
   Program: any;
   Confidence: string;
@@ -72,8 +76,8 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
     }
   }, [props.client.selected_program]);
 
-  const onProgramChange = (program: any) => {
-    props.onProgramSelect(props.client.client_code!, program.value);
+  const onProgramChange = (program: any, values: any) => {
+    props.onProgramSelect(props.client.client_code!, program.value, values);
   };
 
   let { index } = useParams();
@@ -105,9 +109,17 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
       };
     }
     return {
-      Program_Completion: client.Program_Completion,
-      Returned_to_Care: client.Returned_to_Care,
-      program_significantly_modified: client.program_significantly_modified,
+      Program_Completion:
+        client.Program_Completion === null
+          ? ""
+          : client.Program_Completion.toString(),
+      Returned_to_Care:
+        client.Returned_to_Care === null
+          ? ""
+          : client.Returned_to_Care.toString(),
+      program_significantly_modified: Number(
+        client.program_significantly_modified
+      ),
       Program: program,
       confidence: client.confidence ? client.confidence.toString() : "",
       Location: client.selected_location || ""
@@ -632,12 +644,7 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
               errors.Location = "Required";
             }
           }
-          // if (values.Returned_to_Care === null) {
-          //   errors.Returned_to_Care = "Required";
-          // }
-          // if (values.program_significantly_modified === null) {
-          //   errors.program_significantly_modified = "Required";
-          // }
+
           return errors;
         }}
         onSubmit={async (values, helpers) => {
@@ -645,10 +652,31 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
             return false;
           }
 
+          // console.log(values);
+
+          // return;
+
+          const Program_Completion =
+            values.Program_Completion === ""
+              ? null
+              : Number(values.Program_Completion);
+          const Returned_to_Care =
+            values.Returned_to_Care === ""
+              ? null
+              : Number(values.Returned_to_Care);
+          // console.log(
+          //   client.client_code,
+          //   Program_Completion,
+          //   Returned_to_Care,
+          //   Number(values.program_significantly_modified),
+          //   values.Program!.value!,
+          //   values.Location!
+          // );
+          // return;
           await props.onFormSubmit(
             client.client_code,
-            Number(values.Program_Completion),
-            Number(values.Returned_to_Care),
+            Program_Completion,
+            Returned_to_Care,
             Number(values.program_significantly_modified),
             values.Program!.value!,
             values.Location!
@@ -669,9 +697,9 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
               <div css={twoCol}>
                 <Dropdown
                   name="Program"
-                  disabled={Number(values.Program_Completion) === 0}
+                  // disabled={Number(values.Program_Completion) === 0}
                   options={programOptions}
-                  onChange={onProgramChange}
+                  onChange={(p: any) => onProgramChange(p, values)}
                   defaultValue={programOptions.find(
                     p => p.value === predicted_program
                   )}
@@ -687,7 +715,7 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
                 <select
                   css={selectField}
                   name="Location"
-                  disabled={Number(values.Program_Completion) === 0}
+                  // disabled={Number(values.Program_Completion) === 0}
                   value={values.Location}
                   onChange={handleChange}
                 >
@@ -712,7 +740,7 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
                   name="confidence"
                   readOnly
                   css={inputField}
-                  disabled={Number(values.Program_Completion) === 0}
+                  // disabled={Number(values.Program_Completion) === 0}
                   placeholder=""
                   value={values.confidence || ""}
                   onChange={handleChange}
@@ -753,7 +781,11 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
                 <div css={fieldBox}>
                   <input
                     type="checkbox"
-                    disabled={Number(values.Program_Completion) === 0}
+                    disabled={
+                      values.Program_Completion !== ""
+                        ? values.Program_Completion === "0"
+                        : false
+                    }
                     onChange={handleChange}
                     name="program_significantly_modified"
                     id="program_significantly_modified"
@@ -779,9 +811,17 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
                 <select
                   css={selectField}
                   onChange={handleChange}
-                  disabled={Number(values.Program_Completion) === 0}
+                  disabled={
+                    values.Program_Completion !== ""
+                      ? values.Program_Completion === "0"
+                      : false
+                  }
                   name="Returned_to_Care"
-                  value={values.Returned_to_Care || ""}
+                  value={
+                    values.Returned_to_Care !== null
+                      ? values.Returned_to_Care.toString()
+                      : ""
+                  }
                 >
                   <option value="">Select</option>
                   <option value="1">Yes</option>

@@ -41,19 +41,15 @@ export const actions = {
 
   updateProgramCompletion(
     client_code: string,
-    Program_Completion: number,
-    Returned_to_Care: number,
+    Program_Completion: number | null,
+    Returned_to_Care: number | null,
     program_significantly_modified: number,
     program: string | null,
     location: string | null
   ): ThunkAction<Promise<string>, AppState, null, AnyAction> {
     return async (dispatch, getState) => {
       if (program && location) {
-        const responseProgram = await saveLocationAndProgram(
-          client_code,
-          program,
-          location
-        );
+        await saveLocationAndProgram(client_code, program, location);
       }
       const response = await updateProgramCompletion(
         client_code,
@@ -152,6 +148,26 @@ export const actions = {
           clientList[client_code] = cl;
           dispatch(update({ clientList }));
         }
+      }
+    };
+  },
+
+  updateFormValues(
+    client_code: string,
+    values: any
+  ): ThunkAction<void, AppState, null, AnyAction> {
+    return (dispatch, getState) => {
+      const clientList = getState().client?.clientList;
+      if (clientList && clientList[Number(client_code)]) {
+        const client = clientList[client_code];
+        const cl: Types.Client = {
+          ...client,
+          Program_Completion: values.Program_Completion,
+          Returned_to_Care: values.Returned_to_Care,
+          program_significantly_modified: values.program_significantly_modified
+        };
+        clientList[client_code] = cl;
+        dispatch(update({ clientList }));
       }
     };
   },
@@ -307,8 +323,10 @@ export const actions = {
         if (c.client_code) {
           return (clientList[c.client_code] = c);
         }
+        return null;
       });
       dispatch(update({ clientList }));
+      return;
     };
   },
 

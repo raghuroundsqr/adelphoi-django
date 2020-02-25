@@ -144,6 +144,7 @@ const PredictionFormStep1: React.FC<PredictionFormStep1Props> = props => {
               new Date(values.episode_start)
             );
             values.ageAtEpisodeStart = ageAtEp.toString() || "";
+            console.log(values.ageAtEpisodeStart);
             props.onFormSubmit(values);
             // helpers.resetForm();
           }}

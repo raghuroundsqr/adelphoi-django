@@ -1,9 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { withSnackbar, WithSnackbarProps } from "notistack";
-import Backdrop from "@material-ui/core/Backdrop";
-import CircularProgress from "@material-ui/core/CircularProgress";
-import { wrap, mainContent, backdrop } from "../components/styles";
+import { wrap, mainContent } from "../components/styles";
 import { AppState } from "../redux-modules/root";
 import * as program from "../redux-modules/program";
 import { ContainerProps } from "./Container";
@@ -28,8 +26,8 @@ export interface ClientDetailsContainerProps
   searchClient: (client_code: string, client_name: string) => Promise<void>;
   updateProgramCompletion: (
     client_code: string,
-    program_completion: number,
-    returned_to_care: number,
+    program_completion: number | null,
+    returned_to_care: number | null,
     program_significantly_modified: number,
     program: string | null,
     location: string | null
@@ -49,6 +47,7 @@ export interface ClientDetailsContainerProps
   clearErrors: () => void;
   clearClient: () => void;
   getProgramsForClient: (client_code: string) => Promise<void>;
+  updateFormValues: (client_code: string, values: any) => void;
 }
 
 export class ClientDetailsContainer extends React.Component<
@@ -90,12 +89,20 @@ export class ClientDetailsContainer extends React.Component<
 
   updateProgramCompletion = async (
     client_code: string,
-    program_completion: number,
-    returned_to_care: number,
+    program_completion: number | null,
+    returned_to_care: number | null,
     program_significantly_modified: number,
     program: string | null,
     location: string | null
   ) => {
+    console.log(
+      client_code,
+      program_completion,
+      returned_to_care,
+      program_significantly_modified,
+      program,
+      location
+    );
     try {
       this.setState({ isLoading: true });
 
@@ -123,11 +130,13 @@ export class ClientDetailsContainer extends React.Component<
 
   getLocationsAndPcr = async (
     client_code: string,
-    selected_program: string
+    selected_program: string,
+    values: any
   ) => {
     this.setState({ isLoading: true });
     await this.props.getPcr(client_code, selected_program);
     await this.props.getLocations(client_code, selected_program);
+    this.props.updateFormValues(client_code, values);
     this.setState({ isLoading: false });
   };
 
@@ -213,7 +222,8 @@ const mapDispatchToProps = {
   saveLocationAndProgram: client.actions.saveLocationAndProgram,
   clearErrors: client.actions.clearErrors,
   clearClient: client.actions.clear,
-  getProgramsForClient: client.actions.getProgramsForClient
+  getProgramsForClient: client.actions.getProgramsForClient,
+  updateFormValues: client.actions.updateFormValues
 };
 
 export default connect(

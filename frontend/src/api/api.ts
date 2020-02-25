@@ -216,8 +216,8 @@ export const saveLocationAndProgram = async (
 
 export const updateProgramCompletion = async (
   client_code: string,
-  Program_Completion: number,
-  Returned_to_Care: number,
+  Program_Completion: number | null,
+  Returned_to_Care: number | null,
   program_significantly_modified: number
 ) => {
   try {
