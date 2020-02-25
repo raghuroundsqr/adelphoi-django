@@ -645,13 +645,6 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
             return false;
           }
 
-          // Program_Completion
-          // Returned_to_Care
-          // program_significantly_modified
-          // Program
-          // confidence
-          // Location
-
           await props.onFormSubmit(
             client.client_code,
             Number(values.Program_Completion),
@@ -676,7 +669,7 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
               <div css={twoCol}>
                 <Dropdown
                   name="Program"
-                  disabled={Number(values.Program_Completion) === 1}
+                  disabled={Number(values.Program_Completion) === 0}
                   options={programOptions}
                   onChange={onProgramChange}
                   defaultValue={programOptions.find(
@@ -694,7 +687,7 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
                 <select
                   css={selectField}
                   name="Location"
-                  disabled={Number(values.Program_Completion) === 1}
+                  disabled={Number(values.Program_Completion) === 0}
                   value={values.Location}
                   onChange={handleChange}
                 >
@@ -719,7 +712,7 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
                   name="confidence"
                   readOnly
                   css={inputField}
-                  disabled={Number(values.Program_Completion) === 1}
+                  disabled={Number(values.Program_Completion) === 0}
                   placeholder=""
                   value={values.confidence || ""}
                   onChange={handleChange}
@@ -760,7 +753,7 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
                 <div css={fieldBox}>
                   <input
                     type="checkbox"
-                    disabled={Number(values.Program_Completion) === 1}
+                    disabled={Number(values.Program_Completion) === 0}
                     onChange={handleChange}
                     name="program_significantly_modified"
                     id="program_significantly_modified"
@@ -786,7 +779,7 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
                 <select
                   css={selectField}
                   onChange={handleChange}
-                  disabled={Number(values.Program_Completion) === 1}
+                  disabled={Number(values.Program_Completion) === 0}
                   name="Returned_to_Care"
                   value={values.Returned_to_Care || ""}
                 >
@@ -805,7 +798,6 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
                 size="large"
                 variant="contained"
                 color="primary"
-                // disabled={Number(values.Program_Completion) === 1}
               >
                 Submit
               </Button>
