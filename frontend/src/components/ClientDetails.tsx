@@ -652,10 +652,6 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
             return false;
           }
 
-          // console.log(values);
-
-          // return;
-
           const Program_Completion =
             values.Program_Completion === ""
               ? null
@@ -664,15 +660,7 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
             values.Returned_to_Care === ""
               ? null
               : Number(values.Returned_to_Care);
-          // console.log(
-          //   client.client_code,
-          //   Program_Completion,
-          //   Returned_to_Care,
-          //   Number(values.program_significantly_modified),
-          //   values.Program!.value!,
-          //   values.Location!
-          // );
-          // return;
+
           await props.onFormSubmit(
             client.client_code,
             Program_Completion,
@@ -697,7 +685,7 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
               <div css={twoCol}>
                 <Dropdown
                   name="Program"
-                  // disabled={Number(values.Program_Completion) === 0}
+                  disabled={values.Program_Completion !== ""}
                   options={programOptions}
                   onChange={(p: any) => onProgramChange(p, values)}
                   defaultValue={programOptions.find(
@@ -715,7 +703,7 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
                 <select
                   css={selectField}
                   name="Location"
-                  // disabled={Number(values.Program_Completion) === 0}
+                  disabled={values.Program_Completion !== ""}
                   value={values.Location}
                   onChange={handleChange}
                 >
@@ -784,7 +772,7 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
                     disabled={
                       values.Program_Completion !== ""
                         ? values.Program_Completion === "0"
-                        : false
+                        : true
                     }
                     onChange={handleChange}
                     name="program_significantly_modified"
@@ -814,7 +802,7 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
                   disabled={
                     values.Program_Completion !== ""
                       ? values.Program_Completion === "0"
-                      : false
+                      : true
                   }
                   name="Returned_to_Care"
                   value={

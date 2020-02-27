@@ -123,6 +123,7 @@ const ProgramSelection: React.FC<ProgramSelectionProps> = props => {
                 <div css={twoCol}>
                   <input
                     type="text"
+                    readOnly
                     name="Confidence"
                     css={inputField}
                     placeholder=""
