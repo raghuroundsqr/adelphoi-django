@@ -58,12 +58,16 @@ interface FormValues {
   Returned_to_Care: string | number | null;
   program_significantly_modified: number | string | null;
   Program: any;
-  Confidence: string;
-  Location: string;
+  confidence: string;
+  Location: any;
 }
 
 const ClientDetails: React.FC<ClientDetailsProps> = props => {
   const [predicted_program, setPredictedProgram] = useState<string | null>(
+    null
+  );
+
+  const [predicted_location, setPredictedLocation] = useState<string | null>(
     null
   );
 
@@ -75,6 +79,15 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
       setPredictedProgram(props.client.selected_program);
     }
   }, [props.client.selected_program]);
+
+  useEffect(() => {
+    if (
+      !predicted_location ||
+      predicted_location === props.client.selected_location
+    ) {
+      setPredictedLocation(props.client.selected_location);
+    }
+  }, [props.client.selected_location]);
 
   const onProgramChange = (program: any, values: any) => {
     props.onProgramSelect(props.client.client_code!, program.value, values);
@@ -98,14 +111,32 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
         };
       })
     : [];
-  const getInitialValues = () => {
+
+  const locationOptions = props.client.SuggestedLocations
+    ? props.client.SuggestedLocations.map(l => {
+        return {
+          label: l,
+          value: l,
+          predicted: l === predicted_location
+        };
+      })
+    : [];
+  const getInitialValues = (): FormValues => {
     const { client } = props;
-    let program = null;
+    let program: any = null;
+    let location: any = null;
     if (client.selected_program) {
       program = {
         label: client.selected_program,
         value: client.selected_program,
         predicted: client.selected_program === predicted_program
+      };
+    }
+    if (client.selected_location) {
+      location = {
+        label: client.selected_location,
+        value: client.selected_location,
+        predicted: client.selected_location === predicted_location
       };
     }
     return {
@@ -122,7 +153,7 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
       ),
       Program: program,
       confidence: client.confidence ? client.confidence.toString() : "",
-      Location: client.selected_location || ""
+      Location: location || ""
     };
   };
 
@@ -667,7 +698,7 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
             Returned_to_Care,
             Number(values.program_significantly_modified),
             values.Program!.value!,
-            values.Location!
+            values.Location!.value!
           );
           // helpers.resetForm();
         }}
@@ -700,7 +731,17 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
                 <label css={label}>Location</label>
               </div>
               <div css={twoCol}>
-                <select
+                <Dropdown
+                  name="Location"
+                  disabled={values.Program_Completion !== ""}
+                  options={locationOptions}
+                  // onChange={(p: any) => onLocationChange(p, values)}
+                  defaultValue={locationOptions.find(
+                    l => l.value === predicted_location
+                  )}
+                  value={values.Location || null}
+                />
+                {/* <select
                   css={selectField}
                   name="Location"
                   disabled={values.Program_Completion !== ""}
@@ -714,8 +755,8 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
                         {loc}
                       </option>
                     ))}
-                </select>
-                <ErrorMessage component="span" name="Location" />
+                </select> 
+                <ErrorMessage component="span" name="Location" />*/}
               </div>
             </div>
             <div css={fieldRow}>
