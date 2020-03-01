@@ -148,8 +148,6 @@ const ProgramList: React.FC<ProgramListProps> = props => {
               return errors;
             }}
             onSubmit={async (values, helpers) => {
-              console.log(values);
-
               try {
                 if (editingProgram) {
                   const program: Types.Program = {

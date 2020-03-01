@@ -62,7 +62,6 @@ const ProgramSelection: React.FC<ProgramSelectionProps> = props => {
         predicted: client.client_selected_program === client.program_type
       };
     }
-    console.log(program);
     return {
       Program: program,
       Confidence: client.Confidence,
@@ -127,7 +126,7 @@ const ProgramSelection: React.FC<ProgramSelectionProps> = props => {
                     name="Confidence"
                     css={inputField}
                     placeholder=""
-                    value={values.Confidence || ""}
+                    value={values.Confidence === null ? "" : values.Confidence}
                     onChange={handleChange}
                   />
                   <ErrorMessage component="span" name="Confidence" />

@@ -95,14 +95,6 @@ export class ClientDetailsContainer extends React.Component<
     program: string | null,
     location: string | null
   ) => {
-    console.log(
-      client_code,
-      program_completion,
-      returned_to_care,
-      program_significantly_modified,
-      program,
-      location
-    );
     try {
       this.setState({ isLoading: true });
 
