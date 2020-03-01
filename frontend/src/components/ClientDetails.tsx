@@ -152,7 +152,8 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
         client.program_significantly_modified
       ),
       Program: program,
-      confidence: client.confidence ? client.confidence.toString() : "",
+      confidence:
+        client.confidence !== null ? client.confidence.toString() : "",
       Location: location || ""
     };
   };

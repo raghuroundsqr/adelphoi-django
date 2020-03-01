@@ -127,8 +127,8 @@ export const actions = {
   ): ThunkAction<Promise<void>, AppState, null, AnyAction> {
     return async (dispatch, getState) => {
       const response = await fetchPcr(client_code, selected_program);
-      const pcr = response ? response.pcr : null;
-      if (pcr) {
+      const pcr: number | null = response ? response.pcr : null;
+      if (pcr !== null) {
         const cl: Types.Client = {
           ...getState().client!.client,
           Confidence: pcr,
