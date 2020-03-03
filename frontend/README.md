@@ -1,4 +1,20 @@
+App is developed using typescript, react, react router 5 and redux. All versions are latest by Feb 2020.
+Emotion 10 used for styling the app.
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
+Core directories
+Api
+
+- api.ts
+- definitions
+  redux-modules
+- follows ducks pattern to contain reducer, actions and selectors in a single file.
+  Containers
+- connected components that interact with redux state. Also contains Routes wherever required
+  Components
+- presentational components used by containers
+  App.ts - bootstraps the app
 
 ## Available Scripts
 
@@ -42,3 +58,21 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
+
+## Deploy
+
+Make sure latest code is pushed to master branch.
+(assumes key.pem is in the same directory)
+
+1. ssh -i "key.pem" ubuntu@xx.xxx.xx.x
+2. cd /var/www/adelphoi-django/
+3. git pull
+4. cd frontend
+5. yarn build
+
+## Third party packages
+
+1. Form handling - Formik
+2. Styles (css-in-js) - Emotion 10
+3. Material UI React
+4. React Select

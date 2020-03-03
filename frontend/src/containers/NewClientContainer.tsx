@@ -62,7 +62,7 @@ export class NewClientContainer extends React.Component<
   saveClientStep1 = async (client: Types.Client) => {
     const { history } = this.props;
     this.props.clearErrors();
-    console.log(client);
+
     // check excl criteria
     if (client.Exclusionary_Criteria) {
       try {
