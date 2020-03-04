@@ -69,6 +69,8 @@ export interface Client {
   FAST_CaregiverAdvocacyScore: string | null;
   Confidence: number | null;
   confidence: number | null;
+  Roc_confidence: number | null;
+  roc_confidence: number | null;
   Level_of_care: string | null;
   program_type: string | null;
   referred_program: string | null;
@@ -79,12 +81,17 @@ export interface Client {
   program_model_suggested: string[] | null;
   selected_program: string | null;
   selected_location: string | null;
+  selected_referral: string | null;
   SuggestedLocations: string[] | null;
   result_final: string | null;
   inclusionary_criteria: boolean;
   Program_Completion: number | null;
   Returned_to_Care: number | null;
   program_significantly_modified: number | null;
+}
+export interface Referral {
+  referral: number;
+  referral_name: string;
 }
 
 export interface Program {
@@ -100,6 +107,7 @@ export interface Location {
 export interface Configuration {
   gender: number | null;
   program: number | null;
+  referral: number | null;
   level_of_care: number | null;
   location: number[] | null;
   facility_type: number | null;
@@ -200,12 +208,15 @@ export const emptyClient: Client = {
   program_type: null,
   Confidence: null,
   confidence: null,
+  roc_confidence:null,
+  Roc_confidence:null,
   Level_of_care: null,
   SuggestedLocations: null,
   SuggestedPrograms: null,
   model_program: null,
   selected_program: null,
   selected_location: null,
+  selected_referral: null,
   result_final: null,
   inclusionary_criteria: false,
   Program_Completion: null,
@@ -217,6 +228,7 @@ export const emptyClient: Client = {
 export const emptyConfiguration: Configuration = {
   gender: null,
   program: null,
+  referral: null,
   level_of_care: null,
   location: [],
   facility_type: null,

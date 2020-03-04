@@ -30,6 +30,7 @@ import {
 import Dropdown from "./Dropdown";
 import * as Types from "../api/definitions";
 import { baseApiUrl } from "../api/api";
+//import ReferralList from "./ReferralList";
 // import ProgramList from "./ProgramList";
 
 interface ClientDetailsProps {
@@ -43,11 +44,13 @@ interface ClientDetailsProps {
     client_code: string,
     program_completion: number | null,
     returned_to_care: number | null,
+    //roc_confidence: number | null,
     program_significantly_modified: number,
     Program: string | null,
-    Location: string | null
+    Location: string | null,
+    Referral: string | null
   ) => void;
-  isLoading: boolean;
+  isLoading: boolean;   
   hasError: boolean;
   error: string;
   program_completion_response: string | null;
@@ -59,11 +62,16 @@ interface FormValues {
   program_significantly_modified: number | string | null;
   Program: any;
   confidence: string;
+  roc_confidence: string;
   Location: any;
+  Referral: any;
 }
 
 const ClientDetails: React.FC<ClientDetailsProps> = props => {
   const [predicted_program, setPredictedProgram] = useState<string | null>(
+    null
+  );
+  const [predicted_referral, setPredictedReferral] = useState<string | null>(
     null
   );
 
@@ -125,6 +133,14 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
     const { client } = props;
     let program: any = null;
     let location: any = null;
+    let referral: any = null;
+    if (client.selected_referral) {
+      referral = {
+        label: client.selected_referral,
+        value: client.selected_referral,
+        predicted: client.selected_referral === predicted_referral
+      };
+    }
     if (client.selected_program) {
       program = {
         label: client.selected_program,
@@ -151,7 +167,10 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
       program_significantly_modified: Number(
         client.program_significantly_modified
       ),
+      roc_confidence: 
+      client.roc_confidence !== null ? client.roc_confidence.toString() : "",
       Program: program,
+      Referral: referral,
       confidence:
         client.confidence !== null ? client.confidence.toString() : "",
       Location: location || ""
@@ -265,7 +284,7 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
               </div>
             </div>
             <div css={twoCol}>
-              <label css={txtLabel}>C & Y Involvement</label>
+              <label css={txtLabel}>Secondary Involvement (Crossover Youth)</label>
 
               <div css={txtDetail}>
                 {client.CYF_code !== null
@@ -535,6 +554,12 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
           <h1 css={panelHeading}>Assessment Scores</h1>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails css={panel}>
+        <div css={fieldRow}>
+            <div css={twoCol}>
+              <label css={txtLabel}>YLS Prior/Current Offenses Score</label>
+              <div css={txtDetail}>{client.yls_PriorCurrentOffenses_Score}</div>
+            </div>
+          </div>
           <div css={fieldRow}>
             <div css={twoCol}>
               <label css={txtLabel}>YLS Family Circumstances Score</label>
@@ -575,12 +600,6 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
             <div css={twoCol}>
               <label css={txtLabel}>YLS Attitude Score</label>
               <div css={txtDetail}>{client.yls_Attitude_Score}</div>
-            </div>
-          </div>
-          <div css={fieldRow}>
-            <div css={twoCol}>
-              <label css={txtLabel}>YLS Prior/Current Offenses Score</label>
-              <div css={txtDetail}>{client.yls_PriorCurrentOffenses_Score}</div>
             </div>
           </div>
           <div css={fieldRow}>
@@ -699,7 +718,9 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
             Returned_to_Care,
             Number(values.program_significantly_modified),
             values.Program!.value!,
-            values.Location!.value!
+            values.Location!.value!,
+            values.Referral!.value!,
+            //values.roc_confidence!.value!
           );
           // helpers.resetForm();
         }}
@@ -776,6 +797,24 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
                   onChange={handleChange}
                 />
                 <ErrorMessage component="span" name="confidence" />
+              </div>
+            </div>
+            <div css={fieldRow}>
+              <div css={twoCol}>
+                <label css={label}>Remain out of care Likelihood</label>
+              </div>
+              <div css={twoCol}>
+                <input
+                  type="text"
+                  name="roc_confidence"
+                  readOnly
+                  css={inputField}
+                  // disabled={Number(values.Program_Completion) === 0}
+                  placeholder=""
+                  value={values.roc_confidence || ""}
+                  onChange={handleChange}
+                />
+                <ErrorMessage component="span" name="roc_confidence" />
               </div>
             </div>
             <div css={fieldRow}>

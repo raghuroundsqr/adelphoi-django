@@ -392,14 +392,14 @@ const PredictionFormStep1: React.FC<PredictionFormStep1Props> = props => {
                     <option value="">Select</option>
                     <option value="1">Voluntary</option>
                     <option value="2">Dependant</option>
-                    <option value="3">Voluntary Delinquent</option>
-                    <option value="4">Dependant Delinquent</option>
+                    {/* <option value="3">Voluntary Delinquent</option>
+                    <option value="4">Dependant Delinquent</option> */}
                     <option value="5">Delinquent</option>
                   </select>
                   <ErrorMessage component="span" name="ls_type" />
                 </div>
                 <div css={twoCol}>
-                  <label css={label}>C & Y Involvement</label>
+                  <label css={label}>Secondary Involvement (Crossover Youth)</label>
                   <select
                     css={selectField}
                     name="CYF_code"
@@ -407,6 +407,7 @@ const PredictionFormStep1: React.FC<PredictionFormStep1Props> = props => {
                     onChange={handleChange}
                   >
                     <option value="">Select</option>
+                    <option value="0">None</option>
                     <option value="1">CYF</option>
                     <option value="2">Juvenile Justice</option>
                   </select>

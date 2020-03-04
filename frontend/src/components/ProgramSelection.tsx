@@ -37,6 +37,7 @@ interface ProgramSelectionProps {
 interface FormValues {
   Program: any;
   Confidence: string;
+  Roc_confidence: string;
   client_selected_location: string;
 }
 const ProgramSelection: React.FC<ProgramSelectionProps> = props => {
@@ -65,6 +66,7 @@ const ProgramSelection: React.FC<ProgramSelectionProps> = props => {
     return {
       Program: program,
       Confidence: client.Confidence,
+      Roc_confidence: client.Roc_confidence,
       client_selected_location: ""
     };
   };
@@ -130,6 +132,23 @@ const ProgramSelection: React.FC<ProgramSelectionProps> = props => {
                     onChange={handleChange}
                   />
                   <ErrorMessage component="span" name="Confidence" />
+                </div>
+              </div>
+              <div css={fieldRow}>
+                <div css={twoCol}>
+                  <label css={label}>Remain Out of care Likelihood</label>
+                </div>
+                <div css={twoCol}>
+                  <input
+                    type="text"
+                    readOnly
+                    name="roc_confidence"
+                    css={inputField}
+                    placeholder=""
+                    value={values.Roc_confidence === null ? "" : values.Roc_confidence}
+                    onChange={handleChange}
+                  />
+                  <ErrorMessage component="span" name="roc_confidence" />
                 </div>
               </div>
               <div css={fieldRow}>
