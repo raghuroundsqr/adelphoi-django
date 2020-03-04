@@ -59,7 +59,7 @@ export const actions = {
         throw Error("something went wrong while creating the referral");
       }
       const newReferral: Types.Referral = {
-        referral: response.referral_id,
+        referral_code: response.referral_id,
         referral_name: referral.referral_name
       };
       const referralState = getState().referral;
@@ -80,7 +80,9 @@ export const actions = {
       const referralState = getState().referral;
       let existingList = referralState ? referralState.referralList : [];
       if (existingList.length > 0) {
-        existingList = existingList.filter(p => p.referral !== referral.referral);
+        existingList = existingList.filter(
+          p => p.referral_code !== referral.referral_code
+        );
       }
       const referralList = [referral, ...existingList];
       dispatch(update({ referralList }));

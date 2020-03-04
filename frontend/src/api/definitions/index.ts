@@ -90,7 +90,7 @@ export interface Client {
   program_significantly_modified: number | null;
 }
 export interface Referral {
-  referral: number;
+  referral_code: number;
   referral_name: string;
 }
 
@@ -208,8 +208,8 @@ export const emptyClient: Client = {
   program_type: null,
   Confidence: null,
   confidence: null,
-  roc_confidence:null,
-  Roc_confidence:null,
+  roc_confidence: null,
+  Roc_confidence: null,
   Level_of_care: null,
   SuggestedLocations: null,
   SuggestedPrograms: null,

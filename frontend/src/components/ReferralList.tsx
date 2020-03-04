@@ -37,12 +37,12 @@ interface ReferralListProps {
 }
 
 interface FormValues {
-    referral_name: string;
+  referral_name: string;
   editing_referral_name: string;
 }
 
 const initialValues: FormValues = {
-    referral_name: "",
+  referral_name: "",
   editing_referral_name: ""
 };
 
@@ -65,7 +65,10 @@ const ReferralList: React.FC<ReferralListProps> = props => {
       shouldValidate?: boolean | undefined
     ) => void
   ) => {
-    if (editingReferral && editingReferral.referral === referral.referral) {
+    if (
+      editingReferral &&
+      editingReferral.referral_code === referral.referral_code
+    ) {
       return (
         <React.Fragment>
           <TableCell>
@@ -151,7 +154,7 @@ const ReferralList: React.FC<ReferralListProps> = props => {
               try {
                 if (editingReferral) {
                   const referral: Types.Referral = {
-                    referral: editingReferral.referral,
+                    referral_code: editingReferral.referral_code,
                     referral_name: values.editing_referral_name
                   };
                   await props.updateReferral(referral);
@@ -160,7 +163,7 @@ const ReferralList: React.FC<ReferralListProps> = props => {
                   setEditingReferral(null);
                 } else {
                   const referral: Types.Referral = {
-                    referral: 0,
+                    referral_code: 0,
                     referral_name: values.referral_name
                   };
                   await props.createReferral(referral);
@@ -204,7 +207,7 @@ const ReferralList: React.FC<ReferralListProps> = props => {
                   <TableHead>
                     <TableRow css={tableHeader}>
                       <TableCell style={{ width: "600px" }}>
-                      Referral Source Name
+                        Referral Source Name
                       </TableCell>
                       <TableCell>Edit</TableCell>
                     </TableRow>
@@ -212,7 +215,7 @@ const ReferralList: React.FC<ReferralListProps> = props => {
                   <TableBody>
                     {referralList.length > 0 ? (
                       referralList.map(p => (
-                        <TableRow key={p.referral} css={tableRow}>
+                        <TableRow key={p.referral_code} css={tableRow}>
                           {renderCell(p, values, handleChange, setFieldValue)}
                         </TableRow>
                       ))

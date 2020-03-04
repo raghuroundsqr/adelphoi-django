@@ -103,24 +103,22 @@ export const createReferral = async (referral: Types.Referral) => {
     console.error("api function createReferral error");
     throwError(error);
   }
-};  
+};
 
 export const updateReferral = async (referral: Types.Referral) => {
-  
   try {
-      const response = await axios.put(
-      `${baseApiUrl}/referral/${referral.referral}/`, 
+    const response = await axios.put(
+      `${baseApiUrl}/referral/${referral.referral_code}/`,
       {
         referral_name: referral.referral_name
       }
     );
     return response.data;
   } catch (error) {
-    console.error("api function updateReferral error"); 
+    console.error("api function updateReferral error");
     throwError(error);
   }
 };
-
 
 export const fetchPrograms = async () => {
   try {

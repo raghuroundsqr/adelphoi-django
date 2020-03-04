@@ -90,14 +90,13 @@ export class ConfigurationContainer extends React.Component<
     const programList = (programState && programState.programList) || [];
     const locationList = (locationState && locationState.locationList) || [];
     const { match, location } = this.props;
-    console.log(referralList,'ref')
     return (
       <Switch>
         <Route path="/configuration">
           <React.Fragment>
             <Paper style={{ flexGrow: 1, marginTop: 30 }}>
               <Tabs value={location.pathname} centered>
-              <Tab
+                <Tab
                   label="Referral Sources"
                   component={Link}
                   to={`${match.url}/referral`}
@@ -124,7 +123,7 @@ export class ConfigurationContainer extends React.Component<
               </Tabs>
             </Paper>
             <Switch>
-            <Route path={`${match.url}/referral`}>
+              <Route path={`${match.url}/referral`}>
                 <ReferralList
                   referralList={referralList}
                   {...this.state}
