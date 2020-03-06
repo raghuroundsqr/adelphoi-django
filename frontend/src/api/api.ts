@@ -108,7 +108,7 @@ export const createReferral = async (referral: Types.Referral) => {
 export const updateReferral = async (referral: Types.Referral) => {
   try {
     const response = await axios.put(
-      `${baseApiUrl}/referral/${referral.referral_code}/`,
+      `${baseApiUrl}/referral_modify/${referral.referral_code}/`,
       {
         referral_name: referral.referral_name
       }

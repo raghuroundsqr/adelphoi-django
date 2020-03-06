@@ -78,6 +78,7 @@ export interface Client {
   client_selected_program: string | null;
   client_selected_locations: string | null;
   SuggestedPrograms: string[] | null;
+  SuggestedReferral: string[] | null;
   program_model_suggested: string[] | null;
   selected_program: string | null;
   selected_location: string | null;
@@ -87,11 +88,13 @@ export interface Client {
   inclusionary_criteria: boolean;
   Program_Completion: number | null;
   Returned_to_Care: number | null;
-  program_significantly_modified: number | null;
+  referral: string | null;
+   program_significantly_modified: number | null;
 }
 export interface Referral {
   referral_code: number;
   referral_name: string;
+  
 }
 
 export interface Program {
@@ -137,6 +140,7 @@ interface ObjectLiteral {
 
 export const emptyClient: Client = {
   client_code: null,
+  referral: null,
   episode_start: null,
   episode_number: null,
   name: null,
@@ -213,6 +217,7 @@ export const emptyClient: Client = {
   Level_of_care: null,
   SuggestedLocations: null,
   SuggestedPrograms: null,
+  SuggestedReferral: null,
   model_program: null,
   selected_program: null,
   selected_location: null,

@@ -132,7 +132,7 @@ const PredictionFormStep2: React.FC<PredictionFormStep2Props> = props => {
               </div>
               <div css={fieldRow}>
                 <div css={twoCol}>
-                  <label css={label}>YLS Subab Score</label>
+                  <label css={label}>YLS Substance Abuse Score</label>
                 </div>
                 <div css={twoCol}>
                   <input

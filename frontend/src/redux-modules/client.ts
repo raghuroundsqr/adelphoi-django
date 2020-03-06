@@ -132,7 +132,9 @@ export const actions = {
         const cl: Types.Client = {
           ...getState().client!.client,
           Confidence: pcr,
-          confidence: pcr
+          confidence: pcr,
+          Roc_confidence: pcr,
+          roc_confidence: pcr
         };
         dispatch(update({ client: cl }));
         const clientList = getState().client?.clientList;
@@ -142,6 +144,8 @@ export const actions = {
             ...client,
             Confidence: pcr,
             confidence: pcr,
+            Roc_confidence: pcr,
+          roc_confidence: pcr,
             Program_Completion: 0,
             selected_program
           };
@@ -272,6 +276,7 @@ export const actions = {
           ...client,
           program_type: response.program_type || null,
           Confidence: response.Confidence || null,
+          Roc_confidence: response.Roc_confidence || null,
           referred_program: response.program_type || null,
           model_program: response.model_program || null,
           SuggestedPrograms: response.list_program_types || null

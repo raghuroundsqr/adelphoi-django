@@ -7,6 +7,8 @@ import { AppState } from "../redux-modules/root";
 import { ContainerProps } from "./Container";
 import * as client from "../redux-modules/client";
 import * as program from "../redux-modules/program";
+import * as referral from "../redux-modules/referral";
+import ReferralList from "../components/ReferralList";
 import PredictionFormStep1 from "../components/PredictionFormStep1";
 import PredictionFormStep2 from "../components/PredictionFormStep2";
 import ProgramSelection from "../components/ProgramSelection";
@@ -36,6 +38,8 @@ export interface NewClientContainerProp
   clearErrors: () => void;
   clearClient: () => void;
   getAvailablePrograms: () => Promise<void>;
+  getReferral: () => Promise<void>;
+  Referral: Types.Referral[];
 }
 
 export class NewClientContainer extends React.Component<
@@ -57,6 +61,7 @@ export class NewClientContainer extends React.Component<
   componentDidMount() {
     this.props.closeSnackbar();
     this.props.getAvailablePrograms();
+    this.props.getReferral();
   }
 
   saveClientStep1 = async (client: Types.Client) => {
@@ -123,6 +128,7 @@ export class NewClientContainer extends React.Component<
       this.props.enqueueSnackbar(errorMessage);
     }
     this.setState({ isLoading: false });
+    //this.props.clearClient();
   };
 
   saveProgramAndLocation = async (selected_location: string) => {
@@ -135,8 +141,9 @@ export class NewClientContainer extends React.Component<
     this.setState({ isLoading: true });
     await this.props.saveLocationAndProgram(selected_location);
     this.setState({ isLoading: false });
-    this.props.clearClient();
+    
     this.props.enqueueSnackbar("Data saved successfully.");
+    this.props.clearClient();
   };
 
   saveClientStep2 = async (client: Types.Client) => {
@@ -147,6 +154,7 @@ export class NewClientContainer extends React.Component<
       await this.props.insertClient(client);
       this.setState({ isLoading: false });
       history.push("/new-client/program-selection");
+      //this.props.clearClient();
     } catch (error) {
       console.log(error);
       this.setState({ isLoading: false });
@@ -155,7 +163,8 @@ export class NewClientContainer extends React.Component<
   };
 
   render() {
-    const { client: clientState, program: programState } = this.props;
+    const { client: clientState, program: programState, referral: referralState, } = this.props;
+    const referralList = (referralState && referralState.referralList) || [];
     let currentClient: Types.Client;
     currentClient = clientState ? clientState.client : Types.emptyClient;
 
@@ -204,6 +213,7 @@ export class NewClientContainer extends React.Component<
         <Route exact path="/new-client">
           <PredictionFormStep1
             {...this.state}
+            Referral={referralList}
             client={currentClient}
             onFormSubmit={this.saveClientStep1}
             errors={(clientState && clientState.errors) || undefined}
@@ -217,7 +227,8 @@ export class NewClientContainer extends React.Component<
 const mapStateToProps = (state: AppState) => {
   return {
     client: state.client,
-    program: state.program
+    program: state.program,
+    referral: state.referral
   };
 };
 
@@ -230,7 +241,8 @@ const mapDispatchToProps = {
   saveLocationAndProgram: client.actions.saveLocationAndProgram,
   clearErrors: client.actions.clearErrors,
   clearClient: client.actions.clear,
-  getAvailablePrograms: program.actions.getAvailablePrograms
+  getAvailablePrograms: program.actions.getAvailablePrograms,
+  getReferral: referral.actions.getReferral,
 };
 
 export default connect(
