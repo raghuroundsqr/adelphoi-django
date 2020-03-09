@@ -217,7 +217,7 @@ export class NewClientContainer extends React.Component<
             );
           }}
         ></Route>
-        <Route path="/new-client">
+        <Route exact path="/new-client">
           <PredictionFormStep1
             {...this.state}
             Referral={referralList}
