@@ -54,7 +54,7 @@ const PredictionFormStep2: React.FC<PredictionFormStep2Props> = props => {
           enableReinitialize
           onSubmit={async (values, helpers) => {
             await props.onFormSubmit(values);
-            // helpers.resetForm();
+            //helpers.resetForm();
           }}
         >
           {({ values, handleSubmit, handleChange }) => (

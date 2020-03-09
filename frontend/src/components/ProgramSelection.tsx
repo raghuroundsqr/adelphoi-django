@@ -200,7 +200,7 @@ const ProgramSelection: React.FC<ProgramSelectionProps> = props => {
                   variant="contained"
                   color="primary"
                 >
-                  Submit
+                  Continue
                 </Button>
               </div>
             </form>

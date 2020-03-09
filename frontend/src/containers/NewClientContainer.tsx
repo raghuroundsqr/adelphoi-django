@@ -67,9 +67,10 @@ export class NewClientContainer extends React.Component<
   saveClientStep1 = async (client: Types.Client) => {
     const { history } = this.props;
     this.props.clearErrors();
-
+    console.log('first')
     // check excl criteria
     if (client.Exclusionary_Criteria) {
+      
       try {
         this.setState({ isLoading: true });
         this.props.saveClient(client, true, true);
@@ -91,6 +92,7 @@ export class NewClientContainer extends React.Component<
   };
 
   getLocationsAndPcr = async (selected_program: string) => {
+    console.log('second')
     const { client: clientState } = this.props;
     if (!clientState || !clientState.client) {
       return false;
@@ -105,6 +107,7 @@ export class NewClientContainer extends React.Component<
   };
 
   submitProgram = async (client: Types.Client) => {
+    console.log('third')
     // const { client: clientState } = this.props;
     // if (!clientState || !clientState.client) {
     //   return false;
@@ -116,7 +119,7 @@ export class NewClientContainer extends React.Component<
       return false;
     }
     try {
-      this.setState({ isLoading: true });
+      this.setState({ isLoading: true });  
       await this.props.submitPrediction(client);
     } catch (error) {
       let errorMessage: string = "An error occurred while saving.";
@@ -132,6 +135,7 @@ export class NewClientContainer extends React.Component<
   };
 
   saveProgramAndLocation = async (selected_location: string) => {
+    console.log('four')
     // const { history } = this.props;
     const { client: clientState } = this.props;
     if (!clientState || !clientState.client) {
@@ -145,14 +149,17 @@ export class NewClientContainer extends React.Component<
     this.props.enqueueSnackbar("Data saved successfully.");
     this.props.clearClient();
   };
+  
 
   saveClientStep2 = async (client: Types.Client) => {
+    console.log('five')
     const { history } = this.props;
     try {
       this.setState({ isLoading: true });
       this.props.saveClient(client);
       await this.props.insertClient(client);
       this.setState({ isLoading: false });
+      this.props.enqueueSnackbar("New Client Created Successfully.");
       history.push("/new-client/program-selection");
       //this.props.clearClient();
     } catch (error) {
@@ -165,9 +172,9 @@ export class NewClientContainer extends React.Component<
   render() {
     const { client: clientState, program: programState, referral: referralState, } = this.props;
     const referralList = (referralState && referralState.referralList) || [];
+    const { match: { params } } = this.props;
     let currentClient: Types.Client;
     currentClient = clientState ? clientState.client : Types.emptyClient;
-
     const availableProgramList =
       (programState && programState.availableProgramList) || [];
 
@@ -210,13 +217,13 @@ export class NewClientContainer extends React.Component<
             );
           }}
         ></Route>
-        <Route exact path="/new-client">
+        <Route path="/new-client">
           <PredictionFormStep1
             {...this.state}
             Referral={referralList}
             client={currentClient}
             onFormSubmit={this.saveClientStep1}
-            errors={(clientState && clientState.errors) || undefined}
+            errors = {(clientState && clientState.errors) || undefined}
           />
         </Route>
       </Switch>

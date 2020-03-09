@@ -85,6 +85,7 @@ const EpisodeStartPicker: React.FC<FormikProps<Types.Client> &
 
 const DobPicker: React.FC<FormikProps<Types.Client> & FieldProps> = props => {
   const { field, form, ...other } = props;
+  
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
       <KeyboardDatePicker
@@ -122,7 +123,8 @@ const PredictionFormStep1: React.FC<PredictionFormStep1Props> = props => {
     }
     return <SnackNotification errors={errors} />;
   };
-
+  
+console.log(props.client.client_code,'client')
   return (
     <div css={wrap}>
       {renderErrorNotification()}
@@ -148,7 +150,7 @@ const PredictionFormStep1: React.FC<PredictionFormStep1Props> = props => {
             );
             values.ageAtEpisodeStart = ageAtEp.toString() || "";
             props.onFormSubmit(values);
-            // helpers.resetForm();
+            helpers.resetForm();
           }}
         >
           {({ values, handleSubmit, handleChange, errors }) => (
