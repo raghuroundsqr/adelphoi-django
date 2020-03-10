@@ -67,7 +67,7 @@ export class NewClientContainer extends React.Component<
   saveClientStep1 = async (client: Types.Client) => {
     const { history } = this.props;
     this.props.clearErrors();
-    console.log('first')
+    
     // check excl criteria
     if (client.Exclusionary_Criteria) {
       
@@ -92,7 +92,7 @@ export class NewClientContainer extends React.Component<
   };
 
   getLocationsAndPcr = async (selected_program: string) => {
-    console.log('second')
+   
     const { client: clientState } = this.props;
     if (!clientState || !clientState.client) {
       return false;
@@ -107,7 +107,7 @@ export class NewClientContainer extends React.Component<
   };
 
   submitProgram = async (client: Types.Client) => {
-    console.log('third')
+   
     // const { client: clientState } = this.props;
     // if (!clientState || !clientState.client) {
     //   return false;
@@ -152,7 +152,7 @@ export class NewClientContainer extends React.Component<
   
 
   saveClientStep2 = async (client: Types.Client) => {
-    console.log('five')
+    
     const { history } = this.props;
     try {
       this.setState({ isLoading: true });

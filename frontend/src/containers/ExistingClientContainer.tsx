@@ -9,7 +9,7 @@ import { ContainerProps } from "./Container";
 import * as client from "../redux-modules/client";
 import ClientSearch from "../components/ClientSearch";
 import ClientDetailsContainer from "./ClientDetailsContainer";
-import ReferralList from "../components/ReferralList";
+//import ReferralList from "../components/ReferralList";
 
 interface MatchParams {
   index: string;

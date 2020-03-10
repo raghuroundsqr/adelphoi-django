@@ -20,6 +20,7 @@ import {
   inputField,
   label,
   fieldBox,
+  fieldBox1,
   selectField,
   datePicker
 } from "./styles";
@@ -579,33 +580,37 @@ console.log(props.client.client_code,'client')
               </div>
               <div css={fieldRow}>
                 <div css={twoCol}>
-                  <label css={label}>
-                    Sexually Acting Out behaviors in Placement
-                  </label>
+                  <label css={label}> Sexually Acting Out behaviors in Placement</label>
+                  </div>
+				  <div css={twoCol}>
+          <div css={fieldBox1}>
+                    <input
+                      type="radio"
+                      onChange={handleChange}
+                      name="hist_of_prior_program_SAO"
+                      id="hist_of_prior_program_SAO-yes"
+                      value="1"
+                      checked={values.hist_of_prior_program_SAO === "1"}
+                    />{" "}
+                    <label htmlFor="hist_of_prior_program_SAO-yes">Yes</label>
+                  </div>
+                  <div css={fieldBox1}>
+                    <input
+                      type="radio"
+                      onChange={handleChange}
+                      name="hist_of_prior_program_SAO"
+                      id="hist_of_prior_program_SAO-no"
+                      value="0"
+                      checked={values.hist_of_prior_program_SAO === "0"}
+                    />{" "}
+                    <label htmlFor="hist_of_prior_program_SAO-no">No</label>
+                  </div>
+                  
+                  <ErrorMessage component="span" name="hist_of_prior_program_SAO" />
                 </div>
-                <div css={twoCol}>
-                  <input
-                    type="radio"
-                    onChange={handleChange}
-                    name="hist_of_prior_program_SAO"
-                    value="1"
-                    checked={values.hist_of_prior_program_SAO === "1"}
-                  />{" "}
-                  Yes
-                  <input
-                    type="radio"
-                    onChange={handleChange}
-                    name="hist_of_prior_program_SAO"
-                    value="0"
-                    checked={values.hist_of_prior_program_SAO === "0"}
-                  />{" "}
-                  No
                 </div>
-                <ErrorMessage
-                  component="span"
-                  name="hist_of_prior_program_SAO"
-                />
-              </div>
+                
+              
               <h1 css={subHeading}>Mental Health</h1>
               <div css={fieldRow}>
                 <div css={twoCol}>

@@ -12,8 +12,8 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Backdrop from "@material-ui/core/Backdrop";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
-import * as referral from "../redux-modules/referral";
-import ReferralList from "../components/ReferralList";
+// import * as referral from "../redux-modules/referral";
+// import ReferralList from "../components/ReferralList";
 import {
   label,
   backdrop,
@@ -32,8 +32,7 @@ import {
 import Dropdown from "./Dropdown";
 import * as Types from "../api/definitions";
 import { baseApiUrl } from "../api/api";
-//import ReferralList from "./ReferralList";
-// import ProgramList from "./ProgramList";
+
 
 interface ClientDetailsProps {
   client: Types.Client;
@@ -44,14 +43,13 @@ interface ClientDetailsProps {
   ) => Promise<void>;
   onFormSubmit: (
     client_code: string,
-
     program_completion: number | null,
     returned_to_care: number | null,
     //roc_confidence: number | null,
     program_significantly_modified: number,
     Program: string | null,
     Location: string | null,
-    Referral: string | null
+    //Referral: string | null
   ) => void;
   isLoading: boolean;
   hasError: boolean;
@@ -105,7 +103,7 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
 
   useEffect(() => {
     if (
-      !predicted_location ||
+      !predicted_location || 
       predicted_location === props.client.selected_location
     ) {
       setPredictedLocation(props.client.selected_location);
@@ -122,9 +120,7 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
   }
   const { client, Referral } = props;
 
-  if (!client || !client.client_code) {
-    return <h1 css={subHeading}>No client found</h1>;
-  }
+ 
   
   const RefSource  = Referral.map(d =>{
     
@@ -746,7 +742,7 @@ const ClientDetails: React.FC<ClientDetailsProps> = props => {
             Number(values.program_significantly_modified),
             values.Program!.value!,
             values.Location!.value!,
-            values.Referral!.value!,
+           // values.Referral!.value!,
             //values.roc_confidence!.value!
           );
           // helpers.resetForm();
