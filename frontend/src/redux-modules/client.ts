@@ -8,6 +8,7 @@ import { AppState } from "../redux-modules/root";
 import * as Types from "../api/definitions";
 import {
   insertClient,
+  updateClient,
   insertPrediction,
   fetchLocations,
   saveLocationAndProgram,
@@ -127,7 +128,7 @@ export const actions = {
   ): ThunkAction<Promise<void>, AppState, null, AnyAction> {
     return async (dispatch, getState) => {
       const response = await fetchPcr(client_code, selected_program);
-      //console.log('test')
+    
       const pcr: number | null = response ? response.pcr : null;
       const roc: number | null = response ? response.Roc_confidence : null;
       if (pcr !== null) {
@@ -264,8 +265,96 @@ export const actions = {
     return async (dispatch, getState) => {
       let locations: string[] = [];
       let updatedClient: Types.Client;
+      client = { 
+        ...client,
+        yls_FamCircumstances_Score: client.yls_FamCircumstances_Score || null,
+        yls_Edu_Employ_Score: client.yls_Edu_Employ_Score || null,
+        yls_Peer_Score: client.yls_Peer_Score || null,
+        yls_Subab_Score: client.yls_Subab_Score || null,
+        yls_Leisure_Score: client.yls_Leisure_Score || null,
+        yls_Personality_Score: client.yls_Personality_Score || null,
+        yls_Attitude_Score: client.yls_Attitude_Score || null,
+        yls_PriorCurrentOffenses_Score: client.yls_PriorCurrentOffenses_Score || null,
+        family_support: client.family_support || null,
+        fire_setting: client.fire_setting || null,
+        level_of_aggression: client.level_of_aggression || null,
+        client_self_harm: client.client_self_harm || null,
+        Screening_tool_Trauma: client.Screening_tool_Trauma || null,
+        cans_LifeFunctioning: client.cans_LifeFunctioning || null,
+        cans_YouthStrengths: client.cans_YouthStrengths || null,
+        cans_CareGiverStrengths: client.cans_CareGiverStrengths || null,
+        cans_Culture: client.cans_Culture || null,
+        cans_YouthBehavior: client.cans_YouthBehavior || null,
+        cans_YouthRisk: client.cans_YouthRisk || null,
+        cans_Trauma_Exp: client.cans_Trauma_Exp || null       
+      };
       try {
         const response = await insertClient(client);
+        if (!response) {
+          throw Error("something went wrong while saving the client");
+        }
+
+        if (response["Result"] && response["Result"].trim() !== "") {
+          return;
+        }
+
+        const cl = {
+          ...client,
+          program_type: response.program_type || null,
+          Confidence: response.Confidence || null,
+          Roc_confidence: response.Roc_confidence || null,
+          referred_program: response.program_type || null,
+          model_program: response.model_program || null,
+          SuggestedPrograms: response.list_program_types || null
+        };
+        dispatch(update({ client: cl }));
+        updatedClient = cl;
+        // return cl;
+      } catch (errors) {
+        dispatch(update({ client, errors: errors }));
+        throw errors;
+      }
+      try {
+        if (!updatedClient.client_code || !updatedClient.program_type) {
+          throw new Error("ERROR OCCURRED WHILE FETCHING PROGRAM LOCATIONS");
+        }
+        const response = await fetchLocations(
+          updatedClient.client_code,
+          updatedClient.program_type
+        );
+        if (response && response["result"] && response["result"] !== "") {
+          throw new Error(response["result"]);
+        }
+        if (response && response["Suggested Locations"]) {
+          locations = response["Suggested Locations"];
+        }
+        if (locations.length > 0) {
+          const cl: Types.Client = {
+            ...updatedClient,
+            SuggestedLocations: [...locations],
+            client_selected_program: updatedClient.program_type
+          };
+          dispatch(update({ client: cl }));
+          // return cl;
+        }
+      } catch (error) {
+        throw error;
+      }
+    };
+  },
+
+  updateClient(
+    client: Types.Client
+  ): ThunkAction<Promise<void>, AppState, null, AnyAction> {
+    return async (dispatch, getState) => {
+      let locations: string[] = [];
+      let updatedClient: Types.Client;
+      client = {
+        ...client,
+        referred_program: client.referred_program || null
+      };
+      try {
+        const response = await updateClient(client);
         if (!response) {
           throw Error("something went wrong while saving the client");
         }
